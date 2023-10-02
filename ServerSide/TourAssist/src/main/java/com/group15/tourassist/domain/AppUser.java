@@ -5,14 +5,9 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.List;
+
 
 /*
 -- This is credentials table which stores email and passwords of all the users.
@@ -39,4 +34,8 @@ public class AppUser implements Serializable {
 
     @Column(name = "password")
     private String password;
+
+    // JSON to store 3 security and answers.
+    @Column(name = "security_questions")
+    private String securityQuestions;
 }

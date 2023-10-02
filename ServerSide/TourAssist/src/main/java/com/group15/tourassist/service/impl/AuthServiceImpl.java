@@ -1,0 +1,80 @@
+package com.group15.tourassist.service.impl;
+
+import com.group15.tourassist.core.ConstantUtils;
+import com.group15.tourassist.core.Utils;
+import com.group15.tourassist.core.enumeration.UserType;
+import com.group15.tourassist.domain.AppUser;
+import com.group15.tourassist.domain.Customer;
+import com.group15.tourassist.dto.AuthResponse;
+import com.group15.tourassist.dto.CustomerRegistrationDto;
+import com.group15.tourassist.repository.AppUserRepository;
+import com.group15.tourassist.repository.CustomerRepository;
+import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+
+@Service
+public class AuthServiceImpl {
+
+    @Autowired
+    private AppUserRepository appUserRepository;
+
+    @Autowired
+    private CustomerRepository customerRepository;
+
+    @Transactional
+    public AuthResponse registerCustomer(CustomerRegistrationDto customerDto) {
+        AuthResponse authResponse = validateCustomerRegistration(customerDto);
+        if (ConstantUtils.FAILED.equals(authResponse.getStatus())) {
+            return authResponse;
+        }
+
+        AppUser appUser = new AppUser();
+        appUser.setEmail(customerDto.getEmail());
+        appUser.setUserType(UserType.CUSTOMER);
+        appUser.setPassword(customerDto.getPassword());
+        appUser.setSecurityQuestions(customerDto.getSecurityQuestions());
+        appUser = appUserRepository.save(appUser);
+
+        Customer customer = new Customer();
+        customer.setName(customerDto.getName());
+        customer.setCountry(customerDto.getCountry());
+        customer.setMobile(customerDto.getMobile());
+        customer.setDateOfBirth(customerDto.getDateOfBirth());
+        customer.setAppUser(appUser);
+
+        customerRepository.save(customer);
+        return authResponse;
+    }
+
+    private AuthResponse validateCustomerRegistration(CustomerRegistrationDto customerDto) {
+        AuthResponse authResponse = AuthResponse.builder()
+                                    .status(ConstantUtils.SUCCESS)
+                                    .httpStatus(HttpStatus.OK)
+                                    .build();
+
+        if (!Utils.validateEmail(customerDto.getEmail())) {
+            authResponse.setStatus(ConstantUtils.FAILED);
+            authResponse.setHttpStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+            authResponse.setMessage("Invalid Email");
+            return authResponse;
+        }
+
+        if(!Utils.validatePassword(customerDto.getPassword())) {
+            authResponse.setStatus(ConstantUtils.FAILED);
+            authResponse.setHttpStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+            authResponse.setMessage("Invalid Password");
+            return authResponse;
+        }
+
+        if(appUserRepository.findByEmail(customerDto.getEmail()).isPresent()) {
+            authResponse.setStatus(ConstantUtils.FAILED);
+            authResponse.setHttpStatus(HttpStatus.GONE);
+            authResponse.setMessage("User already exists");
+            return authResponse;
+        }
+
+        return authResponse;
+    }
+}

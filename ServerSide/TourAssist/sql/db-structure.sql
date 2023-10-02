@@ -5,6 +5,7 @@ CREATE TABLE `app_user` (
 	`user_type` VARCHAR(20) NOT NULL,
     `email` VARCHAR(50) NOT NULL UNIQUE,
     `password` varchar(255) NOT NULL,
+	`security_questions` varchar(255) NOT NULL,
 	`created_by` VARCHAR(50) NULL DEFAULT NULL,
 	`created_date` DATETIME(6) NULL DEFAULT NULL,
 	`last_modified_by` VARCHAR(50) NULL DEFAULT NULL,
