@@ -1,5 +1,6 @@
 package com.group15.tourassist.web.rest;
 
+import com.group15.tourassist.dto.AgentRegistrationDto;
 import com.group15.tourassist.dto.AuthResponse;
 import com.group15.tourassist.dto.CustomerRegistrationDto;
 import com.group15.tourassist.service.impl.AuthServiceImpl;
@@ -22,6 +23,12 @@ public class AuthController {
     @PostMapping("/register/customer")
     private ResponseEntity<AuthResponse> registerCustomer(@RequestBody CustomerRegistrationDto customerDto) {
         AuthResponse authResponse = authService.registerCustomer(customerDto);
+        return ResponseEntity.of(Optional.of(authResponse));
+    }
+
+    @PostMapping("/register/agent")
+    private ResponseEntity<AuthResponse> registerAgent(@RequestBody AgentRegistrationDto agentDto) {
+        AuthResponse authResponse = authService.registerAgent(agentDto);
         return ResponseEntity.of(Optional.of(authResponse));
     }
 }
