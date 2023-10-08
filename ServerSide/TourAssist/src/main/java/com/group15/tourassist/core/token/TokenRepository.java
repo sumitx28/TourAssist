@@ -7,6 +7,10 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 import java.util.Optional;
 
+
+/**
+ * @author snehitroda
+ */
 public interface TokenRepository extends JpaRepository<Token, Integer> {
 
   @Query(value = """

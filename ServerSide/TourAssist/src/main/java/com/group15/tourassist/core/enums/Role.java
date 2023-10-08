@@ -11,6 +11,10 @@ import java.util.stream.Collectors;
 
 import static com.group15.tourassist.core.enums.Permission.*;
 
+/**
+ * @author snehitroda
+ */
+
 @RequiredArgsConstructor
 public enum Role {
 

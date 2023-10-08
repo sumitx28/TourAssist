@@ -2,23 +2,27 @@ package com.group15.tourassist.core.auth.service;
 
 import com.group15.tourassist.core.config.service.JwtService;
 import com.group15.tourassist.core.entity.AppUser;
+import com.group15.tourassist.core.entity.Token;
+import com.group15.tourassist.core.enums.TokenType;
 import com.group15.tourassist.core.request.AuthenticationRequest;
 import com.group15.tourassist.core.request.RegisterRequest;
 import com.group15.tourassist.core.response.AuthenticationResponse;
-import com.group15.tourassist.core.entity.Token;
 import com.group15.tourassist.core.token.TokenRepository;
-import com.group15.tourassist.core.enums.TokenType;
 import com.group15.tourassist.repository.IAppUserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.java.Log;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+
+
+/**
+ * @author snehitroda
+ */
 
 @Service
 @RequiredArgsConstructor

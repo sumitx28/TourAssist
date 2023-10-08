@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 
 /**
  * @author snehitroda
- * @implNote Token entity is used to store the auth tokens associated with a user
+ * @implNote Token entity is used to store the JWT stateless auth tokens associated with a user
  * */
 
 @Data
