@@ -15,11 +15,9 @@ public class CustomerRegistrationDto {
 
     private String password;
 
-    private String securityQuestions;
-
     private String name;
 
-    private Long mobile;
+    private String mobile;
 
     private Instant dateOfBirth;
 

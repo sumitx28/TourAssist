@@ -26,7 +26,7 @@ public class Customer implements Serializable {
     private String name;
 
     @Column(name = "mobile")
-    private Long mobile;
+    private String mobile;
 
     @Column(name = "date_of_birth")
     private Instant dateOfBirth;

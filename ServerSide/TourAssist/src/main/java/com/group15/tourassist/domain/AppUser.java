@@ -26,7 +26,7 @@ public class AppUser implements Serializable {
     private Long id;
 
     @Column(name = "user_type")
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private UserType userType;
 
     @Column(name = "email")
@@ -34,8 +34,4 @@ public class AppUser implements Serializable {
 
     @Column(name = "password")
     private String password;
-
-    // JSON to store 3 security and answers.
-    @Column(name = "security_questions")
-    private String securityQuestions;
 }

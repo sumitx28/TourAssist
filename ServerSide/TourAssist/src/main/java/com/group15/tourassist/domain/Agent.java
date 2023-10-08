@@ -26,7 +26,7 @@ public class Agent {
     private String companyName;
 
     @Column(name = "mobile")
-    private Long mobile;
+    private String mobile;
 
     @Column(name = "employee_count")
     private Integer employeeCount;

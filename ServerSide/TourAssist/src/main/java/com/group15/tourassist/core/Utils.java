@@ -24,4 +24,26 @@ public class Utils {
 
         return password.length() >= 8;
     }
+
+    // mobile = 10 char length.
+    public static boolean validateMobile(String mobile) {
+        if(Strings.isEmpty(mobile)) {
+            return false;
+        }
+
+        if(mobile.matches("\\d+") && mobile.length() == 10) {
+            return true;
+        }
+        return false;
+    }
+
+    // name validation
+    public static boolean validateName(String name) {
+        if(Strings.isEmpty(name)) {
+            return false;
+        }
+
+        return true;
+    }
+
 }

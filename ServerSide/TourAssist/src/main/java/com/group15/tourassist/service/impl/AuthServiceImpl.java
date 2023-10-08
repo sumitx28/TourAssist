@@ -16,6 +16,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 @Service
 public class AuthServiceImpl {
@@ -40,7 +41,6 @@ public class AuthServiceImpl {
         appUser.setEmail(customerDto.getEmail());
         appUser.setUserType(UserType.CUSTOMER);
         appUser.setPassword(customerDto.getPassword());
-        appUser.setSecurityQuestions(customerDto.getSecurityQuestions());
         appUser = appUserRepository.save(appUser);
 
         Customer customer = new Customer();
@@ -74,6 +74,20 @@ public class AuthServiceImpl {
             return authResponse;
         }
 
+        if(!Utils.validateMobile(customerDto.getMobile())) {
+            authResponse.setStatus(ConstantUtils.FAILED);
+            authResponse.setHttpStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+            authResponse.setMessage("Invalid Mobile");
+            return authResponse;
+        }
+
+        if(!Utils.validateName(customerDto.getName())) {
+            authResponse.setStatus(ConstantUtils.FAILED);
+            authResponse.setHttpStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+            authResponse.setMessage("Invalid Name");
+            return authResponse;
+        }
+
         if(appUserRepository.findByEmail(customerDto.getEmail()).isPresent()) {
             authResponse.setStatus(ConstantUtils.FAILED);
             authResponse.setHttpStatus(HttpStatus.GONE);
@@ -95,12 +109,12 @@ public class AuthServiceImpl {
         appUser.setEmail(agentDto.getEmail());
         appUser.setUserType(UserType.AGENT);
         appUser.setPassword(agentDto.getPassword());
-        appUser.setSecurityQuestions(agentDto.getSecurityQuestions());
         appUser = appUserRepository.save(appUser);
 
         Agent agent = new Agent();
         agent.setCompanyName(agentDto.getCompanyName());
         agent.setEmployeeCount(agentDto.getEmployeeCount());
+        agent.setMobile(agentDto.getMobile());
         agent.setVerificationId(agentDto.getVerificationId());
         agent.setVerificationDocLink(agentDto.getVerificationDocLink());
         agent.setAppUser(appUser);
@@ -126,6 +140,27 @@ public class AuthServiceImpl {
             authResponse.setStatus(ConstantUtils.FAILED);
             authResponse.setHttpStatus(HttpStatus.INTERNAL_SERVER_ERROR);
             authResponse.setMessage("Invalid Password");
+            return authResponse;
+        }
+
+        if(StringUtils.isEmpty(agentDto.getCompanyName())) {
+            authResponse.setStatus(ConstantUtils.FAILED);
+            authResponse.setHttpStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+            authResponse.setMessage("Invalid Company Name");
+            return authResponse;
+        }
+
+        if(StringUtils.isEmpty(agentDto.getVerificationId())) {
+            authResponse.setStatus(ConstantUtils.FAILED);
+            authResponse.setHttpStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+            authResponse.setMessage("Invalid verification id");
+            return authResponse;
+        }
+
+        if(!Utils.validateMobile(agentDto.getMobile())) {
+            authResponse.setStatus(ConstantUtils.FAILED);
+            authResponse.setHttpStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+            authResponse.setMessage("Invalid Mobile");
             return authResponse;
         }
 

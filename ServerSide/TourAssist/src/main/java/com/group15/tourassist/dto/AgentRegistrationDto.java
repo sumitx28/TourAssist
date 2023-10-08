@@ -16,11 +16,9 @@ public class AgentRegistrationDto {
 
     private String password;
 
-    private String securityQuestions;
-
     private String companyName;
 
-    private Long mobile;
+    private String mobile;
 
     private Integer employeeCount;
 
