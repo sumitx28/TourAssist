@@ -1,4 +1,4 @@
-package com.group15.tourassist.core.response;
+package com.group15.tourassist.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

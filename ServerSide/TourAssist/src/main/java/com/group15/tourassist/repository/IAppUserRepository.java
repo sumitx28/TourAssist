@@ -1,7 +1,7 @@
 package com.group15.tourassist.repository;
 
 
-import com.group15.tourassist.core.entity.AppUser;
+import com.group15.tourassist.entity.AppUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

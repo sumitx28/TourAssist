@@ -1,4 +1,4 @@
-package com.group15.tourassist.core.entity;
+package com.group15.tourassist.entity;
 
 import com.group15.tourassist.core.enums.Role;
 import jakarta.persistence.*;
@@ -31,8 +31,6 @@ public class AppUser implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String firstName;
-    private String lastName;
     private String email;
     @Enumerated(EnumType.STRING)
     private Role role;

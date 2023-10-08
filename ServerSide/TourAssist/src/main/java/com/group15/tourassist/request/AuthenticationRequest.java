@@ -1,4 +1,4 @@
-package com.group15.tourassist.core.request;
+package com.group15.tourassist.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

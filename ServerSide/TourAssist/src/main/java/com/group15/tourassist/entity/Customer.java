@@ -1,12 +1,19 @@
-/*
-package com.group15.tourassist.domain;
+package com.group15.tourassist.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.time.Instant;
 
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
+@Builder
 @Table(name = "customer")
 public class Customer implements Serializable {
 
@@ -17,11 +24,14 @@ public class Customer implements Serializable {
     @OneToOne
     private AppUser appUser;
 
-    @Column(name = "name")
-    private String name;
+    @Column(name = "first_name")
+    private String firstName;
+
+    @Column(name = "last_name")
+    private String lastName;
 
     @Column(name = "mobile")
-    private Long mobile;
+    private String mobile;
 
     @Column(name = "date_of_birth")
     private Instant dateOfBirth;
@@ -30,4 +40,4 @@ public class Customer implements Serializable {
     private String country;
 
 }
-*/
+

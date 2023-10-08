@@ -1,7 +1,7 @@
 package com.group15.tourassist.core.config;
 
-import com.group15.tourassist.core.ConstantUtils;
-import com.group15.tourassist.core.token.TokenRepository;
+import com.group15.tourassist.core.utils.ConstantUtils;
+import com.group15.tourassist.repository.TokenRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;

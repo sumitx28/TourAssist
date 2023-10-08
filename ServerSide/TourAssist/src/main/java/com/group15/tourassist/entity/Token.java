@@ -1,4 +1,4 @@
-package com.group15.tourassist.core.entity;
+package com.group15.tourassist.entity;
 
 import com.group15.tourassist.core.enums.TokenType;
 import jakarta.persistence.*;

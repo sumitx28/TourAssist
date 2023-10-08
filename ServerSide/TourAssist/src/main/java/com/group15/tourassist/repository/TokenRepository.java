@@ -1,6 +1,6 @@
-package com.group15.tourassist.core.token;
+package com.group15.tourassist.repository;
 
-import com.group15.tourassist.core.entity.Token;
+import com.group15.tourassist.entity.Token;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

@@ -1,7 +1,7 @@
 package com.group15.tourassist.core.config;
 
 import com.group15.tourassist.core.config.service.IJwtService;
-import com.group15.tourassist.core.token.TokenRepository;
+import com.group15.tourassist.repository.TokenRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
