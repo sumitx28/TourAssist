@@ -1,13 +1,15 @@
 package com.group15.tourassist.repository;
-import com.group15.tourassist.entity.Customer;
+
+
+import com.group15.tourassist.entity.AppUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
 @Repository
-public interface CustomerRepository extends JpaRepository<Customer, Long> {
+public interface IAppUserRepository extends JpaRepository<AppUser, Integer> {
 
-    Optional<Customer> findById(Long id);
+    Optional<AppUser> findByEmail(String email);
+
 }
-
