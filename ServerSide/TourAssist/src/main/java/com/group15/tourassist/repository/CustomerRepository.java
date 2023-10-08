@@ -1,3 +1,4 @@
+/*
 package com.group15.tourassist.repository;
 
 import com.group15.tourassist.domain.Customer;
@@ -11,3 +12,4 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
     Optional<Customer> findById(Long id);
 }
+*/

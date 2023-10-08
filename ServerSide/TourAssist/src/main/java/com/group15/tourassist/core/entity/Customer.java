@@ -1,3 +1,4 @@
+/*
 package com.group15.tourassist.domain;
 
 import jakarta.persistence.*;
@@ -29,3 +30,4 @@ public class Customer implements Serializable {
     private String country;
 
 }
+*/
