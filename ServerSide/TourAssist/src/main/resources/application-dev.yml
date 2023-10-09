@@ -1,0 +1,23 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+      database-platform: org.hibernate.dialect.MySQL5Dialect
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    database: mysql
+  datasource:
+    url: jdbc:mysql://db-5308.cs.dal.ca:3306/CSCI5308_15_DEVINT
+    username: CSCI5308_15_DEVINT_USER
+    password: oqu2eeKohK
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+application:
+  security:
+    jwt:
+      secret-key: idr7T5JBeraYvPQWcrtj5RLxdak43JJlUd0OTghkzUc=
+      expiration: 86400000 # a day
+      refresh-token:
+        expiration: 604800000 # 7 days
