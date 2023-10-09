@@ -11,7 +11,7 @@ function Login() {
     e.preventDefault();
 
     try {
-      const response = await fetch(`${API_URL}/api/login`, {
+      const response = await fetch(`${API_URL}/api/v1/auth/authenticate`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -20,9 +20,9 @@ function Login() {
       });
 
       if (response.ok) {
-        const { token } = await response.json();
+        const { access_token } = await response.json();
 
-        localStorage.setItem("authToken", token);
+        localStorage.setItem("authToken", access_token);
 
         naviagte("/dashboard");
       } else {
