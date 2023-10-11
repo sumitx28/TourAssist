@@ -73,7 +73,6 @@ CREATE TABLE resort_amenities (
     id BIGINT(20) NOT NULL AUTO_INCREMENT,
     resort_master_id bigint(20) not null,
     amenity_master_id bigint(20) not null,
-    `amenity_name` VARCHAR(255) NOT NULL,
     PRIMARY KEY (`id`),
     FOREIGN KEY (resort_master_id) REFERENCES resort_master(id),
     FOREIGN KEY (amenity_master_id) REFERENCES amenities_master(id)
@@ -177,6 +176,16 @@ CREATE TABLE package_review (
     review_comment text,
     FOREIGN KEY (package_id) REFERENCES package(id),
 	FOREIGN KEY (customer_id) REFERENCES customer(id),
+	PRIMARY KEY (`id`)
+);
+
+CREATE TABLE package_media (
+    id BIGINT(20) NOT NULL AUTO_INCREMENT,
+    package_id bigint(20) NOT NULL,
+    media_content text not null,
+	`description` text,
+    upload_date datetime not null,
+    FOREIGN KEY (package_id) REFERENCES package(id),
 	PRIMARY KEY (`id`)
 );
 
