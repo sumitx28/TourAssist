@@ -271,6 +271,7 @@ INSERT INTO amenities_master (id, amenity_name) VALUES (9, 'Library or Reading L
 --
 
 -- Insert statements for resort_master_id = 1
+
 INSERT INTO resort_amenities (id, resort_master_id, amenity_master_id) VALUES (1, 1, 3);
 INSERT INTO resort_amenities (id, resort_master_id, amenity_master_id) VALUES (2, 1, 7);
 INSERT INTO resort_amenities (id, resort_master_id, amenity_master_id) VALUES (3, 1, 2);
@@ -278,6 +279,7 @@ INSERT INTO resort_amenities (id, resort_master_id, amenity_master_id) VALUES (4
 INSERT INTO resort_amenities (id, resort_master_id, amenity_master_id) VALUES (5, 1, 9);
 
 -- Insert statements for resort_master_id = 2
+
 INSERT INTO resort_amenities (id, resort_master_id, amenity_master_id) VALUES (6, 2, 4);
 INSERT INTO resort_amenities (id, resort_master_id, amenity_master_id) VALUES (7, 2, 1);
 INSERT INTO resort_amenities (id, resort_master_id, amenity_master_id) VALUES (8, 2, 8);
@@ -285,16 +287,16 @@ INSERT INTO resort_amenities (id, resort_master_id, amenity_master_id) VALUES (9
 INSERT INTO resort_amenities (id, resort_master_id, amenity_master_id) VALUES (10, 2, 3);
 
 -- Insert statements for resort_master_id = 3
+
 INSERT INTO resort_amenities (id, resort_master_id, amenity_master_id) VALUES (11, 3, 2);
 INSERT INTO resort_amenities (id, resort_master_id, amenity_master_id) VALUES (12, 3, 6);
 INSERT INTO resort_amenities (id, resort_master_id, amenity_master_id) VALUES (13, 3, 8);
 INSERT INTO resort_amenities (id, resort_master_id, amenity_master_id) VALUES (14, 3, 4);
 INSERT INTO resort_amenities (id, resort_master_id, amenity_master_id) VALUES (15, 3, 1);
 
--- Continue repeating the pattern for resort_master_id values 4 to 20
--- ...
 
 -- Insert statements for resort_master_id = 20
+
 INSERT INTO resort_amenities (id, resort_master_id, amenity_master_id) VALUES (96, 20, 5);
 INSERT INTO resort_amenities (id, resort_master_id, amenity_master_id) VALUES (97, 20, 9);
 INSERT INTO resort_amenities (id, resort_master_id, amenity_master_id) VALUES (98, 20, 3);
@@ -303,50 +305,29 @@ INSERT INTO resort_amenities (id, resort_master_id, amenity_master_id) VALUES (1
 
 --
 
--- Insert statements for resort_master_id = 1
-INSERT INTO resort_amenities (id, resort_master_id, amenity_master_id) VALUES (1, 1, 3);
-INSERT INTO resort_amenities (id, resort_master_id, amenity_master_id) VALUES (2, 1, 7);
-INSERT INTO resort_amenities (id, resort_master_id, amenity_master_id) VALUES (3, 1, 2);
-INSERT INTO resort_amenities (id, resort_master_id, amenity_master_id) VALUES (4, 1, 5);
-INSERT INTO resort_amenities (id, resort_master_id, amenity_master_id) VALUES (5, 1, 9);
-
--- Insert statements for resort_master_id = 2
-INSERT INTO resort_amenities (id, resort_master_id, amenity_master_id) VALUES (6, 2, 4);
-INSERT INTO resort_amenities (id, resort_master_id, amenity_master_id) VALUES (7, 2, 1);
-INSERT INTO resort_amenities (id, resort_master_id, amenity_master_id) VALUES (8, 2, 8);
-INSERT INTO resort_amenities (id, resort_master_id, amenity_master_id) VALUES (9, 2, 6);
-INSERT INTO resort_amenities (id, resort_master_id, amenity_master_id) VALUES (10, 2, 3);
-
--- Insert statements for resort_master_id = 3
-INSERT INTO resort_amenities (id, resort_master_id, amenity_master_id) VALUES (11, 3, 2);
-INSERT INTO resort_amenities (id, resort_master_id, amenity_master_id) VALUES (12, 3, 6);
-INSERT INTO resort_amenities (id, resort_master_id, amenity_master_id) VALUES (13, 3, 8);
-INSERT INTO resort_amenities (id, resort_master_id, amenity_master_id) VALUES (14, 3, 4);
-INSERT INTO resort_amenities (id, resort_master_id, amenity_master_id) VALUES (15, 3, 1);
-
 
 --
 
-INSERT INTO resort_amenities (id, activity_name) VALUES (1, 'Guided City Tours');
-INSERT INTO resort_amenities (id, activity_name) VALUES (2, 'Snorkeling Adventure');
-INSERT INTO resort_amenities (id, activity_name) VALUES (3, 'Cooking Classes');
-INSERT INTO resort_amenities (id, activity_name) VALUES (4, 'Sunset Cruise');
-INSERT INTO resort_amenities (id, activity_name) VALUES (5, 'Hiking Excursion');
-INSERT INTO resort_amenities (id, activity_name) VALUES (6, 'Wine Tasting Tour');
-INSERT INTO resort_amenities (id, activity_name) VALUES (7, 'Cultural Performances');
-INSERT INTO resort_amenities (id, activity_name) VALUES (8, 'Hot Air Balloon Ride');
-INSERT INTO resort_amenities (id, activity_name) VALUES (9, 'Wildlife Safari');
-INSERT INTO resort_amenities (id, activity_name) VALUES (10, 'Zip-lining Adventure');
-INSERT INTO resort_amenities (id, activity_name) VALUES (11, 'Beach Picnic');
-INSERT INTO resort_amenities (id, activity_name) VALUES (12, 'Historical Walking Tour');
-INSERT INTO resort_amenities (id, activity_name) VALUES (13, 'Scuba Diving Expedition');
-INSERT INTO resort_amenities (id, activity_name) VALUES (14, 'Spa and Wellness Retreat');
-INSERT INTO resort_amenities (id, activity_name) VALUES (15, 'Golfing Experience');
-INSERT INTO resort_amenities (id, activity_name) VALUES (16, 'Art and Craft Workshops');
-INSERT INTO resort_amenities (id, activity_name) VALUES (17, 'River Rafting Adventure');
-INSERT INTO resort_amenities (id, activity_name) VALUES (18, 'Bicycle Tour');
-INSERT INTO resort_amenities (id, activity_name) VALUES (19, 'Photography Safari');
-INSERT INTO resort_amenities (id, activity_name) VALUES (20, 'Cultural Immersion Day');
+INSERT INTO activity_master (id, activity_name) VALUES (1, 'Guided City Tours');
+INSERT INTO activity_master (id, activity_name) VALUES (2, 'Snorkeling Adventure');
+INSERT INTO activity_master (id, activity_name) VALUES (3, 'Cooking Classes');
+INSERT INTO activity_master (id, activity_name) VALUES (4, 'Sunset Cruise');
+INSERT INTO activity_master (id, activity_name) VALUES (5, 'Hiking Excursion');
+INSERT INTO activity_master (id, activity_name) VALUES (6, 'Wine Tasting Tour');
+INSERT INTO activity_master (id, activity_name) VALUES (7, 'Cultural Performances');
+INSERT INTO activity_master (id, activity_name) VALUES (8, 'Hot Air Balloon Ride');
+INSERT INTO activity_master (id, activity_name) VALUES (9, 'Wildlife Safari');
+INSERT INTO activity_master (id, activity_name) VALUES (10, 'Zip-lining Adventure');
+INSERT INTO activity_master (id, activity_name) VALUES (11, 'Beach Picnic');
+INSERT INTO activity_master (id, activity_name) VALUES (12, 'Historical Walking Tour');
+INSERT INTO activity_master (id, activity_name) VALUES (13, 'Scuba Diving Expedition');
+INSERT INTO activity_master (id, activity_name) VALUES (14, 'Spa and Wellness Retreat');
+INSERT INTO activity_master (id, activity_name) VALUES (15, 'Golfing Experience');
+INSERT INTO activity_master (id, activity_name) VALUES (16, 'Art and Craft Workshops');
+INSERT INTO activity_master (id, activity_name) VALUES (17, 'River Rafting Adventure');
+INSERT INTO activity_master (id, activity_name) VALUES (18, 'Bicycle Tour');
+INSERT INTO activity_master (id, activity_name) VALUES (19, 'Photography Safari');
+INSERT INTO activity_master (id, activity_name) VALUES (20, 'Cultural Immersion Day');
 
 --
 
