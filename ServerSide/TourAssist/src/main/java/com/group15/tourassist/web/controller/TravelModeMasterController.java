@@ -25,7 +25,7 @@ public class TravelModeMasterController {
 
     @GetMapping("/travel-modes")
     private ResponseEntity<List<TravelModeMaster>> getTravelModes() {
-        log.info("** get locations request");
+        log.info("** get travel-modes request");
         List<TravelModeMaster> allModes = travelModeMasterService.getAllTravelModes();
         return ResponseEntity.of(Optional.of(allModes));
     }
