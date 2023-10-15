@@ -1,8 +1,6 @@
 package com.group15.tourassist.web.controller;
 
 import com.group15.tourassist.entity.DestinationMaster;
-import com.group15.tourassist.request.CustomerRegistrationRequest;
-import com.group15.tourassist.response.AuthenticationResponse;
 import com.group15.tourassist.service.IDestinationMasterService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,7 +15,7 @@ import java.util.Optional;
 @RequestMapping("/api/v1")
 public class DestinationMasterController {
 
-    Logger log = LoggerFactory.getLogger(AuthenticationController.class);
+    Logger log = LoggerFactory.getLogger(DestinationMasterController.class);
 
     @Autowired
     IDestinationMasterService destinationMasterService;
