@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import API_URL from "../../config/config";
 
-function Login() {
+function AgentLogin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const naviagte = useNavigate();
@@ -31,7 +31,7 @@ function Login() {
 
         localStorage.setItem("authToken", access_token);
 
-        naviagte("/dashboard");
+        naviagte("/agent-dashboard");
       } else {
         alert("Login failed");
       }
@@ -55,7 +55,7 @@ function Login() {
         <div className="w-full sm:w-2/5 flex items-center justify-center p-6 sm:px-8 sm:py-12">
           <div className="sm:mx-auto sm:w-full sm:max-w-sm">
             <h2 className="mt-6 text-center text-xl sm:text-2xl font-bold leading-6 tracking-tight text-gray-900">
-              Customer Login
+              Agent Login
             </h2>
 
             <form
@@ -124,9 +124,9 @@ function Login() {
             </form>
 
             <p className="mt-4 text-center text-sm text-gray-500">
-              Are you an Agent?{" "}
+              Are you a Customer?{" "}
               <Link
-                to="/agent-login"
+                to="/login"
                 className="font-semibold text-indigo-600 hover:text-indigo-500"
               >
                 Login here
@@ -139,4 +139,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default AgentLogin;
