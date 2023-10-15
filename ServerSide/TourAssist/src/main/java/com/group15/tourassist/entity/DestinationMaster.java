@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -23,4 +25,10 @@ public class DestinationMaster {
 
     @Column(name = "country")
     private String country;
+
+    @OneToMany(mappedBy = "destinationMaster")
+    private List<ResortMaster> resorts;
+
+    @OneToMany(mappedBy = "destinationMaster")
+    private List<GuideMaster> guides;
 }
