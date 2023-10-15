@@ -29,7 +29,6 @@ public class PasswordResetTokenController {
     public ResponseEntity<String> resetPasswordRequest(@RequestBody ForgotPasswordEmailRequest request) {
         log.info("here"+request.getEmail());
         Optional<AppUser> userOptional = appUserRepository.findByEmail(request.getEmail());
-        log.info(String.valueOf(userOptional));
 
         if (userOptional.isPresent()) {
             AppUser user = userOptional.get();
