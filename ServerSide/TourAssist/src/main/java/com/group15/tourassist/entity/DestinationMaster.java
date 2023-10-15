@@ -28,4 +28,7 @@ public class DestinationMaster {
 
     @OneToMany(mappedBy = "destinationMaster")
     private List<ResortMaster> resorts;
+
+    @OneToMany(mappedBy = "destinationMaster")
+    private List<GuideMaster> guides;
 }
