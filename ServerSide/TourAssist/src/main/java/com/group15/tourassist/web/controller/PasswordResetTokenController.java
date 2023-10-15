@@ -2,18 +2,16 @@ package com.group15.tourassist.web.controller;
 
 import com.group15.tourassist.entity.AppUser;
 import com.group15.tourassist.repository.IAppUserRepository;
+import com.group15.tourassist.request.ForgotPasswordEmailRequest;
+import com.group15.tourassist.request.PasswordResetRequest;
 import com.group15.tourassist.service.EmailService;
 import com.group15.tourassist.service.IPasswordResetTokenService;
-import com.group15.tourassist.service.PasswordResetTokenService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
@@ -28,9 +26,9 @@ public class PasswordResetTokenController {
     Logger log = LoggerFactory.getLogger(AuthenticationController.class);
 
     @PostMapping("/request")
-    public ResponseEntity<String> resetPasswordRequest(@RequestParam("email") String email) {
-        log.info("here"+email);
-        Optional<AppUser> userOptional = appUserRepository.findByEmail(email);
+    public ResponseEntity<String> resetPasswordRequest(@RequestBody ForgotPasswordEmailRequest request) {
+        log.info("here"+request.getEmail());
+        Optional<AppUser> userOptional = appUserRepository.findByEmail(request.getEmail());
         log.info(String.valueOf(userOptional));
 
         if (userOptional.isPresent()) {
@@ -45,7 +43,9 @@ public class PasswordResetTokenController {
     }
 
     @PostMapping("/reset")
-    public ResponseEntity<String> resetPassword(@RequestParam("token") String token, @RequestParam("password") String password) {
+    public ResponseEntity<String> resetPassword(@RequestBody PasswordResetRequest request) {
+        String token= request.getToken();
+        String password= request.getPassword();
         if (!passwordResetTokenService.validateToken(token)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid or expired token.");
         } else {
