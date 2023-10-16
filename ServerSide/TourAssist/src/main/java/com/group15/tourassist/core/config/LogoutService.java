@@ -2,9 +2,13 @@ package com.group15.tourassist.core.config;
 
 import com.group15.tourassist.core.utils.ConstantUtils;
 import com.group15.tourassist.repository.TokenRepository;
+import com.group15.tourassist.web.controller.DemoController;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
@@ -19,8 +23,11 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class LogoutService implements LogoutHandler {
 
+    Logger log = LoggerFactory.getLogger(DemoController.class);
+
     private final TokenRepository tokenRepository;
 
+    @Transactional
     @Override
     public void logout(
             HttpServletRequest request,
@@ -35,6 +42,7 @@ public class LogoutService implements LogoutHandler {
         jwt = authHeader.substring(7);
         var existingToken = tokenRepository.findByToken(jwt)
                 .orElse(null);
+        log.info("jwt token found: {}", existingToken.getToken().toString() );
         if (existingToken != null) {
             existingToken.setExpired(true);
             existingToken.setRevoked(true);

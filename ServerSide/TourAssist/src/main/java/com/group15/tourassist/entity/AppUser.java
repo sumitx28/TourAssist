@@ -72,4 +72,13 @@ public class AppUser implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+
+    @Override
+    public String toString() {
+        return "AppUser{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                '}';
+    }
 }
