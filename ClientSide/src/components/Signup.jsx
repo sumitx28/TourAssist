@@ -20,9 +20,14 @@ function SignUp() {
   const handleSignUp = async (e) => {
     e.preventDefault();
 
+    // Define a data object that matches the backend entity
     const userData = {
       email,
       password,
+      companyName,
+      mobile,
+      employeeCount: userType === "agent" ? employeeCount : null,
+      verificationId: userType === "agent" ? verificationId : null,
     };
 
     if (userType === "customer") {
@@ -31,11 +36,6 @@ function SignUp() {
       userData.mobile = mobile;
       userData.dateOfBirth = dateOfBirth;
       userData.country = country;
-    } else if (userType === "agent") {
-      userData.companyName = companyName;
-      userData.mobile = mobile;
-      userData.employeeCount = employeeCount;
-      userData.verificationId = verificationId;
     }
 
     try {
