@@ -22,6 +22,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -39,6 +41,8 @@ import java.io.IOException;
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService implements IAuthenticationService {
+
+    Logger log = LoggerFactory.getLogger(AuthenticationService.class);
 
     private final IAppUserRepository appUserRepository;
     private final TokenRepository tokenRepository;
@@ -219,21 +223,38 @@ public class AuthenticationService implements IAuthenticationService {
         return validateDto;
     }
 
+
+    /**
+     * @param request Authentication request containing user creds
+     * @return post user authentication response
+     */
+    @Transactional
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
-        var user = appUserRepository.findByEmail(request.getEmail())
-                .orElseThrow();  // TODO throw the correct exception
+        var user = appUserRepository.findByEmail(request.getEmail()).orElseThrow();
+
         var jwtToken = jwtService.generateToken(user);
         revokeAllUserTokens(user);
-        //var refreshToken = jwtService.generateRefreshToken(user);
-        // saveUserToken(user, jwtToken);
-
+        saveUserToken(user, jwtToken);
         return AuthenticationResponse.builder()
                 .accessToken(jwtToken)
                 .build();
     }
 
+    @Transactional
+    private void revokeAllUserTokens(AppUser appUser) {
+        var validUserTokens = tokenRepository.findAllValidTokenByUser(appUser.getId());
+        if (validUserTokens.isEmpty())
+            return;
+        validUserTokens.forEach(token -> {
+            token.setExpired(true);
+            token.setRevoked(true);
+        });
 
+        tokenRepository.saveAll(validUserTokens);
+    }
+
+    @Transactional
     private void saveUserToken(AppUser appUser, String jwtToken) {
         var token = Token.builder()
                 .appUser(appUser)
@@ -245,48 +266,11 @@ public class AuthenticationService implements IAuthenticationService {
         tokenRepository.save(token);
     }
 
-    private void revokeAllUserTokens(AppUser appUser) {
-        var validUserTokens = tokenRepository.findAllValidTokenByUser(appUser.getId());
-        if (validUserTokens.isEmpty())
-            return;
-        validUserTokens.forEach(token -> {
-            token.setExpired(true);
-            token.setRevoked(true);
-        });
-        tokenRepository.saveAll(validUserTokens);
-    }
+
 
 
     @Override
     public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        //TODO
     }
 
-/*    public void refreshToken(
-            HttpServletRequest request,
-            HttpServletResponse response
-    ) throws IOException {
-        final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-        final String refreshToken;
-        final String userEmail;
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            return;
-        }
-        refreshToken = authHeader.substring(7);
-        userEmail = jwtService.extractUsername(refreshToken);
-        if (userEmail != null) {
-            var user = this.repository.findByEmail(userEmail)
-                    .orElseThrow();
-            if (jwtService.isTokenValid(refreshToken, user)) {
-                var accessToken = jwtService.generateToken(user);
-                revokeAllUserTokens(user);
-                saveUserToken(user, accessToken);
-                var authResponse = AuthenticationResponse.builder()
-                        .accessToken(accessToken)
-                        .refreshToken(refreshToken)
-                        .build();
-                new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
-            }
-        }
-    }*/
 }
