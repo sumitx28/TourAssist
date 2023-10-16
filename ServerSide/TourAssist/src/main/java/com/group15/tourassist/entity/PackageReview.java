@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.time.Instant;
 
 @Entity
@@ -15,7 +16,7 @@ import java.time.Instant;
 @Data
 @Builder
 @Table(name = "package_review")
-public class PackageReview {
+public class PackageReview implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

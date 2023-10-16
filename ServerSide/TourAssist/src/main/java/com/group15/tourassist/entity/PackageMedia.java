@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.time.Instant;
 
 @Entity
@@ -14,7 +15,7 @@ import java.time.Instant;
 @Data
 @Builder
 @Table(name = "package_review")
-public class PackageMedia {
+public class PackageMedia implements Serializable {
 
 
     @Id

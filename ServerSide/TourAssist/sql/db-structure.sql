@@ -104,7 +104,6 @@ CREATE TABLE package (
     destination_id bigint(20) not null,
     package_created_date datetime not null,
     is_customizable tinyint(1) not null,
-    `status` tinyint(1) not null,
 	FOREIGN KEY (agent_id) REFERENCES agent(id),
 	FOREIGN KEY (source_id) REFERENCES destination_master(id),
 	FOREIGN KEY (destination_id) REFERENCES destination_master(id),

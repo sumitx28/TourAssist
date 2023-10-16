@@ -50,7 +50,7 @@ public class Utils {
 
     // Util method to get the future end-dates.
     public static Instant getEndOfTime(Instant instant) {
-        return instant.plus(100, ChronoUnit.YEARS);
+        return instant.plus(365, ChronoUnit.DAYS);
     }
 
 }

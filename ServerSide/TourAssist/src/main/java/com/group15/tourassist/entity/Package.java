@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.time.Instant;
 
 @Entity
@@ -14,7 +15,7 @@ import java.time.Instant;
 @Data
 @Builder
 @Table(name = "package")
-public class Package {
+public class Package implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,6 +45,4 @@ public class Package {
     @Column(name = "is_customizable")
     private Boolean isCustomizable;
 
-    @Column(name = "status")
-    private Boolean status;
 }
