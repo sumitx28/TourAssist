@@ -34,7 +34,7 @@ function SignUp() {
       userData.firstName = firstName;
       userData.lastName = lastName;
       userData.mobile = mobile;
-      userData.dateOfBirth = dateOfBirth;
+      userData.dateOfBirth = new Date(dateOfBirth).toISOString();
       userData.country = country;
     }
 
