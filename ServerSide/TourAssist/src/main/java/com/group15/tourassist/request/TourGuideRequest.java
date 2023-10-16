@@ -13,7 +13,7 @@ public class TourGuideRequest {
 
     private Long guideId;
 
-    private Long price;
+    private Double price;
 
     private Boolean isCustomizable;
 

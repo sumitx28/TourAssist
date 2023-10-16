@@ -2,6 +2,8 @@ package com.group15.tourassist.core.utils;
 
 import org.apache.logging.log4j.util.Strings;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -44,6 +46,11 @@ public class Utils {
         }
 
         return true;
+    }
+
+    // Util method to get the future end-dates.
+    public static Instant getEndOfTime(Instant instant) {
+        return instant.plus(100, ChronoUnit.YEARS);
     }
 
 }
