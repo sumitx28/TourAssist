@@ -77,7 +77,7 @@ public class AuthenticationService implements IAuthenticationService {
 
         var jwtToken = jwtService.generateToken(appUser);
         var refreshToken = jwtService.generateRefreshToken(appUser);
-        //saveUserToken(savedUser, jwtToken);
+        saveUserToken(appUser, jwtToken);
         return AuthenticationResponse.builder()
                 .accessToken(jwtToken)
                 .build();
@@ -162,7 +162,7 @@ public class AuthenticationService implements IAuthenticationService {
 
         var jwtToken = jwtService.generateToken(appUser);
         var refreshToken = jwtService.generateRefreshToken(appUser);
-        //saveUserToken(savedUser, jwtToken);
+        saveUserToken(appUser, jwtToken);
         return AuthenticationResponse.builder()
                 .accessToken(jwtToken)
                 .build();
