@@ -50,6 +50,7 @@ public class AuthenticationController {
 
     @PostMapping("/authenticate")
     public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
+        log.info("** login request: {}", request.getEmail());
         return ResponseEntity.ok(authenticationService.authenticate(request));
     }
 

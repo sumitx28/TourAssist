@@ -1,13 +1,14 @@
+import AgentDashboard from "./components/AgentDashboard";
+import AgentLogin from "./components/AgentLogin";
+import Dashboard from "./components/Dashboard";
+import ForgotPassword from "./components/ForgotPassword";
 import Home from "./components/Home";
 import Login from "./components/Login";
-import Dashboard from "./components/Dashboard";
-import AuthGuard from "./guards/AuthGuard";
-import AgentLogin from "./components/AgentLogin";
-import AgentDashboard from "./components/AgentDashboard";
-import ForgotPassword from "./components/ForgotPassword";
 import ResetPassword from "./components/ResetPassword";
+import SignUp from "./components/Signup";
+import AuthGuard from "./guards/AuthGuard";
 
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Routes>
           <Route exact path="/" element={<Home />}></Route>
           <Route exact path="/login" element={<Login />}></Route>
+          <Route exact path="/signup" element={<SignUp />}></Route>
           <Route path="/agent-login" element={<AgentLogin />} />
           <Route path="/agent-dashboard" element={<AgentDashboard />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
