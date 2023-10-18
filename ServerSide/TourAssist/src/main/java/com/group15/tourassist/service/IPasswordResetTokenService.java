@@ -8,5 +8,5 @@ public interface IPasswordResetTokenService {
     Boolean validateToken(String token);
     Boolean isPasswordResetTokenExpired(String token);
     void resetPassword(String token, String newPassword);
-    void updatePasswordResetToken(PasswordResetToken token);
+    String updatePasswordResetToken(PasswordResetToken token);
 }

@@ -55,10 +55,12 @@ public class PasswordResetTokenService<EmailService> implements IPasswordResetTo
     }
 
     @Override
-    public void updatePasswordResetToken(PasswordResetToken token) {
-        token.setToken(TokenGenerator.generateUniqueToken());
+    public String updatePasswordResetToken(PasswordResetToken token) {
+        var tokenNew= TokenGenerator.generateUniqueToken();
+        token.setToken(tokenNew);
         LocalDateTime expiryDate= LocalDateTime.now().plusMinutes(60);
         token.setExpiryDate(expiryDate);
         passwordResetTokenRepository.save(token);
+        return tokenNew;
     }
 }

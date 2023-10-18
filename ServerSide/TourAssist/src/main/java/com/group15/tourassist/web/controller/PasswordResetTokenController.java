@@ -48,7 +48,7 @@ public class PasswordResetTokenController {
             AppUser user = userOptional.get();
             PasswordResetToken alreadyPresetToken= passwordResetTokenRepository.findByAppUser_email(request.getEmail());
             if (alreadyPresetToken!=null){
-                passwordResetTokenService.updatePasswordResetToken(alreadyPresetToken);
+                token= passwordResetTokenService.updatePasswordResetToken(alreadyPresetToken);
             }
             else{
                 token = passwordResetTokenService.generatePasswordResetToken(user);
