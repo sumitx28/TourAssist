@@ -1,7 +1,9 @@
 package com.group15.tourassist.web.controller;
 
 import com.group15.tourassist.entity.AppUser;
+import com.group15.tourassist.entity.PasswordResetToken;
 import com.group15.tourassist.repository.IAppUserRepository;
+import com.group15.tourassist.repository.PasswordResetTokenRepository;
 import com.group15.tourassist.request.ForgotPasswordEmailRequest;
 import com.group15.tourassist.request.PasswordResetRequest;
 import com.group15.tourassist.service.EmailService;
@@ -32,6 +34,7 @@ import java.util.Optional;
 public class PasswordResetTokenController {
 
     private final IAppUserRepository appUserRepository;
+    private final PasswordResetTokenRepository passwordResetTokenRepository;
     private final IPasswordResetTokenService passwordResetTokenService;
     private final EmailService emailService;
     Logger log = LoggerFactory.getLogger(AuthenticationController.class);
@@ -40,14 +43,21 @@ public class PasswordResetTokenController {
     public ResponseEntity<String> resetPasswordRequest(@RequestBody ForgotPasswordEmailRequest request) {
         log.info("here"+request.getEmail());
         Optional<AppUser> userOptional = appUserRepository.findByEmail(request.getEmail());
-
-        if (userOptional.isPresent()) {
+        if(userOptional.isPresent()){
+             String token=null;
             AppUser user = userOptional.get();
-            var token = passwordResetTokenService.generatePasswordResetToken(user);
+            PasswordResetToken alreadyPresetToken= passwordResetTokenRepository.findByAppUser_email(request.getEmail());
+            if (alreadyPresetToken!=null){
+                passwordResetTokenService.updatePasswordResetToken(alreadyPresetToken);
+            }
+            else{
+                token = passwordResetTokenService.generatePasswordResetToken(user);
+            }
             var resetPasswordUrl = "http://localhost:5173/reset-password/" + token;
             sendResetPasswordEmail(user.getUsername(), resetPasswordUrl);
             return ResponseEntity.ok("Email sent to the user");
-        } else {
+        }
+        else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
         }
     }
