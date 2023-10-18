@@ -53,4 +53,14 @@ public class PasswordResetTokenService<EmailService> implements IPasswordResetTo
         appUserRepository.save(user);
         passwordResetTokenRepository.delete(passwordResetToken);
     }
+
+    @Override
+    public String updatePasswordResetToken(PasswordResetToken token) {
+        var tokenNew= TokenGenerator.generateUniqueToken();
+        token.setToken(tokenNew);
+        LocalDateTime expiryDate= LocalDateTime.now().plusMinutes(60);
+        token.setExpiryDate(expiryDate);
+        passwordResetTokenRepository.save(token);
+        return tokenNew;
+    }
 }

@@ -11,7 +11,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/tour_assist
     username: root
-    password: Sumit2801
+    password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
 
 application:
