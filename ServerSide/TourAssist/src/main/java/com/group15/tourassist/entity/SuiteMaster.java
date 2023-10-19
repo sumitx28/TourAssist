@@ -6,18 +6,20 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Builder
 @Table(name = "suite_master")
-public class SuiteMaster {
+public class SuiteMaster implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "suite_name")
-    private String suiteName;
+    @Column(name = "suite_type")
+    private String suiteType;
 }

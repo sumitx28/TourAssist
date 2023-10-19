@@ -6,13 +6,15 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Builder
 @Table(name = "travel_mode_master")
-public class TravelModeMaster {
+public class TravelModeMaster implements Serializable {
 
      @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
