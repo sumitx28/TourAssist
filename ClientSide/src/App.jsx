@@ -7,6 +7,7 @@ import Login from "./components/Login";
 import ResetPassword from "./components/ResetPassword";
 import SignUp from "./components/Signup";
 import AuthGuard from "./guards/AuthGuard";
+import CreatePackage from "./components/agent/create-package/CreatePackage";
 
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 
@@ -22,6 +23,7 @@ function App() {
           <Route path="/agent-dashboard" element={<AgentDashboard />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password/:token" element={<ResetPassword />} />
+          <Route path="/create-package" element={<CreatePackage />} />
           <Route
             path="/dashboard"
             element={
