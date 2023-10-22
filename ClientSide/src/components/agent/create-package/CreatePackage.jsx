@@ -9,24 +9,24 @@ import {
 } from "@mui/material";
 
 function TravelForm() {
-  const [packageName, setPackageName] = useState("");
-  const [tripStartDate, setTripStartDate] = useState("");
-  const [tripEndDate, setTripEndDate] = useState("");
-  const [tripSource, setTripSource] = useState("");
-  const [tripDestination, setTripDestination] = useState("");
-  const [selectedActivities, setSelectedActivities] = useState([]);
-  const [selectedResort, setSelectedResort] = useState("");
-  const [selectedRoomType, setSelectedRoomType] = useState("");
-  const [selectedTourGuide, setSelectedTourGuide] = useState("");
-  const [selectedTransport, setSelectedTransport] = useState("");
-  const [isTransportCustomizable, setIsTransportCustomizable] = useState(false);
-  const [customTransportPrice, setCustomTransportPrice] = useState("");
-  const [isTourGuideCustomizable, setIsTourGuideCustomizable] = useState(false);
-  const [customTourGuideName, setCustomTourGuideName] = useState("");
-  const [isResortCustomizable, setIsResortCustomizable] = useState(false);
-  const [customResortName, setCustomResortName] = useState("");
-  const [isRoomTypeCustomizable, setIsRoomTypeCustomizable] = useState(false);
-  const [customRoomTypeName, setCustomRoomTypeName] = useState("");
+  const [formData, setFormData] = useState({
+    packageName: "",
+    tripStartDate: "",
+    tripEndDate: "",
+    tripSource: "",
+    tripDestination: "",
+    selectedActivities: [],
+    selectedResort: "",
+    selectedRoomType: "",
+    selectedTourGuide: "",
+    selectedTransport: "",
+    isTransportCustomizable: false,
+    customTransportPrice: "",
+    isTourGuideCustomizable: false,
+    customTourGuidePrice: "",
+    isRoomTypeCustomizable: false,
+    customRoomTypePrice: "",
+  });
 
   const activities = [
     { id: 1, name: "Hiking" },
@@ -69,37 +69,82 @@ function TravelForm() {
   ];
 
   const handleActivityChange = (e) => {
-    setSelectedActivities(e.target.value);
+    setFormData({ ...formData, selectedActivities: e.target.value });
   };
 
-  const handleCustomizableChange = (
-    e,
-    stateUpdater,
-    customValueStateUpdater
-  ) => {
-    stateUpdater(e.target.checked);
-    customValueStateUpdater(""); // Clear the custom value when changing customizability.
+  const handleCustomizableChange = (e, stateKey, customValueKey) => {
+    setFormData({
+      ...formData,
+      [stateKey]: e.target.checked,
+      [customValueKey]: e.target.checked ? "" : formData[customValueKey],
+    });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Is Transport Customizable: ", isTransportCustomizable);
-    console.log("Custom Transport Price: ", customTransportPrice);
-    console.log("Selected Transport: ", selectedTransport);
+    // console.log(
+    //   "Is Transport Customizable: ",
+    //   formData.isTransportCustomizable
+    // );
+    // console.log("Custom Transport Price: ", formData.customTransportPrice);
+    // console.log("Selected Transport: ", formData.selectedTransport);
 
-    console.log("Is Tour Guide Customizable: ", isTourGuideCustomizable);
-    console.log("Custom Tour Guide Name: ", customTourGuideName);
-    console.log("Selected Tour Guide: ", selectedTourGuide);
+    // console.log(
+    //   "Is Tour Guide Customizable: ",
+    //   formData.isTourGuideCustomizable
+    // );
+    // console.log("Custom Tour Guide Name: ", formData.customTourGuideName);
+    // console.log("Selected Tour Guide: ", formData.selectedTourGuide);
 
-    console.log("Is Resort Customizable: ", isResortCustomizable);
-    console.log("Custom Resort Name: ", customResortName);
-    console.log("Selected Resort: ", selectedResort);
+    // console.log("Is Resort Customizable: ", formData.isResortCustomizable);
+    // console.log("Custom Resort Name: ", formData.customResortName);
+    // console.log("Selected Resort: ", formData.selectedResort);
 
-    console.log("Is Room Type Customizable: ", isRoomTypeCustomizable);
-    console.log("Custom Room Type Name: ", customRoomTypeName);
-    console.log("Selected Room Type: ", selectedRoomType);
+    // console.log("Is Room Type Customizable: ", formData.isRoomTypeCustomizable);
+    // console.log("Custom Room Type Name: ", formData.customRoomTypeName);
+    // console.log("Selected Room Type: ", formData.selectedRoomType);
 
-    console.log("Selected Activities: ", selectedActivities);
+    // console.log("Selected Activities: ", formData.selectedActivities);
+
+    const postData = {
+      packageName: formData.packageName,
+      agentId: 123,
+      tripStartDate: formData.tripStartDate,
+      tripEndDate: formData.tripEndDate,
+      sourceId: formData.tripSource,
+      destinationId: formData.tripDestination,
+      isCustomizable:
+        formData.isResortCustomizable ||
+        formData.isRoomTypeCustomizable ||
+        formData.isTourGuideCustomizable ||
+        formData.isTransportCustomizable,
+      stayRequest: {
+        resortId: formData.selectedResort,
+        suiteId: formData.selectedRoomType,
+        price: Number(formData.customRoomTypePrice),
+        isCustomizable: formData.isRoomTypeCustomizable,
+      },
+      tourGuideRequest: {
+        guideId: formData.selectedTourGuide,
+        price: Number(formData.customTourGuidePrice),
+        isCustomizable: formData.isTourGuideCustomizable,
+      },
+      transportationRequest: {
+        modeId: formData.selectedTransport,
+        price: Number(formData.customTransportPrice),
+        isCustomizable: formData.isTransportCustomizable,
+      },
+      activities: formData.selectedActivities.map((value) => {
+        return {
+          activityId: value,
+          activityDate: new Date().toJSON().slice(0, 10),
+          price: 0,
+          isCustomizable: false,
+        };
+      }),
+    };
+
+    console.log(postData);
   };
 
   return (
@@ -124,8 +169,10 @@ function TravelForm() {
                 id="package-name"
                 variant="outlined"
                 fullWidth
-                value={packageName}
-                onChange={(e) => setPackageName(e.target.value)}
+                value={formData.packageName}
+                onChange={(e) =>
+                  setFormData({ ...formData, packageName: e.target.value })
+                }
               />
             </div>
           </div>
@@ -143,7 +190,7 @@ function TravelForm() {
                 id="selected-activities"
                 variant="outlined"
                 fullWidth
-                value={selectedActivities}
+                value={formData.selectedActivities}
                 onChange={handleActivityChange}
               >
                 {activities.map((activity) => (
@@ -168,8 +215,10 @@ function TravelForm() {
                 id="trip-start-date"
                 variant="outlined"
                 fullWidth
-                value={tripStartDate}
-                onChange={(e) => setTripStartDate(e.target.value)}
+                value={formData.tripStartDate}
+                onChange={(e) =>
+                  setFormData({ ...formData, tripStartDate: e.target.value })
+                }
               />
             </div>
           </div>
@@ -187,8 +236,10 @@ function TravelForm() {
                 id="trip-end-date"
                 variant="outlined"
                 fullWidth
-                value={tripEndDate}
-                onChange={(e) => setTripEndDate(e.target.value)}
+                value={formData.tripEndDate}
+                onChange={(e) =>
+                  setFormData({ ...formData, tripEndDate: e.target.value })
+                }
               />
             </div>
           </div>
@@ -205,8 +256,10 @@ function TravelForm() {
                 id="trip-source"
                 variant="outlined"
                 fullWidth
-                value={tripSource}
-                onChange={(e) => setTripSource(e.target.value)}
+                value={formData.tripSource}
+                onChange={(e) =>
+                  setFormData({ ...formData, tripSource: e.target.value })
+                }
               >
                 {sources.map((location) => (
                   <MenuItem value={location.id} key={location.id}>
@@ -229,8 +282,10 @@ function TravelForm() {
                 id="trip-destination"
                 variant="outlined"
                 fullWidth
-                value={tripDestination}
-                onChange={(e) => setTripDestination(e.target.value)}
+                value={formData.tripDestination}
+                onChange={(e) =>
+                  setFormData({ ...formData, tripDestination: e.target.value })
+                }
               >
                 {destinations.map((location) => (
                   <MenuItem value={location.id} key={location.id}>
@@ -253,8 +308,13 @@ function TravelForm() {
                 id="selected-tour-guide"
                 variant="outlined"
                 fullWidth
-                value={selectedTourGuide}
-                onChange={(e) => setSelectedTourGuide(e.target.value)}
+                value={formData.selectedTourGuide}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    selectedTourGuide: e.target.value,
+                  })
+                }
               >
                 {tourGuides.map((guide) => (
                   <MenuItem value={guide.id} key={guide.id}>
@@ -265,12 +325,12 @@ function TravelForm() {
               <FormControlLabel
                 control={
                   <Checkbox
-                    checked={isTourGuideCustomizable}
+                    checked={formData.isTourGuideCustomizable}
                     onChange={(e) =>
                       handleCustomizableChange(
                         e,
-                        setIsTourGuideCustomizable,
-                        setCustomTourGuideName
+                        "isTourGuideCustomizable",
+                        "customTourGuidePrice"
                       )
                     }
                     name="isTourGuideCustomizable"
@@ -278,7 +338,7 @@ function TravelForm() {
                 }
                 label="Is Customizable?"
               />
-              {isTourGuideCustomizable && (
+              {formData.isTourGuideCustomizable && (
                 <TextField
                   type="text"
                   name="custom-tour-guide-name"
@@ -286,8 +346,13 @@ function TravelForm() {
                   variant="outlined"
                   fullWidth
                   label="Price"
-                  value={customTourGuideName}
-                  onChange={(e) => setCustomTourGuideName(e.target.value)}
+                  value={formData.customTourGuidePrice}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      customTourGuidePrice: e.target.value,
+                    })
+                  }
                 />
               )}
             </div>
@@ -305,8 +370,13 @@ function TravelForm() {
                 id="selected-transport"
                 variant="outlined"
                 fullWidth
-                value={selectedTransport}
-                onChange={(e) => setSelectedTransport(e.target.value)}
+                value={formData.selectedTransport}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    selectedTransport: e.target.value,
+                  })
+                }
               >
                 {transportModes.map((mode) => (
                   <MenuItem value={mode.id} key={mode.id}>
@@ -317,12 +387,12 @@ function TravelForm() {
               <FormControlLabel
                 control={
                   <Checkbox
-                    checked={isTransportCustomizable}
+                    checked={formData.isTransportCustomizable}
                     onChange={(e) =>
                       handleCustomizableChange(
                         e,
-                        setIsTransportCustomizable,
-                        setCustomTransportPrice
+                        "isTransportCustomizable",
+                        "customTransportPrice"
                       )
                     }
                     name="isTransportCustomizable"
@@ -330,7 +400,7 @@ function TravelForm() {
                 }
                 label="Is Customizable"
               />
-              {isTransportCustomizable && (
+              {formData.isTransportCustomizable && (
                 <TextField
                   type="number"
                   name="custom-transport-price"
@@ -338,8 +408,13 @@ function TravelForm() {
                   variant="outlined"
                   fullWidth
                   label="Price"
-                  value={customTransportPrice}
-                  onChange={(e) => setCustomTransportPrice(e.target.value)}
+                  value={formData.customTransportPrice}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      customTransportPrice: e.target.value,
+                    })
+                  }
                 />
               )}
             </div>
@@ -357,8 +432,13 @@ function TravelForm() {
                 id="selected-resort"
                 variant="outlined"
                 fullWidth
-                value={selectedResort}
-                onChange={(e) => setSelectedResort(e.target.value)}
+                value={formData.selectedResort}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    selectedResort: e.target.value,
+                  })
+                }
               >
                 {resorts.map((resort) => (
                   <MenuItem value={resort.id} key={resort.id}>
@@ -366,34 +446,6 @@ function TravelForm() {
                   </MenuItem>
                 ))}
               </Select>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={isResortCustomizable}
-                    onChange={(e) =>
-                      handleCustomizableChange(
-                        e,
-                        setIsResortCustomizable,
-                        setCustomResortName
-                      )
-                    }
-                    name="isResortCustomizable"
-                  />
-                }
-                label="Is Customizable"
-              />
-              {isResortCustomizable && (
-                <TextField
-                  type="text"
-                  name="custom-resort-name"
-                  id="custom-resort-name"
-                  variant="outlined"
-                  fullWidth
-                  label="Price"
-                  value={customResortName}
-                  onChange={(e) => setCustomResortName(e.target.value)}
-                />
-              )}
             </div>
           </div>
           <div>
@@ -409,8 +461,13 @@ function TravelForm() {
                 id="selected-room-type"
                 variant="outlined"
                 fullWidth
-                value={selectedRoomType}
-                onChange={(e) => setSelectedRoomType(e.target.value)}
+                value={formData.selectedRoomType}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    selectedRoomType: e.target.value,
+                  })
+                }
               >
                 {roomTypes.map((type) => (
                   <MenuItem value={type.id} key={type.id}>
@@ -421,12 +478,12 @@ function TravelForm() {
               <FormControlLabel
                 control={
                   <Checkbox
-                    checked={isRoomTypeCustomizable}
+                    checked={formData.isRoomTypeCustomizable}
                     onChange={(e) =>
                       handleCustomizableChange(
                         e,
-                        setIsRoomTypeCustomizable,
-                        setCustomRoomTypeName
+                        "isRoomTypeCustomizable",
+                        "customRoomTypePrice"
                       )
                     }
                     name="isRoomTypeCustomizable"
@@ -434,7 +491,7 @@ function TravelForm() {
                 }
                 label="Is Customizable"
               />
-              {isRoomTypeCustomizable && (
+              {formData.isRoomTypeCustomizable && (
                 <TextField
                   type="text"
                   name="custom-room-type-name"
@@ -442,15 +499,24 @@ function TravelForm() {
                   variant="outlined"
                   fullWidth
                   label="Price"
-                  value={customRoomTypeName}
-                  onChange={(e) => setCustomRoomTypeName(e.target.value)}
+                  value={formData.customRoomTypePrice}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      customRoomTypePrice: e.target.value,
+                    })
+                  }
                 />
               )}
             </div>
           </div>
         </div>
         <div className="mt-8">
-          <Button variant="contained" onClick={handleSubmit}>
+          <Button
+            variant="contained"
+            onClick={handleSubmit}
+            style={{ width: "100%" }}
+          >
             Create
           </Button>
         </div>
