@@ -23,17 +23,15 @@ function TravelForm() {
   const [customTransportPrice, setCustomTransportPrice] = useState("");
   const [isTourGuideCustomizable, setIsTourGuideCustomizable] = useState(false);
   const [customTourGuideName, setCustomTourGuideName] = useState("");
-  const [isResortCustomizable, setIsResortCustomizable] = useState(false); // New state for resort customizability
-  const [customResortName, setCustomResortName] = useState(""); // New state for custom resort name
-  const [isRoomTypeCustomizable, setIsRoomTypeCustomizable] = useState(false); // New state for room type customizability
-  const [customRoomTypeName, setCustomRoomTypeName] = useState(""); // New state for custom room type name
+  const [isResortCustomizable, setIsResortCustomizable] = useState(false);
+  const [customResortName, setCustomResortName] = useState("");
+  const [isRoomTypeCustomizable, setIsRoomTypeCustomizable] = useState(false);
+  const [customRoomTypeName, setCustomRoomTypeName] = useState("");
 
   const activities = [
-    "Hiking",
-    "Sightseeing",
-    "Swimming",
-    "Cycling",
-    "Boating",
+    { id: 1, name: "Hiking" },
+    { id: 2, name: "Sightseeing" },
+    { id: 3, name: "Swimming" },
   ];
 
   const transportModes = [
@@ -100,6 +98,8 @@ function TravelForm() {
     console.log("Is Room Type Customizable: ", isRoomTypeCustomizable);
     console.log("Custom Room Type Name: ", customRoomTypeName);
     console.log("Selected Room Type: ", selectedRoomType);
+
+    console.log("Selected Activities: ", selectedActivities);
   };
 
   return (
@@ -147,8 +147,8 @@ function TravelForm() {
                 onChange={handleActivityChange}
               >
                 {activities.map((activity) => (
-                  <MenuItem key={activity} value={activity}>
-                    {activity}
+                  <MenuItem key={activity.id} value={activity.id}>
+                    {activity.name}
                   </MenuItem>
                 ))}
               </Select>
