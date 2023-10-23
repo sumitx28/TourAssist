@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   TextField,
   Select,
@@ -6,7 +6,13 @@ import {
   Button,
   FormControlLabel,
   Checkbox,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
 } from "@mui/material";
+import fetchData from "../../../utility/request";
 
 function TravelForm() {
   const [formData, setFormData] = useState({
@@ -28,6 +34,21 @@ function TravelForm() {
     customRoomTypePrice: "",
   });
 
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [sources, setSources] = useState([]); // Use state to store sources and destinations
+  const [destinations, setDestinations] = useState([]);
+
+  useEffect(() => {
+    const getData = async () => {
+      const sourcesData = await fetchData("/api/v1/locations");
+      const destinationsData = await fetchData("/api/v1/locations");
+      setSources(sourcesData);
+      setDestinations(destinationsData);
+    };
+
+    getData();
+  }, []);
+
   const activities = [
     { id: 1, name: "Hiking" },
     { id: 2, name: "Sightseeing" },
@@ -39,16 +60,16 @@ function TravelForm() {
     { id: 2, name: "Cruise" },
     { id: 3, name: "Train" },
   ];
-  const sources = [
-    { id: 1, name: "Helsinki" },
-    { id: 2, name: "New York" },
-    { id: 3, name: "Chicago" },
-  ];
-  const destinations = [
-    { id: 4, name: "Dallas" },
-    { id: 5, name: "Toronto" },
-    { id: 6, name: "Halifax" },
-  ];
+  // const sources = [
+  //   { id: 1, name: "Helsinki" },
+  //   { id: 2, name: "New York" },
+  //   { id: 3, name: "Chicago" },
+  // ];
+  // const destinations = [
+  //   { id: 4, name: "Dallas" },
+  //   { id: 5, name: "Toronto" },
+  //   { id: 6, name: "Halifax" },
+  // ];
 
   const resorts = [
     { id: 1, name: "Resort A" },
@@ -82,69 +103,68 @@ function TravelForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // console.log(
-    //   "Is Transport Customizable: ",
-    //   formData.isTransportCustomizable
-    // );
-    // console.log("Custom Transport Price: ", formData.customTransportPrice);
-    // console.log("Selected Transport: ", formData.selectedTransport);
 
-    // console.log(
-    //   "Is Tour Guide Customizable: ",
-    //   formData.isTourGuideCustomizable
-    // );
-    // console.log("Custom Tour Guide Name: ", formData.customTourGuideName);
-    // console.log("Selected Tour Guide: ", formData.selectedTourGuide);
+    // Check for required fields
+    const requiredFields = [
+      "packageName",
+      "tripStartDate",
+      "tripEndDate",
+      "tripSource",
+      "tripDestination",
+      "selectedTransport",
+      "selectedResort",
+      "selectedRoomType",
+    ];
 
-    // console.log("Is Resort Customizable: ", formData.isResortCustomizable);
-    // console.log("Custom Resort Name: ", formData.customResortName);
-    // console.log("Selected Resort: ", formData.selectedResort);
+    const hasEmptyFields = requiredFields.some((field) => !formData[field]);
 
-    // console.log("Is Room Type Customizable: ", formData.isRoomTypeCustomizable);
-    // console.log("Custom Room Type Name: ", formData.customRoomTypeName);
-    // console.log("Selected Room Type: ", formData.selectedRoomType);
+    if (hasEmptyFields) {
+      setDialogOpen(true);
+    } else {
+      const postData = {
+        packageName: formData.packageName,
+        agentId: 123,
+        tripStartDate: formData.tripStartDate,
+        tripEndDate: formData.tripEndDate,
+        sourceId: formData.tripSource,
+        destinationId: formData.tripDestination,
+        isCustomizable:
+          formData.isResortCustomizable ||
+          formData.isRoomTypeCustomizable ||
+          formData.isTourGuideCustomizable ||
+          formData.isTransportCustomizable,
+        stayRequest: {
+          resortId: formData.selectedResort,
+          suiteId: formData.selectedRoomType,
+          price: Number(formData.customRoomTypePrice),
+          isCustomizable: formData.isRoomTypeCustomizable,
+        },
+        tourGuideRequest: {
+          guideId: formData.selectedTourGuide,
+          price: Number(formData.customTourGuidePrice),
+          isCustomizable: formData.isTourGuideCustomizable,
+        },
+        transportationRequest: {
+          modeId: formData.selectedTransport,
+          price: Number(formData.customTransportPrice),
+          isCustomizable: formData.isTransportCustomizable,
+        },
+        activities: formData.selectedActivities.map((value) => {
+          return {
+            activityId: value,
+            activityDate: new Date().toJSON().slice(0, 10),
+            price: 0,
+            isCustomizable: false,
+          };
+        }),
+      };
 
-    // console.log("Selected Activities: ", formData.selectedActivities);
+      console.log(postData);
+    }
+  };
 
-    const postData = {
-      packageName: formData.packageName,
-      agentId: 123,
-      tripStartDate: formData.tripStartDate,
-      tripEndDate: formData.tripEndDate,
-      sourceId: formData.tripSource,
-      destinationId: formData.tripDestination,
-      isCustomizable:
-        formData.isResortCustomizable ||
-        formData.isRoomTypeCustomizable ||
-        formData.isTourGuideCustomizable ||
-        formData.isTransportCustomizable,
-      stayRequest: {
-        resortId: formData.selectedResort,
-        suiteId: formData.selectedRoomType,
-        price: Number(formData.customRoomTypePrice),
-        isCustomizable: formData.isRoomTypeCustomizable,
-      },
-      tourGuideRequest: {
-        guideId: formData.selectedTourGuide,
-        price: Number(formData.customTourGuidePrice),
-        isCustomizable: formData.isTourGuideCustomizable,
-      },
-      transportationRequest: {
-        modeId: formData.selectedTransport,
-        price: Number(formData.customTransportPrice),
-        isCustomizable: formData.isTransportCustomizable,
-      },
-      activities: formData.selectedActivities.map((value) => {
-        return {
-          activityId: value,
-          activityDate: new Date().toJSON().slice(0, 10),
-          price: 0,
-          isCustomizable: false,
-        };
-      }),
-    };
-
-    console.log(postData);
+  const handleCloseDialog = () => {
+    setDialogOpen(false);
   };
 
   return (
@@ -160,7 +180,7 @@ function TravelForm() {
               htmlFor="package-name"
               className="block text-sm font-semibold text-gray-900"
             >
-              Package Name
+              Package Name*
             </label>
             <div className="mt-2.5">
               <TextField
@@ -206,7 +226,7 @@ function TravelForm() {
               htmlFor="trip-start-date"
               className="block text-sm font-semibold text-gray-900"
             >
-              Trip Start Date
+              Trip Start Date*
             </label>
             <div className="mt-2.5">
               <TextField
@@ -227,7 +247,7 @@ function TravelForm() {
               htmlFor="trip-end-date"
               className="block text-sm font-semibold text-gray-900"
             >
-              Trip End Date
+              Trip End Date*
             </label>
             <div className="mt-2.5">
               <TextField
@@ -248,7 +268,7 @@ function TravelForm() {
               htmlFor="trip-source"
               className="block text-sm font-semibold text-gray-900"
             >
-              Trip Source
+              Trip Source*
             </label>
             <div className="mt-2.5">
               <Select
@@ -274,7 +294,7 @@ function TravelForm() {
               htmlFor="trip-destination"
               className="block text-sm font-semibold text-gray-900"
             >
-              Trip Destination
+              Trip Destination*
             </label>
             <div className="mt-2.5">
               <Select
@@ -362,7 +382,7 @@ function TravelForm() {
               htmlFor="selected-transport"
               className="block text-sm font-semibold text-gray-900"
             >
-              Mode of Transport
+              Mode of Travel*
             </label>
             <div className="mt-2.5">
               <Select
@@ -424,7 +444,7 @@ function TravelForm() {
               htmlFor="selected-resort"
               className="block text-sm font-semibold text-gray-900"
             >
-              Resort
+              Resort*
             </label>
             <div className="mt-2.5">
               <Select
@@ -453,7 +473,7 @@ function TravelForm() {
               htmlFor="selected-room-type"
               className="block text-sm font-semibold text-gray-900"
             >
-              Type of Room
+              Type of Room*
             </label>
             <div className="mt-2.5">
               <Select
@@ -521,6 +541,26 @@ function TravelForm() {
           </Button>
         </div>
       </form>
+      <Dialog
+        open={dialogOpen}
+        onClose={handleCloseDialog}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Fill All Required Fields"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Please fill in all the required fields before submitting the form.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog} autoFocus>
+            OK
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }
