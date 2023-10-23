@@ -2,7 +2,7 @@ FROM amazoncorretto:17-al2023-jdk
 
 WORKDIR /app
 
-COPY target/tour-assist-0.0.1-SNAPSHOT.jar /app/app.jar
+COPY ServerSide/TourAssist/target/tour-assist-0.0.1-SNAPSHOT.jar /app/app.jar
 
 EXPOSE 8080
 
