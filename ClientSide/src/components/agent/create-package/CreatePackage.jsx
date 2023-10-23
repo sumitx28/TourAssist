@@ -13,6 +13,8 @@ import {
   DialogActions,
 } from "@mui/material";
 import fetchData from "../../../utility/request";
+import axios from "axios";
+import API_URL from "../../../../config/config";
 
 function TravelForm() {
   const [formData, setFormData] = useState({
@@ -37,57 +39,43 @@ function TravelForm() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [sources, setSources] = useState([]); // Use state to store sources and destinations
   const [destinations, setDestinations] = useState([]);
+  const [activities, setActivities] = useState([]);
+  const [transportModes, setTransportModes] = useState([]);
+  const [tourGuides, setTourGuides] = useState([]);
+  const [roomTypes, setRoomTypes] = useState([]);
+  const [resorts, setResorts] = useState([]);
 
   useEffect(() => {
     const getData = async () => {
-      const sourcesData = await fetchData("/api/v1/locations");
-      const destinationsData = await fetchData("/api/v1/locations");
+      const sourcesData = await fetchData("/api/v1/auth/locations");
+      const destinationsData = await fetchData("/api/v1/auth/locations");
+      const activitiesData = await fetchData("/api/v1/auth/activities");
+      const transportModeData = await fetchData("/api/v1/auth/travel-modes");
+      const roomTypesData = await fetchData("/api/v1/auth/suites");
+
       setSources(sourcesData);
       setDestinations(destinationsData);
+      setActivities(activitiesData);
+      setTransportModes(transportModeData);
+      setRoomTypes(roomTypesData);
     };
 
     getData();
   }, []);
 
-  const activities = [
-    { id: 1, name: "Hiking" },
-    { id: 2, name: "Sightseeing" },
-    { id: 3, name: "Swimming" },
-  ];
+  const fetchTourGuides = async (destinationId) => {
+    const tourGuideData = await fetchData(
+      `/api/v1/auth/guides/${destinationId}`
+    );
+    setTourGuides(tourGuideData);
+  };
 
-  const transportModes = [
-    { id: 1, name: "Flight" },
-    { id: 2, name: "Cruise" },
-    { id: 3, name: "Train" },
-  ];
-  // const sources = [
-  //   { id: 1, name: "Helsinki" },
-  //   { id: 2, name: "New York" },
-  //   { id: 3, name: "Chicago" },
-  // ];
-  // const destinations = [
-  //   { id: 4, name: "Dallas" },
-  //   { id: 5, name: "Toronto" },
-  //   { id: 6, name: "Halifax" },
-  // ];
-
-  const resorts = [
-    { id: 1, name: "Resort A" },
-    { id: 2, name: "Resort B" },
-    { id: 3, name: "Resort C" },
-  ];
-
-  const roomTypes = [
-    { id: 1, name: "Standard" },
-    { id: 2, name: "Deluxe" },
-    { id: 3, name: "Suite" },
-  ];
-
-  const tourGuides = [
-    { id: 1, name: "Guide 1" },
-    { id: 2, name: "Guide 2" },
-    { id: 3, name: "Guide 3" },
-  ];
+  const fetchResorts = async (destinationId) => {
+    const resortsData = await fetchData(
+      `/api/v1/auth/resorts/${destinationId}`
+    );
+    setResorts(resortsData);
+  };
 
   const handleActivityChange = (e) => {
     setFormData({ ...formData, selectedActivities: e.target.value });
@@ -101,10 +89,11 @@ function TravelForm() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Check for required fields
+    console.log(formData);
+
     const requiredFields = [
       "packageName",
       "tripStartDate",
@@ -123,10 +112,10 @@ function TravelForm() {
     } else {
       const postData = {
         packageName: formData.packageName,
-        agentId: 123,
+        agentId: 1,
         tripStartDate: formData.tripStartDate,
-        tripEndDate: formData.tripEndDate,
-        sourceId: formData.tripSource,
+        tripEndDate: formData.tripEndDate + "T10:00:00Z",
+        sourceId: formData.tripSource + "T10:00:00Z",
         destinationId: formData.tripDestination,
         isCustomizable:
           formData.isResortCustomizable ||
@@ -160,6 +149,23 @@ function TravelForm() {
       };
 
       console.log(postData);
+
+      const authToken = localStorage.getItem("authToken");
+
+      try {
+        const response = await axios.post(
+          `${API_URL}/api/v1/auth/create-package`,
+          postData,
+          {
+            headers: {
+              Authorization: `Bearer ${authToken}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+      } catch (e) {
+        alert("Package Successfully Created");
+      }
     }
   };
 
@@ -215,7 +221,7 @@ function TravelForm() {
               >
                 {activities.map((activity) => (
                   <MenuItem key={activity.id} value={activity.id}>
-                    {activity.name}
+                    {activity.activityName}
                   </MenuItem>
                 ))}
               </Select>
@@ -283,7 +289,7 @@ function TravelForm() {
               >
                 {sources.map((location) => (
                   <MenuItem value={location.id} key={location.id}>
-                    {location.name}
+                    {location.city}
                   </MenuItem>
                 ))}
               </Select>
@@ -303,13 +309,15 @@ function TravelForm() {
                 variant="outlined"
                 fullWidth
                 value={formData.tripDestination}
-                onChange={(e) =>
-                  setFormData({ ...formData, tripDestination: e.target.value })
-                }
+                onChange={(e) => {
+                  fetchTourGuides(e.target.value);
+                  fetchResorts(e.target.value);
+                  setFormData({ ...formData, tripDestination: e.target.value });
+                }}
               >
                 {destinations.map((location) => (
                   <MenuItem value={location.id} key={location.id}>
-                    {location.name}
+                    {location.city}
                   </MenuItem>
                 ))}
               </Select>
@@ -338,7 +346,7 @@ function TravelForm() {
               >
                 {tourGuides.map((guide) => (
                   <MenuItem value={guide.id} key={guide.id}>
-                    {guide.name}
+                    {guide.guideName}
                   </MenuItem>
                 ))}
               </Select>
@@ -400,7 +408,7 @@ function TravelForm() {
               >
                 {transportModes.map((mode) => (
                   <MenuItem value={mode.id} key={mode.id}>
-                    {mode.name}
+                    {mode.mode}
                   </MenuItem>
                 ))}
               </Select>
@@ -462,7 +470,7 @@ function TravelForm() {
               >
                 {resorts.map((resort) => (
                   <MenuItem value={resort.id} key={resort.id}>
-                    {resort.name}
+                    {resort.resortName}
                   </MenuItem>
                 ))}
               </Select>
@@ -491,7 +499,7 @@ function TravelForm() {
               >
                 {roomTypes.map((type) => (
                   <MenuItem value={type.id} key={type.id}>
-                    {type.name}
+                    {type.suiteType}
                   </MenuItem>
                 ))}
               </Select>
