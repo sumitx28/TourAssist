@@ -14,7 +14,7 @@ import java.time.Instant;
 @NoArgsConstructor
 @Data
 @Builder
-@Table(name = "package_review")
+@Table(name = "package_media")
 public class PackageMedia implements Serializable {
 
 

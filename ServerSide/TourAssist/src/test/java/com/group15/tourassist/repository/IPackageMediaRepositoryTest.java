@@ -28,6 +28,9 @@ class IPackageMediaRepositoryTest {
         packageMediaOne = new PackageMedia(1l, 1l, "/package_media/1.jpg", "tour image", august20th2023UTC);
     }
 
+    /**
+     * This tests the save functionality of IPackageMediaRepository by mocking the repository object.
+     */
     @Test
     public void testSavePackageMedia() {
         // Arrange
