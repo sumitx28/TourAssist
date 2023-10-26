@@ -36,4 +36,6 @@ public class PackageCreateRequest {
 
     private TransportationRequest transportationRequest;
 
+    private List<PackageMediaRequest> packageMediaRequests;
+
 }

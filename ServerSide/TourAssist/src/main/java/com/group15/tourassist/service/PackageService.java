@@ -30,6 +30,9 @@ public class PackageService implements IPackageService {
     @Autowired
     IActivityRepository activityRepository;
 
+    @Autowired
+    IPackageMediaService packageMediaService;
+
     // Transaction method to save all or nothing.
     @Override
     @Transactional
@@ -40,8 +43,18 @@ public class PackageService implements IPackageService {
         createTourGuide(request.getTourGuideRequest(), newPackage.getId());
         createTransportation(request.getTransportationRequest(), newPackage.getId());
         createActivities(request.getActivities(), newPackage.getId());
+        createPackageMedia(request.getPackageMediaRequests(), newPackage.getId());
 
         return newPackage.getId();
+    }
+
+
+    /**
+     * @param packageMediaRequests All the images for a package.
+     * @param packageId package_id : primary key of package table.
+     */
+    private void createPackageMedia(List<PackageMediaRequest> packageMediaRequests, Long packageId) {
+        packageMediaService.saveAllPackageMedia(packageMediaRequests, packageId);
     }
 
     // Create a Stay entity from request.
