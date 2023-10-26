@@ -181,7 +181,7 @@ CREATE TABLE package_review (
 CREATE TABLE package_media (
     id BIGINT(20) NOT NULL AUTO_INCREMENT,
     package_id bigint(20) NOT NULL,
-    media_content text not null,
+    media_path text not null,
 	`description` text,
     upload_date datetime not null,
     FOREIGN KEY (package_id) REFERENCES package(id),
