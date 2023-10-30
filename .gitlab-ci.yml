@@ -71,7 +71,7 @@ package:
   script:
     - pwd
     - ls -la ServerSide/TourAssist/target/
-    - docker build -t docker.io/patelraj22777/test:$CI_COMMIT_SHORT_SHA $BACKEND_DIR/target/ .
+    - docker build -t docker.io/patelraj22777/test:$CI_COMMIT_SHORT_SHA $BACKEND_DIR/target/
     - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PWD docker.io
     - docker push docker.io/patelraj22777/test:$CI_COMMIT_SHORT_SHA
 
