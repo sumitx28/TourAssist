@@ -44,7 +44,7 @@ build:
     - pwd
     - cd $BACKEND_DIR
     - mvn clean package -Dspring.profiles.active=prod
-    - cp target/tour-assist-*.jar /home/deployer/backend-$CI_COMMIT_SHORT_SHA.jar
+    - cp target/tour-assist-*.jar /app-$CI_COMMIT_SHORT_SHA.jar
   only:
     - ci-cd-backend
 
@@ -52,10 +52,13 @@ deploy:
   stage: deploy
   tags:
     - deployment
+  image: maven:3.8.5-openjdk-17
   script:
     - pwd
-    - cd $BACKEND_DIR
-    - java -jar -Dspring.profiles.active=prod /home/deployer/backend-$CI_COMMIT_SHORT_SHA.jar
+    - cd /
+    - pwd
+    - ls -la
+    - java -jar -Dspring.profiles.active=prod /app-$CI_COMMIT_SHORT_SHA.jar
   only:
     - ci-cd-backend
 
