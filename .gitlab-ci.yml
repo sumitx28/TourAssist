@@ -39,10 +39,11 @@ build:
   stage: build
   tags:
     - deployment
+  image: maven:3.8.5-openjdk-17
   script:
     - pwd
     - cd $BACKEND_DIR
-    - $MAVEN_HOME/bin/mvn clean package
+    - mvn clean package -Dspring.profiles.active=prod
     - cp target/tour-assist-*.jar /home/deployer/backend-$CI_COMMIT_SHORT_SHA.jar
   only:
     - ci-cd-backend
