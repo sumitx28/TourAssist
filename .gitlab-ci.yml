@@ -34,11 +34,11 @@ publish:
 
  
   script:
-    - pwd 
+    - pwd
     - echo $SERVER_IP
-    - docker --version
-    - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PWD docker.io
-    - docker build --no-cache -t docker.io/patelraj22777/test:$CI_COMMIT_SHORT_SHA ServerSide/TourAssist/
-    - docker push docker.io/patelraj22777/test:$CI_COMMIT_SHORT_SHA
+#    - docker --version
+#    - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PWD docker.io
+#    - docker build --no-cache -t docker.io/patelraj22777/test:$CI_COMMIT_SHORT_SHA ServerSide/TourAssist/
+#    - docker push docker.io/patelraj22777/test:$CI_COMMIT_SHORT_SHA
   only:
     - ci-cd-backend
