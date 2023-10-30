@@ -14,7 +14,7 @@ import java.time.Instant;
 @NoArgsConstructor
 @Data
 @Builder
-@Table(name = "package_review")
+@Table(name = "package_media")
 public class PackageMedia implements Serializable {
 
 
@@ -25,8 +25,8 @@ public class PackageMedia implements Serializable {
     @Column(name = "package_id")
     private Long packageId;
 
-    @Column(name = "mediaContent")
-    private String mediaContent;
+    @Column(name = "mediaPath")
+    private String mediaPath;
 
     @Column(name = "description")
     private String description;
