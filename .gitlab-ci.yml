@@ -23,11 +23,13 @@ stages:          # List of stages for jobs, and their order of execution
 
 test:
   stage: test
+  image: maven:3.8.5-openjdk-17
   script:
     - pwd
     - echo $BACKEND_DIR
     - cd $BACKEND_DIR
-    - $MAVEN_HOME/bin/mvn clean install
+    - mvn -version
+    - mvn clean install
   only:
     - ci-cd-backend
 
