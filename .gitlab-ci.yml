@@ -22,24 +22,24 @@ services:
 
 
 stages:          # List of stages for jobs, and their order of execution
-#  - test
+  - test
   - build
   - package
   - deploy
 
-#test:
-#  stage: test
-#  tags:
-#    - deployment
-#  image: maven:3.8.5-openjdk-17
-#  script:
-#    - pwd
-#    - echo $BACKEND_DIR
-#    - cd $BACKEND_DIR
-#    - mvn -version
-#    - mvn clean install -Dspring.profiles.active=prod
-#  only:
-#    - ci-cd-backend
+test:
+  stage: test
+  tags:
+    - deployment
+  image: maven:3.8.5-openjdk-17
+  script:
+    - pwd
+    - echo $BACKEND_DIR
+    - cd $BACKEND_DIR
+    - mvn -version
+    - mvn clean install -Dspring.profiles.active=prod
+  only:
+    - ci-cd-backend
 
 build:
   stage: build
