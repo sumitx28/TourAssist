@@ -17,28 +17,35 @@
 # https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Getting-Started.gitlab-ci.yml
 
 stages:          # List of stages for jobs, and their order of execution
-  - publish
+  - test
+  - build
+  - deploy
 
-publish:
-  image: docker:latest
-  stage: publish
-  tags: 
-    - deployment
-  variables:
-    # these values may need to be different if using TLS, k8s, etc.
-    # You can alternatively set defaults in your runner config
-    DOCKER_TLS_CERTDIR: ""
-    DOCKER_HOST: "tcp://docker:2375"
-  services:
-    - docker:dind
-
- 
+test:
+  stage: test
   script:
     - pwd
-    - echo $SERVER_IP
-#    - docker --version
-#    - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PWD docker.io
-#    - docker build --no-cache -t docker.io/patelraj22777/test:$CI_COMMIT_SHORT_SHA ServerSide/TourAssist/
-#    - docker push docker.io/patelraj22777/test:$CI_COMMIT_SHORT_SHA
+    - echo $BACKEND_DIR
+    - cd $BACKEND_DIR
+    - mvn clean install
+  only:
+    - ci-cd-backend
+
+build:
+  stage: build
+  script:
+    - pwd
+    - cd $BACKEND_DIR
+    - mvn clean package
+    - cp target/tour-assist-*.jar /home/deployer/backend-$CI_COMMIT_SHORT_SHA.jar
+  only:
+    - ci-cd-backend
+
+deploy:
+  stage: deploy
+  script:
+    - pwd
+    - cd $BACKEND_DIR
+    - java -jar -Dspring.profiles.active=prod /home/deployer/backend-$CI_COMMIT_SHORT_SHA.jar
   only:
     - ci-cd-backend
