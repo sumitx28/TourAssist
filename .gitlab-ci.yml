@@ -16,24 +16,30 @@
 # This specific template is located at:
 # https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Getting-Started.gitlab-ci.yml
 
+image: docker:latest
+services:
+  - docker:dind
+
+
 stages:          # List of stages for jobs, and their order of execution
-  - test
+#  - test
   - build
+  - package
   - deploy
 
-test:
-  stage: test
-  tags:
-    - deployment
-  image: maven:3.8.5-openjdk-17
-  script:
-    - pwd
-    - echo $BACKEND_DIR
-    - cd $BACKEND_DIR
-    - mvn -version
-    - mvn clean install -Dspring.profiles.active=prod
-  only:
-    - ci-cd-backend
+#test:
+#  stage: test
+#  tags:
+#    - deployment
+#  image: maven:3.8.5-openjdk-17
+#  script:
+#    - pwd
+#    - echo $BACKEND_DIR
+#    - cd $BACKEND_DIR
+#    - mvn -version
+#    - mvn clean install -Dspring.profiles.active=prod
+#  only:
+#    - ci-cd-backend
 
 build:
   stage: build
@@ -44,22 +50,36 @@ build:
     - pwd
     - cd $BACKEND_DIR
     - mvn clean package -Dspring.profiles.active=prod
-    - docker cp maven:3.8.5-openjdk-17:target/tour-assist-*.jar /app-$CI_COMMIT_SHORT_SHA.jar
+  artifacts:
+    paths:
+      - $BACKEND_DIR/target/*.jar
   only:
     - ci-cd-backend
+
+package:
+  stage: package
+  tags:
+    - deployment
+  script:
+    - pwd
+    - ls -la ServerSide/TourAssist/target/
+    - docker build -t ServerSide/TourAssist/ .
+    - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PWD docker.io
+    - docker push docker.io/patelraj22777/test:$CI_COMMIT_SHORT_SHA
 
 deploy:
   stage: deploy
   tags:
     - deployment
-  image: docker
   script:
-    - pwd
-    - cd /
-    - pwd
-    - ls -la
-    - java -jar -Dspring.profiles.active=prod /app-$CI_COMMIT_SHORT_SHA.jar
+    - chmod og= $ID_RSA
+    - apk update && apk add openssh-client
+    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PWD docker.io"
+    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker pull docker.io/patelraj22777/test:$CI_COMMIT_SHORT_SHA"
+    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker container rm -f my-app || true"
+    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker run -d -p 8073:8080 --name my-app docker.io/patelraj22777/test:$CI_COMMIT_SHORT_SHA"
+  environment:
+    name: production
+    url: http://172.17.0.148:8073
   only:
     - ci-cd-backend
-
-# testing change
