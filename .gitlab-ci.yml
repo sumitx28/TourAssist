@@ -23,6 +23,8 @@ stages:          # List of stages for jobs, and their order of execution
 
 test:
   stage: test
+  tags:
+    - deployment
   image: maven:3.8.5-openjdk-17
   script:
     - pwd
@@ -35,6 +37,8 @@ test:
 
 build:
   stage: build
+  tags:
+    - deployment
   script:
     - pwd
     - cd $BACKEND_DIR
@@ -45,6 +49,8 @@ build:
 
 deploy:
   stage: deploy
+  tags:
+    - deployment
   script:
     - pwd
     - cd $BACKEND_DIR
