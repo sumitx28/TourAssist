@@ -27,7 +27,7 @@ test:
     - pwd
     - echo $BACKEND_DIR
     - cd $BACKEND_DIR
-    - mvn clean install
+    - $MAVEN_HOME/bin/mvn clean install
   only:
     - ci-cd-backend
 
@@ -36,7 +36,7 @@ build:
   script:
     - pwd
     - cd $BACKEND_DIR
-    - mvn clean package
+    - $MAVEN_HOME/bin/mvn clean package
     - cp target/tour-assist-*.jar /home/deployer/backend-$CI_COMMIT_SHORT_SHA.jar
   only:
     - ci-cd-backend
