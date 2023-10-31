@@ -14,24 +14,7 @@ import { Link as RouterLink, useNavigate } from "react-router-dom";
 import axios from "axios";
 import API_URL from "../../config/config";
 import TravelLogo from "./commons/TravelLogo";
-
-function Copyright(props) {
-  return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
-    >
-      {"Copyright © "}
-      <Link color="inherit">
-        <RouterLink to={"/"}>{"Tour Assist"}</RouterLink>
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
+import Copyright from "./commons/Copyright";
 
 const defaultTheme = createTheme();
 
