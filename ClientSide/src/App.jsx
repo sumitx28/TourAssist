@@ -1,13 +1,14 @@
-import AgentDashboard from "./components/AgentDashboard";
+import AgentDashboard from "./components/agent/AgentDashboard";
 import AgentLogin from "./components/AgentLogin";
 import Dashboard from "./components/Dashboard";
+import AgentDash from "./components/dashboard/Dashboard";
 import ForgotPassword from "./components/ForgotPassword";
 import Home from "./components/Home";
 import Login from "./components/Login";
 import ResetPassword from "./components/ResetPassword";
 import SignUp from "./components/Signup";
 import AuthGuard from "./guards/AuthGuard";
-import CreatePackage from "./components/agent/create-package/CreatePackage";
+import CreatePackage from "./components/agent/CreatePackage";
 
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 
@@ -20,10 +21,27 @@ function App() {
           <Route exact path="/login" element={<Login />}></Route>
           <Route exact path="/signup" element={<SignUp />}></Route>
           <Route path="/agent-login" element={<AgentLogin />} />
-          <Route path="/agent-dashboard" element={<AgentDashboard />} />
+          <Route
+            path="/agent-dashboard"
+            element={
+              <AuthGuard>
+                <AgentDashboard />
+              </AuthGuard>
+            }
+          />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password/:token" element={<ResetPassword />} />
-          <Route path="/create-package" element={<CreatePackage />} />
+          <Route
+            path="/create-package"
+            element={
+              <AuthGuard>
+                <AgentDash
+                  title="New Travel Package"
+                  Component={<CreatePackage />}
+                />
+              </AuthGuard>
+            }
+          />
           <Route
             path="/dashboard"
             element={

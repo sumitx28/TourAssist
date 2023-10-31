@@ -12,10 +12,10 @@ import {
   DialogContentText,
   DialogActions,
 } from "@mui/material";
-import fetchData from "../../../utility/request";
+import fetchData from "../../utility/request";
 import axios from "axios";
-import API_URL from "../../../../config/config";
-import NavBar from "../../commons/NavBar";
+import API_URL from "../../../config/config";
+import NavBar from "../commons/NavBar";
 
 function TravelForm() {
   const [formData, setFormData] = useState({
@@ -175,8 +175,7 @@ function TravelForm() {
   };
 
   return (
-    <>
-      <NavBar />
+    <React.Fragment>
       <div className="px-6 py-4 max-w-screen-lg mx-auto">
         <div className="mx-auto text-center">
           <h2 className="text-3xl font-bold text-gray-900">
@@ -574,7 +573,7 @@ function TravelForm() {
           </DialogActions>
         </Dialog>
       </div>
-    </>
+    </React.Fragment>
   );
 }
 
