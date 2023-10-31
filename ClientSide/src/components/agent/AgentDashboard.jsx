@@ -1,7 +1,9 @@
+import Dashboard from "../dashboard/Dashboard";
+
 const AgentDashboard = () => {
   return (
     <>
-      <h1>Hello Agent</h1>
+      <Dashboard title="Agent Dashboard" />
     </>
   );
 };

@@ -16,23 +16,23 @@ function Home() {
             <p>Welcome to Tour Assist. Your one-stop travel solution.</p>
           </blockquote>
         </figure>
-      <div className="flex justify-center min-h-full py-12 lg:px-8">
-        <Link to="/login">
-          <button
-            type="submit"
-            className="w-24 h-10 rounded-md bg-indigo-600 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 mr-4"
+        <div className="flex justify-center min-h-full py-12 lg:px-8">
+          <Link to="/login">
+            <button
+              type="submit"
+              className="w-24 h-10 rounded-md bg-indigo-600 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 mr-4"
             >
-            Login
-          </button>
-        </Link>
-        <Link to="/signup">
-          <button
-            type="submit"
-            className="w-24 h-10 rounded-md bg-indigo-600 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              Login
+            </button>
+          </Link>
+          <Link to="/signup">
+            <button
+              type="submit"
+              className="w-24 h-10 rounded-md bg-indigo-600 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
             >
-            Sign up
-          </button>
-        </Link>
+              Sign up
+            </button>
+          </Link>
         </div>
       </div>
     </section>

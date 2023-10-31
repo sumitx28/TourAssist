@@ -1,58 +1,78 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import Avatar from "@mui/material/Avatar";
+import Button from "@mui/material/Button";
+import CssBaseline from "@mui/material/CssBaseline";
+import TextField from "@mui/material/TextField";
+import Link from "@mui/material/Link";
+import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import Typography from "@mui/material/Typography";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import countries from "../data/countries.json";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
+import axios from "axios";
 import API_URL from "../../config/config";
+import TravelLogo from "./commons/TravelLogo";
+import { Paper } from "@mui/material";
+import Copyright from "./commons/Copyright";
 
-function SignUp() {
-  const [userType, setUserType] = useState("customer"); // Default to customer
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [mobile, setMobile] = useState("");
-  const [dateOfBirth, setDateOfBirth] = useState("");
-  const [country, setCountry] = useState("");
-  const [companyName, setCompanyName] = useState("");
-  const [employeeCount, setEmployeeCount] = useState("");
-  const [verificationId, setVerificationId] = useState("");
+const defaultTheme = createTheme();
+
+export default function SignUp() {
+  const [data, setData] = useState({
+    userType: "customer",
+    country: "Canada",
+    dob: null,
+  });
 
   const navigate = useNavigate();
 
-  const handleSignUp = async (e) => {
-    e.preventDefault();
-
-    // Define a data object that matches the backend entity
-    const userData = {
-      email,
-      password,
-      companyName,
-      mobile,
-      employeeCount: userType === "agent" ? employeeCount : null,
-      verificationId: userType === "agent" ? verificationId : null,
-    };
-
-    if (userType === "customer") {
-      userData.firstName = firstName;
-      userData.lastName = lastName;
-      userData.mobile = mobile;
-      userData.dateOfBirth = new Date(dateOfBirth).toISOString();
-      userData.country = country;
-    }
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
 
     try {
-      const response = await fetch(
-        `${API_URL}/api/v1/auth/register/${userType}`,
+      const userData = {
+        firstName:
+          data.userType === "customer" ? formData.get("firstName") : null,
+        lastName:
+          data.userType === "customer" ? formData.get("lastName") : null,
+        email: formData.get("email"),
+        password: formData.get("password"),
+        companyName: formData.get("company-name"),
+        mobile: formData.get("mobile-number"),
+        dateOfBirth: data.dob,
+        country: data.country,
+        employeeCount:
+          data.userType === "agent"
+            ? formData.get("number-of-employees")
+            : null,
+        verificationId:
+          data.userType === "agent" ? formData.get("verification-id") : null,
+      };
+
+      const response = await axios.post(
+        `${API_URL}/api/v1/auth/register/${data.userType}`,
+        userData,
         {
-          method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(userData),
         }
       );
 
-      if (response.ok) {
-        // Registration was successful; you can handle this as needed
-        navigate("/login"); // Redirect to the login page after successful sign-up
+      console.log(response);
+      console.log(userData);
+
+      if (response.status === 200) {
+        alert("Signup Successful!");
+        navigate("/login");
       } else {
         alert("Sign-up failed");
       }
@@ -62,271 +82,209 @@ function SignUp() {
   };
 
   return (
-    <>
-      <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-        <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-          <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-            Sign Up for an Account
-          </h2>
-        </div>
-
-        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form className="space-y-6" onSubmit={handleSignUp}>
-            <div>
-              <label
-                htmlFor="userType"
-                className="block text-sm font-medium leading-6 text-gray-900"
+    <ThemeProvider theme={defaultTheme}>
+      <div style={{ overflow: "hidden", height: "100vh", width: "100vw" }}>
+        <Grid container component="main" sx={{ height: "100vh" }}>
+          <CssBaseline />
+          <TravelLogo />
+          <Grid
+            item
+            xs={12}
+            sm={8}
+            md={5}
+            component={Paper}
+            elevation={6}
+            square
+          >
+            <Box
+              sx={{
+                my: 8,
+                mx: 4,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                overflow: "hidden",
+              }}
+            >
+              <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+                <LockOutlinedIcon />
+              </Avatar>
+              <Typography component="h1" variant="h5">
+                Sign up
+              </Typography>
+              <Box
+                component="form"
+                noValidate
+                onSubmit={handleSubmit}
+                sx={{ mt: 1 }}
               >
-                User Type
-              </label>
-              <div className="mt-2">
-                <select
-                  id="userType"
-                  name="userType"
-                  onChange={(e) => setUserType(e.target.value)}
-                  required
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                <Select
+                  labelId="user-type-label"
+                  id="user-type"
+                  value={data.userType}
+                  onChange={(event) =>
+                    setData({ ...data, userType: event.target.value })
+                  }
+                  fullWidth
+                  sx={{ mt: 2 }}
                 >
-                  <option value="customer">Customer</option>
-                  <option value="agent">Agent</option>
-                </select>
-              </div>
-            </div>
-
-            <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium leading-6 text-gray-900"
-              >
-                Email address
-              </label>
-              <div className="mt-2">
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  onChange={(e) => setEmail(e.target.value)}
-                  autoComplete="email"
-                  required
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                />
-              </div>
-            </div>
-
-            <div>
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium leading-6 text-gray-900"
-              >
-                Password
-              </label>
-              <div className="mt-2">
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  autoComplete="new-password"
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                />
-              </div>
-            </div>
-
-            {userType === "customer" && (
-              <>
-                <div>
-                  <label
-                    htmlFor="firstName"
-                    className="block text-sm font-medium leading-6 text-gray-900"
-                  >
-                    First Name
-                  </label>
-                  <div className="mt-2">
-                    <input
-                      id="firstName"
-                      name="firstName"
-                      type="text"
-                      onChange={(e) => setFirstName(e.target.value)}
-                      autoComplete="given-name"
+                  <MenuItem value="customer">Customer</MenuItem>
+                  <MenuItem value="agent">Agent</MenuItem>
+                </Select>
+                <Grid container spacing={2} sx={{ mt: 1 }}>
+                  {data.userType === "customer" && (
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        autoComplete="given-name"
+                        name="firstName"
+                        required
+                        fullWidth
+                        id="firstName"
+                        label="First Name"
+                        autoFocus
+                      />
+                    </Grid>
+                  )}
+                  {data.userType === "customer" && (
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        required
+                        fullWidth
+                        id="lastName"
+                        label="Last Name"
+                        name="lastName"
+                        autoComplete="family-name"
+                      />
+                    </Grid>
+                  )}
+                  <Grid item xs={12} sx={{ mt: 1 }}>
+                    <TextField
                       required
-                      className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                      fullWidth
+                      id="email"
+                      label="Email Address"
+                      name="email"
+                      autoComplete="email"
                     />
-                  </div>
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="lastName"
-                    className="block text-sm font-medium leading-6 text-gray-900"
-                  >
-                    Last Name
-                  </label>
-                  <div className="mt-2">
-                    <input
-                      id="lastName"
-                      name="lastName"
-                      type="text"
-                      onChange={(e) => setLastName(e.target.value)}
-                      autoComplete="family-name"
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
                       required
-                      className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                      fullWidth
+                      name="password"
+                      label="Password"
+                      type="password"
+                      id="password"
+                      autoComplete="new-password"
                     />
-                  </div>
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="mobile"
-                    className="block text-sm font-medium leading-6 text-gray-900"
-                  >
-                    Mobile
-                  </label>
-                  <div className="mt-2">
-                    <input
-                      id="mobile"
-                      name="mobile"
-                      type="text"
-                      onChange={(e) => setMobile(e.target.value)}
+                  </Grid>
+                  {data.userType === "agent" && (
+                    <Grid item xs={12}>
+                      <TextField
+                        required
+                        fullWidth
+                        id="company-name"
+                        label="Company Name"
+                        name="company-name"
+                        autoComplete="company-name"
+                      />
+                    </Grid>
+                  )}
+                  {data.userType === "agent" && (
+                    <Grid item xs={12}>
+                      <TextField
+                        required
+                        fullWidth
+                        id="number-of-employees"
+                        label="Employee Count"
+                        type="number"
+                        name="number-of-employees"
+                      />
+                    </Grid>
+                  )}
+                  <Grid item xs={12}>
+                    <TextField
                       required
-                      className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                      fullWidth
+                      name="mobile-number"
+                      label="Mobile Number"
+                      id="mobile-number"
+                      autoComplete="mobile-number"
                     />
-                  </div>
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="dateOfBirth"
-                    className="block text-sm font-medium leading-6 text-gray-900"
-                  >
-                    Date of Birth
-                  </label>
-                  <div className="mt-2">
-                    <input
-                      id="dateOfBirth"
-                      name="dateOfBirth"
-                      type="date"
-                      onChange={(e) => setDateOfBirth(e.target.value)}
-                      required
-                      className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="country"
-                    className="block text-sm font-medium leading-6 text-gray-900"
-                  >
-                    Country
-                  </label>
-                  <div className="mt-2">
-                    <input
-                      id="country"
-                      name="country"
-                      type="text"
-                      onChange={(e) => setCountry(e.target.value)}
-                      required
-                      className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                    />
-                  </div>
-                </div>
-              </>
-            )}
-
-            {userType === "agent" && (
-              <>
-                <div>
-                  <label
-                    htmlFor="companyName"
-                    className="block text-sm font-medium leading-6 text-gray-900"
-                  >
-                    Company Name
-                  </label>
-                  <div className="mt-2">
-                    <input
-                      id="companyName"
-                      name="companyName"
-                      type="text"
-                      onChange={(e) => setCompanyName(e.target.value)}
-                      required
-                      className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="mobile"
-                    className="block text-sm font-medium leading-6 text-gray-900"
-                  >
-                    Mobile
-                  </label>
-                  <div className="mt-2">
-                    <input
-                      id="mobile"
-                      name="mobile"
-                      type="text"
-                      onChange={(e) => setMobile(e.target.value)}
-                      required
-                      className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="employeeCount"
-                    className="block text-sm font-medium leading-6 text-gray-900"
-                  >
-                    Employee Count
-                  </label>
-                  <div className="mt-2">
-                    <input
-                      id="employeeCount"
-                      name="employeeCount"
-                      type="number"
-                      onChange={(e) => setEmployeeCount(e.target.value)}
-                      required
-                      className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="verificationId"
-                    className="block text-sm font-medium leading-6 text-gray-900"
-                  >
-                    Verification ID
-                  </label>
-                  <div className="mt-2">
-                    <input
-                      id="verificationId"
-                      name="verificationId"
-                      type="text"
-                      onChange={(e) => setVerificationId(e.target.value)}
-                      required
-                      className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                    />
-                  </div>
-                </div>
-              </>
-            )}
-
-            <div>
-              <button
-                type="submit"
-                className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-              >
-                Sign Up
-              </button>
-            </div>
-          </form>
-        </div>
+                  </Grid>
+                  {data.userType === "agent" && (
+                    <Grid item xs={12}>
+                      <TextField
+                        required
+                        fullWidth
+                        id="verification-id"
+                        label="Company Registeration ID"
+                        type="text"
+                        name="verification-id"
+                      />
+                    </Grid>
+                  )}
+                  {data.userType === "customer" && (
+                    <Grid item xs={12}>
+                      <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <DatePicker
+                          label="Date of Birth"
+                          value={data.dob}
+                          onChange={(date) =>
+                            setData({
+                              ...data,
+                              dob: new Date(date).toISOString(),
+                            })
+                          }
+                          sx={{ width: "100%" }}
+                        />
+                      </LocalizationProvider>
+                    </Grid>
+                  )}
+                  {data.userType === "customer" && (
+                    <Grid item xs={12}>
+                      <Select
+                        id="country"
+                        value={data.country}
+                        onChange={(event) =>
+                          setData({ ...data, country: event.target.value })
+                        }
+                        fullWidth
+                        required
+                        sx={{ mt: 2 }}
+                      >
+                        {countries.countries.map((country) => (
+                          <MenuItem key={country.code} value={country.name}>
+                            {country.name}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </Grid>
+                  )}
+                </Grid>
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  sx={{ mt: 3, mb: 2 }}
+                >
+                  Sign Up
+                </Button>
+                <Grid container justifyContent="flex-end">
+                  <Grid item>
+                    <Link variant="body2">
+                      <RouterLink to={"/login"}>
+                        Already have an account? Sign in
+                      </RouterLink>
+                    </Link>
+                  </Grid>
+                </Grid>
+                <Copyright sx={{ mt: 5 }} />
+              </Box>
+            </Box>
+          </Grid>
+        </Grid>
       </div>
-    </>
+    </ThemeProvider>
   );
 }
-
-export default SignUp;
