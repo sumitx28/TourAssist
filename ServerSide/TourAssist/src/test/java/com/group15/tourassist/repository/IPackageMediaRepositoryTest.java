@@ -25,7 +25,7 @@ class IPackageMediaRepositoryTest {
     @BeforeEach
     public void setup() {
         august20th2023UTC = Instant.parse("2023-08-20T00:00:00Z");
-        packageMediaOne = new PackageMedia(1l, 1l, "/package_media/1.jpg", "tour image", august20th2023UTC);
+        packageMediaOne = new PackageMedia(1l, 1l, "base64image", "tour image", august20th2023UTC);
     }
 
     /**

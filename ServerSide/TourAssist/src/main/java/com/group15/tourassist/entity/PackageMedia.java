@@ -25,8 +25,8 @@ public class PackageMedia implements Serializable {
     @Column(name = "package_id")
     private Long packageId;
 
-    @Column(name = "mediaPath")
-    private String mediaPath;
+    @Column(name = "media")
+    private String media;
 
     @Column(name = "description")
     private String description;

@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Data
 public class PackageMediaRequest {
 
-    private byte[] image;
+    private String image;
 
     private String description;
 
