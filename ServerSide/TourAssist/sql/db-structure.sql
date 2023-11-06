@@ -134,7 +134,7 @@ CREATE TABLE stay (
     is_customizable tinyint(1) not null,
     FOREIGN KEY (package_id) REFERENCES package(id),
 	FOREIGN KEY (resort_master_id) REFERENCES resort_master(id),
-	FOREIGN KEY (resort_master_id) REFERENCES suite_master(id),
+	FOREIGN KEY (suite_master_id) REFERENCES suite_master(id),
 	PRIMARY KEY (`id`)
 );
 
