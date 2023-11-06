@@ -162,7 +162,7 @@ CREATE TABLE tour_guide (
     price double not null,
     is_customizable tinyint(1) not null,
     FOREIGN KEY (package_id) REFERENCES package(id),
-	FOREIGN KEY (guide_master_id) REFERENCES tour_guide(id),
+	FOREIGN KEY (guide_master_id) REFERENCES guide_master(id),
 	PRIMARY KEY (`id`)
 );
 
