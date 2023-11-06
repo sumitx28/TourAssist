@@ -134,7 +134,7 @@ CREATE TABLE stay (
     is_customizable tinyint(1) not null,
     FOREIGN KEY (package_id) REFERENCES package(id),
 	FOREIGN KEY (resort_master_id) REFERENCES resort_master(id),
-	FOREIGN KEY (resort_master_id) REFERENCES suite_master(id),
+	FOREIGN KEY (suite_master_id) REFERENCES suite_master(id),
 	PRIMARY KEY (`id`)
 );
 
@@ -162,7 +162,7 @@ CREATE TABLE tour_guide (
     price double not null,
     is_customizable tinyint(1) not null,
     FOREIGN KEY (package_id) REFERENCES package(id),
-	FOREIGN KEY (guide_master_id) REFERENCES tour_guide(id),
+	FOREIGN KEY (guide_master_id) REFERENCES guide_master(id),
 	PRIMARY KEY (`id`)
 );
 
