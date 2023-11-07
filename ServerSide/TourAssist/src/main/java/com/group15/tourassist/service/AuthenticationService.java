@@ -10,7 +10,7 @@ import com.group15.tourassist.entity.AppUser;
 import com.group15.tourassist.entity.Customer;
 import com.group15.tourassist.entity.Token;
 import com.group15.tourassist.core.enums.TokenType;
-import com.group15.tourassist.repository.AgentRepository;
+import com.group15.tourassist.repository.IAgentRepository;
 import com.group15.tourassist.repository.CustomerRepository;
 import com.group15.tourassist.request.AgentRegistrationRequest;
 import com.group15.tourassist.request.AuthenticationRequest;
@@ -50,7 +50,7 @@ public class AuthenticationService implements IAuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final CustomerRepository customerRepository;
-    private final AgentRepository agentRepository;
+    private final IAgentRepository IAgentRepository;
 
     @Transactional
     public AuthenticationResponse registerCustomer(CustomerRegistrationRequest request) {
@@ -162,7 +162,7 @@ public class AuthenticationService implements IAuthenticationService {
                 .verificationDocLink(request.getVerificationDocLink())
                 .appUser(appUser)
                 .build();
-        agentRepository.save(agent);
+        IAgentRepository.save(agent);
 
         var jwtToken = jwtService.generateToken(appUser);
         var refreshToken = jwtService.generateRefreshToken(appUser);
