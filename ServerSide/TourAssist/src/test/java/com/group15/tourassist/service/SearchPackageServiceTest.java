@@ -30,6 +30,8 @@ public class SearchPackageServiceTest {
     private ITotalPackagePriceCalculatorService totalPackagePriceCalculatorService;
     @Mock
     private IPackageReviewRepository packageReviewRepository;
+    @Mock
+    private IPackageReviewService packageReviewService;
 
 
     @BeforeEach
@@ -58,7 +60,7 @@ public class SearchPackageServiceTest {
                 .thenReturn(expectedPackages);
 
         // Act
-        List<Package> packages = searchPackageService.getPackagesDetails(request);
+        List<Package> packages = searchPackageService.getPackagesDetails(request, null, null);
 
         // Assert
         final int expectedPackageCount = expectedPackages.size();
@@ -67,17 +69,19 @@ public class SearchPackageServiceTest {
     }
 
     @Test
-    public void testGetSearchTravelPackages() {
+    public void testGetSearchTravelPackagesWithoutSortFilter() {
         // Arrange
         CustomerSearchPackageRequest request = new CustomerSearchPackageRequest();
+        String sortBy = null;
+        String filterBy = null;
         // Set request attributes
 
         // Mock the behavior of packageRepository
         List<Package> packageList = List.of(new Package(), new Package());
-        when(searchPackageService.getPackagesDetails(request)).thenReturn(packageList);
+        when(searchPackageService.getPackagesDetails(request, sortBy, filterBy)).thenReturn(packageList);
 
         // Act
-        SearchPackagesWebResponse response = searchPackageService.getSearchTravelPackages(request);
+        SearchPackagesWebResponse response = searchPackageService.getSearchTravelPackages(request, sortBy, filterBy);
 
         // Assert
         assertEquals(2, response.getTravelPackages().size());
