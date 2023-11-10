@@ -1,5 +1,7 @@
 package com.group15.tourassist.core.config.service;
 
+import com.group15.tourassist.core.utils.ConstantUtils;
+import com.group15.tourassist.entity.AppUser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -35,9 +37,18 @@ public class JwtService implements IJwtService {
         return claimsResolver.apply(claims);
     }
 
+    /**
+     * @param appUser user of the app
+     * @return generated JWT token which contains the userId and roles as extra claims
+     * @implNote follows the liskov substitution SOLID principle
+     */
     @Override
-    public String generateToken(UserDetails userDetails) {
-        return generateToken(new HashMap<>(), userDetails);
+    public String generateToken(AppUser appUser) {
+        HashMap<String, Object> extraClaims = new HashMap<>();
+        extraClaims.put(ConstantUtils.appUserId, appUser.getId());
+        extraClaims.put(ConstantUtils.role, appUser.getRole());
+
+        return generateToken(extraClaims, appUser);
     }
 
     public String generateToken(
