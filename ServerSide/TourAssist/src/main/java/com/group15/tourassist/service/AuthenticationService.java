@@ -11,7 +11,7 @@ import com.group15.tourassist.entity.Customer;
 import com.group15.tourassist.entity.Token;
 import com.group15.tourassist.core.enums.TokenType;
 import com.group15.tourassist.repository.IAgentRepository;
-import com.group15.tourassist.repository.CustomerRepository;
+import com.group15.tourassist.repository.ICustomerRepository;
 import com.group15.tourassist.request.AgentRegistrationRequest;
 import com.group15.tourassist.request.AuthenticationRequest;
 import com.group15.tourassist.request.CustomerRegistrationRequest;
@@ -49,7 +49,7 @@ public class AuthenticationService implements IAuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
-    private final CustomerRepository customerRepository;
+    private final ICustomerRepository ICustomerRepository;
     private final IAgentRepository IAgentRepository;
 
     @Transactional
@@ -77,7 +77,7 @@ public class AuthenticationService implements IAuthenticationService {
                 .mobile(request.getMobile())
                 .build();
 
-        customerRepository.save(customer);
+        ICustomerRepository.save(customer);
 
         var jwtToken = jwtService.generateToken(appUser);
         var refreshToken = jwtService.generateRefreshToken(appUser);

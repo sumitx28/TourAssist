@@ -1,6 +1,7 @@
 package com.group15.tourassist.core.config.service;
 
 
+import com.group15.tourassist.entity.AppUser;
 import org.springframework.security.core.userdetails.UserDetails;
 
 /**
@@ -11,7 +12,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 public interface IJwtService {
     String extractUsername(String token);
 
-    String generateToken(UserDetails userDetails);
+    //String generateToken(UserDetails userDetails);
+
+    /**
+     *
+     * @param appUser user of the app
+     * @return generated JWT token which contains the userId and roles as extra claims
+     */
+    String generateToken(AppUser appUser);
 
     String generateRefreshToken(UserDetails userDetails);
 

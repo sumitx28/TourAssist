@@ -1,6 +1,11 @@
 package com.group15.tourassist.core.utils;
 
 public class ConstantUtils {
+
+    public static final String appUserId = "appUserId";
+
+    public static final String role = "role";
+
     public static final String AUTHORIZATION = "Authorization";
 
     public static final String BEARER = "BEARER ";
