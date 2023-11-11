@@ -2,6 +2,7 @@ package com.group15.tourassist.entity;
 
 import com.group15.tourassist.core.enums.BookedItem;
 import com.group15.tourassist.core.enums.TransactionStatus;
+import com.group15.tourassist.request.PaymentRequest;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -41,4 +42,20 @@ public class PaymentTransaction {
 
     @Column(name = "transaction_date")
     private Instant transactionDate;
+
+    /**
+     * @param request create payment request
+     * @param booking corresponding booking object
+     * @return PaymentTransaction entity
+     */
+    public static PaymentTransaction getPaymentByRequest(PaymentRequest request, Booking booking) {
+        return PaymentTransaction.builder()
+                .booking(booking)
+                .paymentType(request.getPaymentType())
+                .transactionId(request.getTransactionId())
+                .price(request.getPrice())
+                .transactionDate(Instant.now())
+                .transactionStatus(request.getTransactionStatus())
+                .build();
+    }
 }

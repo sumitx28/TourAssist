@@ -1,6 +1,7 @@
 package com.group15.tourassist.service;
 
 import com.group15.tourassist.core.enums.BookingStatus;
+import com.group15.tourassist.core.enums.TransactionStatus;
 import com.group15.tourassist.entity.Booking;
 import com.group15.tourassist.repository.IBookingRepository;
 import com.group15.tourassist.request.BookingRequest;
@@ -40,5 +41,25 @@ public class BookingService implements IBookingService{
         guestService.createGuests(bookingRequest.getGuests(), booking);
 
         return booking.getId();
+    }
+
+
+    /**
+     * @param bookingId bookingId to be queried
+     * @return Booking entity corresponding to the id
+     */
+    @Override
+    public Booking getBookingById(Long bookingId) {
+        return bookingRepository.findById(bookingId).get();
+    }
+
+    /**
+     * @param bookingId bookingId for which status should be updated
+     * @param transactionStatus corresponding transaction status
+     */
+    @Override
+    public void updateBookingStatus(Long bookingId, TransactionStatus transactionStatus) {
+        BookingStatus bookingStatus = transactionStatus.equals(TransactionStatus.SUCCESS) ? BookingStatus.CONFIRM : BookingStatus.PENDING;
+        bookingRepository.updateBookingStatus(bookingId, bookingStatus.toString());
     }
 }

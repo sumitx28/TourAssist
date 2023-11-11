@@ -19,5 +19,6 @@ public class PaymentRequest {
     private String paymentType;
 
     private TransactionStatus transactionStatus;
-    
+
+    private Double price;
 }
