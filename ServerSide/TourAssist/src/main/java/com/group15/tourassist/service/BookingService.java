@@ -20,6 +20,7 @@ public class BookingService implements IBookingService{
     @Override
     public Long createBooking(BookingRequest bookingRequest) {
         Double totalPrice = bookingLineItemService.computeTotalPrice(bookingRequest.getBookingItemRequests());
+
         return null;
     }
 }

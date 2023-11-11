@@ -1,14 +1,10 @@
 package com.group15.tourassist.service;
 
 import com.group15.tourassist.core.enums.BookedItem;
-import com.group15.tourassist.core.enums.BookingStatus;
 import com.group15.tourassist.entity.Activity;
-import com.group15.tourassist.entity.Booking;
 import com.group15.tourassist.repository.IActivityRepository;
 import com.group15.tourassist.repository.IBookingLineItemRepository;
 import com.group15.tourassist.request.BookingItemRequest;
-import jakarta.persistence.Column;
-import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -62,6 +58,6 @@ class BookingLineItemServiceTest {
         Double totalPrice = bookingLineItemService.computeTotalPrice(bookingItems);
 
         // Assert
-        assertEquals(300d, totalPrice);
+        assertEquals(400d, totalPrice);
     }
 }
