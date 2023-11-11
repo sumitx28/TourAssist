@@ -3,11 +3,8 @@ package com.group15.tourassist.service;
 import com.group15.tourassist.core.enums.BookedItem;
 import com.group15.tourassist.core.enums.BookingStatus;
 import com.group15.tourassist.entity.Booking;
-import com.group15.tourassist.entity.BookingLineItem;
 import com.group15.tourassist.entity.Guest;
-import com.group15.tourassist.entity.PackageMedia;
 import com.group15.tourassist.repository.IBookingRepository;
-import com.group15.tourassist.repository.IPackageMediaRepository;
 import com.group15.tourassist.request.BookingItemRequest;
 import com.group15.tourassist.request.BookingRequest;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,6 +30,9 @@ class BookingServiceTest {
     @Mock
     private IBookingRepository bookingRepository;
 
+    @Mock
+    private BookingLineItemService bookingLineItemService;
+
     private Booking confirmBooking;
 
     private BookingRequest bookingRequest;
@@ -53,6 +53,7 @@ class BookingServiceTest {
     void createBooking_PositiveCase() {
         // Arrange
         when(bookingRepository.save(any())).thenReturn(confirmBooking);
+        when(bookingLineItemService.computeTotalPrice(any())).thenReturn(10d);
 
         // Act
         Long bookingId = bookingService.createBooking(bookingRequest);

@@ -1,6 +1,7 @@
 package com.group15.tourassist.entity;
 
 import com.group15.tourassist.core.enums.BookingStatus;
+import com.group15.tourassist.request.BookingRequest;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -39,4 +40,22 @@ public class Booking {
     @Column(name = "booking_status")
     @Enumerated(EnumType.STRING)
     private BookingStatus bookingStatus;
+
+
+    /**
+     * @param request Booking request object
+     * @param totalPrice total price of this booking
+     * @param status CONFIRM/PENDING
+     * @return Booking object
+     */
+    public static Booking getBookingFromRequest(BookingRequest request, Double totalPrice, BookingStatus status) {
+        return Booking.builder()
+                .packageId(request.getPackageId())
+                .customerId(request.getCustomerId())
+                .agentId(request.getAgentId())
+                .bookingDate(Instant.now())
+                .totalPrice(totalPrice)
+                .bookingStatus(status)
+                .build();
+    }
 }

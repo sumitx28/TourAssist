@@ -1,4 +1,10 @@
 package com.group15.tourassist.service;
 
+import com.group15.tourassist.request.BookingItemRequest;
+
+import java.util.List;
+
 public interface IBookingLineItemService {
+    
+    Double computeTotalPrice(List<BookingItemRequest> bookingItemRequests);
 }
