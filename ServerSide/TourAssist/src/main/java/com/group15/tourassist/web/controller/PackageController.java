@@ -34,8 +34,12 @@ public class PackageController {
     private IPackageService packageService;
 
 
+    /**
+     * @param request Package request object
+     * @return package_id of the created package.
+     */
     @PostMapping("/create-package")
-    private ResponseEntity<Long> registerAgent(@RequestBody PackageCreateRequest request) {
+    private ResponseEntity<Long> createPackage(@RequestBody PackageCreateRequest request) {
         log.info("** get create-package request {}", request.toString());
 
         Long packageId = packageService.createNewPackage(request);
