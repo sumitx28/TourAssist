@@ -1,7 +1,9 @@
 package com.group15.tourassist.service;
 
 import com.group15.tourassist.core.enums.BookedItem;
+import com.group15.tourassist.core.enums.BookingStatus;
 import com.group15.tourassist.entity.Activity;
+import com.group15.tourassist.entity.Booking;
 import com.group15.tourassist.repository.IActivityRepository;
 import com.group15.tourassist.repository.IBookingLineItemRepository;
 import com.group15.tourassist.request.BookingItemRequest;
@@ -18,7 +20,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -39,25 +41,26 @@ class BookingLineItemServiceTest {
     private Activity activity1;
     private Activity activity2;
 
+
     @BeforeEach
     public void setup() {
-        activity1 = new Activity(1l, 1l, 1l, Instant.parse("2023-08-01T00:00:00Z"), Instant.parse("2023-08-01T00:00:00Z"), Instant.parse("2023-08-01T00:00:00Z"), 100d, Boolean.TRUE);
-        activity2 = new Activity(2l, 1l, 2l, Instant.parse("2023-08-02T00:00:00Z"), Instant.parse("2023-08-01T00:00:00Z"), Instant.parse("2023-08-01T00:00:00Z"), 300d, Boolean.FALSE);
+        activity1 = new Activity(1L, 1L, 1L, Instant.parse("2023-08-01T00:00:00Z"), Instant.parse("2023-08-01T00:00:00Z"), Instant.parse("2023-08-01T00:00:00Z"), 100D, Boolean.TRUE);
+        activity2 = new Activity(2L, 1L, 2L, Instant.parse("2023-08-02T00:00:00Z"), Instant.parse("2023-08-01T00:00:00Z"), Instant.parse("2023-08-01T00:00:00Z"), 300D, Boolean.FALSE);
         bookingItems = new ArrayList<>();
-        bookingItems.add(new BookingItemRequest(BookedItem.ACTIVITY, 1l));
-        bookingItems.add(new BookingItemRequest(BookedItem.ACTIVITY, 2l));
+        bookingItems.add(new BookingItemRequest(BookedItem.ACTIVITY, 1L));
+        bookingItems.add(new BookingItemRequest(BookedItem.ACTIVITY, 2L));
     }
 
     @Test
     void testComputeTotalPrice_PositiveCase() {
         // Arrange
-        when(activityRepository.findById(1l)).thenReturn(Optional.ofNullable(activity1));
-        when(activityRepository.findById(2l)).thenReturn(Optional.ofNullable(activity2));
+        when(activityRepository.findById(1L)).thenReturn(Optional.ofNullable(activity1));
+        when(activityRepository.findById(2L)).thenReturn(Optional.ofNullable(activity2));
 
         // Act
         Double totalPrice = bookingLineItemService.computeTotalPrice(bookingItems);
 
         // Assert
-        assertEquals(400d, totalPrice);
+        assertEquals(400D, totalPrice);
     }
 }

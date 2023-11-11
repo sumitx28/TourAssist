@@ -5,6 +5,7 @@ import com.group15.tourassist.core.enums.BookingStatus;
 import com.group15.tourassist.entity.Booking;
 import com.group15.tourassist.entity.Guest;
 import com.group15.tourassist.repository.IBookingRepository;
+import com.group15.tourassist.repository.IGuestRepository;
 import com.group15.tourassist.request.BookingItemRequest;
 import com.group15.tourassist.request.BookingRequest;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,6 +34,12 @@ class BookingServiceTest {
     @Mock
     private BookingLineItemService bookingLineItemService;
 
+    @Mock
+    private GuestService guestService;
+
+    @Mock
+    private IGuestRepository guestRepository;
+
     private Booking confirmBooking;
 
     private BookingRequest bookingRequest;
@@ -43,10 +50,10 @@ class BookingServiceTest {
 
     @BeforeEach
     public void setup() {
-        confirmBooking = new Booking(1l, 1l, 2l, 3l, Instant.parse("2023-08-20T00:00:00Z"), 100d, BookingStatus.CONFIRM);
-        bookingItemRequest = new BookingItemRequest(BookedItem.ACTIVITY, 1l);
-        guest = new Guest(1l, null, "Raj", "Patel", Instant.parse("1996-02-11T00:00:00Z"));
-        bookingRequest = new BookingRequest(1l, 2l, 3l, Collections.singletonList(bookingItemRequest), Collections.singletonList(guest));
+        confirmBooking = new Booking(1L, 1L, 2L, 3L, Instant.parse("2023-08-20T00:00:00Z"), 100D, BookingStatus.CONFIRM);
+        bookingItemRequest = new BookingItemRequest(BookedItem.ACTIVITY, 1L);
+        guest = new Guest(1L, null, "Raj", "Patel", Instant.parse("1996-02-11T00:00:00Z"));
+        bookingRequest = new BookingRequest(1L, 2L, 3L, Collections.singletonList(bookingItemRequest), Collections.singletonList(guest));
     }
 
     @Test
@@ -59,6 +66,6 @@ class BookingServiceTest {
         Long bookingId = bookingService.createBooking(bookingRequest);
 
         // Assert
-        assertNotNull(bookingId);   // should return a non null booking_id which gets stored in db.
+        assertEquals(1L, bookingId);   // should return a non null booking_id (1 in this case) which gets stored in db.
     }
 }
