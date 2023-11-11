@@ -1,9 +1,7 @@
 package com.group15.tourassist.service;
 
 import com.group15.tourassist.core.enums.BookedItem;
-import com.group15.tourassist.core.enums.BookingStatus;
 import com.group15.tourassist.entity.Activity;
-import com.group15.tourassist.entity.Booking;
 import com.group15.tourassist.repository.IActivityRepository;
 import com.group15.tourassist.repository.IBookingLineItemRepository;
 import com.group15.tourassist.request.BookingItemRequest;

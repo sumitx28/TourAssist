@@ -8,6 +8,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.Instant;
+
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -36,4 +38,7 @@ public class PaymentTransaction {
 
     @Column(name = "payment_type")
     private String paymentType;
+
+    @Column(name = "transaction_date")
+    private Instant transactionDate;
 }

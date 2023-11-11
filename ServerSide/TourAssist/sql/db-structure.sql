@@ -219,6 +219,7 @@ CREATE TABLE payment_transaction (
     payment_type varchar(255) not null,
     transaction_status varchar(255) not null CHECK (transaction_status IN ('SUCCESS', 'FAILED')),
     price double not null,
+    transaction_date datetime not null,
 	FOREIGN KEY (booking_id) REFERENCES booking(id),
 	PRIMARY KEY (`id`)
 );
