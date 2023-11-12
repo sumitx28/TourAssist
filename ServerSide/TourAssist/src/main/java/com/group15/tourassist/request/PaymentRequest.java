@@ -12,6 +12,8 @@ import lombok.NoArgsConstructor;
 @Builder
 public class PaymentRequest {
 
+    private String customerEmail;
+
     private String transactionId;
 
     private Long bookingId;

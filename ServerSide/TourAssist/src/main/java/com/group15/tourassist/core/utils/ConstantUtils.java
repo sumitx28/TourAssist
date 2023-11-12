@@ -30,4 +30,8 @@ public class ConstantUtils {
     public static final String CUSTOMIZABLE_TRUE = "1";
     public static final String filterSortDelimiter = ":";
     public static String priceRangeDelimiter = "\\#";
+
+    public static final String BOOKING_EMAIL_TEMPLATE = "Thank you for booking %s. Your booking is %s. Below are the details:\n" +
+            "Booking Id: %s\nPayment Id: %s\nTrip duration: %s - %s";
+
 }
