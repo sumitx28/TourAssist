@@ -8,6 +8,7 @@ import com.group15.tourassist.repository.IPaymentTransactionRepository;
 import com.group15.tourassist.request.PaymentRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -32,6 +33,7 @@ public class PaymentTransactionService implements IPaymentTransactionService{
      * @return Id of created payment entity.
      */
     @Override
+    @Transactional
     public Long createPayment(PaymentRequest request) {
         // create entity object to save
         Booking booking = bookingService.getBookingById(request.getBookingId());
