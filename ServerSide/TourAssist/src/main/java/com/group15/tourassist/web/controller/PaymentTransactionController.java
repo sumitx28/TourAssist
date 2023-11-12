@@ -1,9 +1,14 @@
 package com.group15.tourassist.web.controller;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import com.group15.tourassist.request.PaymentRequest;
+import com.group15.tourassist.service.PaymentTransactionService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @CrossOrigin(
         origins = {
@@ -18,6 +23,20 @@ import org.springframework.web.bind.annotation.RestController;
         })
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/payment")
 public class PaymentTransactionController {
+
+        Logger log = LoggerFactory.getLogger(PackageController.class);
+
+        @Autowired
+        private PaymentTransactionService paymentTransactionService;
+
+
+        @PostMapping("/payment-transaction")
+        private ResponseEntity<Long> createPayment(@RequestBody PaymentRequest request) {
+                log.info("** get payment-transaction request {}", request.toString());
+
+                Long bookingId = paymentTransactionService.createPayment(request);
+                return ResponseEntity.of(Optional.of(bookingId));
+        }
 }
