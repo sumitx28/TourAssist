@@ -1,0 +1,88 @@
+{
+    "packageId" : 1,
+    "mediaPath": [],
+    "packageName": "Summer Adventure",
+    "agentDetails": {
+        "id": 1,
+        "companyName": "Temple tours",
+        "mobile": "4678457845"
+    },
+    "sourceDetails": {
+        "city": "Paris",
+        "country": "France"
+    },
+    "destinationDetails": {
+        "id": null, 
+        "city": "New York",
+        "country": "United States",
+        "resorts": [
+            {
+                "id": 18,
+                "resortName": "Sunny Side Villas",
+                "destinationMaster": {
+                    "id": 1,
+                    "city": "New York",
+                    "country": "United States"
+                }
+            }
+        ],
+        "guides": []
+    },
+    "tripStartDate": "2023-12-2",
+    "tripEndDate": "2023-12-8",
+    "activities": [
+        {
+            "activityMasterId": 1,
+            "activityName": "Sky Diving",
+            "activityDate": "2023-07-02T14:30:00Z",
+            "price": 50.0,
+            "isCustomizable": true
+        },
+        {
+            "activityMasterId": 2,
+            "activityName": "Kayaking",
+            "activityDate": "2023-07-05T09:00:00Z",
+            "price": 40.0,
+            "isCustomizable": false
+        }
+    ],
+    "transportationDetails": {
+        "modeMaster": {
+            "id": 1,
+            "mode": "Flight"
+        },
+        "priceStartDate": "2023-12-2",
+        "priceExpiryDate": "2023-12-2",
+        "price": 90.0,
+        "isCustomizable": true
+    },
+    "stay": {
+        "packageId": 10,
+        "resortMaster": {
+            "id": 1,
+            "resortName": "Seaside Resort",
+            "destinationMaster": {
+                "id": 5,
+                "city": "Sydney",
+                "country": "Australia"
+            }
+        },
+        "suiteMaster": {
+            "id": 1,
+            "suiteType": "Standard Suite"
+        },
+        "priceStartDate": "2023-11-11T23:57:25.326476Z",
+        "priceExpiryDate": "2024-11-10T23:57:25.326476Z",
+        "price": 120.0,
+        "isCustomizable": true
+    },
+    "tourGuide": {
+        "tourGuideId": 2,
+        "tourGuideMaster": {
+            "tourGuideName": "Angela",
+            "price": 20
+        },
+        "isCustomizable" : true
+    },
+    "isCustomizable": true
+}
