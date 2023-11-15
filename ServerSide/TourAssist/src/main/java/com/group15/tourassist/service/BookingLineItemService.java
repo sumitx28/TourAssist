@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class BookingLineItemService implements IBookingLineItemService{
+public class BookingLineItemService implements IBookingLineItemService {
 
     @Autowired
     private IBookingLineItemRepository bookingLineItemRepository;
@@ -37,14 +37,14 @@ public class BookingLineItemService implements IBookingLineItemService{
     public Double computeTotalPrice(List<BookingItemRequest> bookingItemRequests) {
         Double totalPrice = 0D;
         for (BookingItemRequest bookingItemRequest : bookingItemRequests) {
-            totalPrice +=  getLineItemPrice(bookingItemRequest.getItemName(), bookingItemRequest.getItemId());
+            totalPrice += getLineItemPrice(bookingItemRequest.getItemName(), bookingItemRequest.getItemId());
         }
         return totalPrice;
     }
 
     /**
      * @param bookedItem Type of custom item which is getting booked
-     * @param itemId ID of the custom item (activity, guide, transportation, resort)
+     * @param itemId     ID of the custom item (activity, guide, transportation, resort)
      * @return price of that item.
      */
     private Double getLineItemPrice(BookedItem bookedItem, Long itemId) {
@@ -67,10 +67,16 @@ public class BookingLineItemService implements IBookingLineItemService{
      */
     @Override
     public void createBookingLineItems(List<BookingItemRequest> bookingItemRequests, Booking booking) {
-        for(BookingItemRequest bookingRequest : bookingItemRequests) {
+        for (BookingItemRequest bookingRequest : bookingItemRequests) {
             Double price = getLineItemPrice(bookingRequest.getItemName(), bookingRequest.getItemId());
             BookingLineItem bookingLineItem = BookingLineItem.getBookingLineItem(bookingRequest, booking, price);
             bookingLineItemRepository.save(bookingLineItem);
         }
+    }
+
+
+    @Override
+    public List<BookingLineItem> getBookingLineItemsByBookingId(Long bookingId) {
+        return bookingLineItemRepository.getLineItemsByBookingId(bookingId);
     }
 }
