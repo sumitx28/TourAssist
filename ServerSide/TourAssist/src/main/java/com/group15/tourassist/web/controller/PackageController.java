@@ -2,6 +2,7 @@ package com.group15.tourassist.web.controller;
 
 import com.group15.tourassist.request.PackageCreateRequest;
 import com.group15.tourassist.response.AuthenticationResponse;
+import com.group15.tourassist.response.PackageDetailResponse;
 import com.group15.tourassist.service.IPackageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,5 +45,12 @@ public class PackageController {
 
         Long packageId = packageService.createNewPackage(request);
         return ResponseEntity.of(Optional.of(packageId));
+    }
+
+    @GetMapping("/package/{packageId}")
+    private ResponseEntity<PackageDetailResponse> getPackageDetails(@PathVariable Long packageId) {
+        log.info("** get package details");
+        var  response = packageService.getPackageDetailsById(packageId);
+        return ResponseEntity.of(Optional.of(response));
     }
 }
