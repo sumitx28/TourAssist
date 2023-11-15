@@ -22,9 +22,9 @@ public class BookingDetailsDTO {
     private Instant bookingDate;
     private Double totalPrice;
     private BookingStatus bookingStatus;
-    private List<ActivityDTO> activityDTOS;
+    private List<ActivityMinDTO> activityMinDTOS;
     private List<GuideDTO> guideDTOS;
     private ResortMaster resortDetails;
-    private List<TransportationDTO> transportationDTOS;
+    private List<TransportationMinDTO> transportationMinDTOS;
 
 }

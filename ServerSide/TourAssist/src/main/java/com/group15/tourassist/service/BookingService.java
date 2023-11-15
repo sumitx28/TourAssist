@@ -3,10 +3,10 @@ package com.group15.tourassist.service;
 import com.group15.tourassist.core.enums.BookedItem;
 import com.group15.tourassist.core.enums.BookingStatus;
 import com.group15.tourassist.core.enums.TransactionStatus;
-import com.group15.tourassist.dto.ActivityDTO;
+import com.group15.tourassist.dto.ActivityMinDTO;
 import com.group15.tourassist.dto.BookingDetailsDTO;
 import com.group15.tourassist.dto.GuideDTO;
-import com.group15.tourassist.dto.TransportationDTO;
+import com.group15.tourassist.dto.TransportationMinDTO;
 import com.group15.tourassist.entity.*;
 import com.group15.tourassist.entity.Package;
 import com.group15.tourassist.repository.*;
@@ -154,26 +154,26 @@ public class BookingService implements IBookingService {
             bookingDetailsDTO.setPackageName(travelPackage.getPackageName());
 
             List<BookingLineItem> bookingLineItemList = bookingLineItemService.getBookingLineItemsByBookingId(booking.getId());
-            List<ActivityDTO> activityDTOs = new LinkedList<>();
+            List<ActivityMinDTO> activityMinDTOS = new LinkedList<>();
             List<GuideDTO> guideDTOS = new LinkedList<>();
-            List<TransportationDTO> transportationDTOS = new LinkedList<>();
+            List<TransportationMinDTO> transportationMinDTOS = new LinkedList<>();
 
             for (BookingLineItem bookingLineItem : bookingLineItemList) {
-                populateActivityDTOs(activityDTOs, bookingLineItem);
+                populateActivityDTOs(activityMinDTOS, bookingLineItem);
                 populateGuideDTOs(guideDTOS, bookingLineItem);
-                populateTransportationDTOs(transportationDTOS, bookingLineItem);
+                populateTransportationDTOs(transportationMinDTOS, bookingLineItem);
                 populateGuideDTO(bookingDetailsDTO, bookingLineItem);
 
             }
-            bookingDetailsDTO.setActivityDTOS(activityDTOs);
+            bookingDetailsDTO.setActivityMinDTOS(activityMinDTOS);
             bookingDetailsDTO.setGuideDTOS(guideDTOS);
-            bookingDetailsDTO.setTransportationDTOS(transportationDTOS);
+            bookingDetailsDTO.setTransportationMinDTOS(transportationMinDTOS);
         }
     }
 
-    private void populateTransportationDTOs(List<TransportationDTO> transportationDTOS, BookingLineItem bookingLineItem) {
+    private void populateTransportationDTOs(List<TransportationMinDTO> transportationMinDTOS, BookingLineItem bookingLineItem) {
         if (BookedItem.TRANSPORTATION.equals(bookingLineItem.getBookedItem())) {
-            TransportationDTO transportationDTO = new TransportationDTO();
+            TransportationMinDTO transportationMinDTO = new TransportationMinDTO();
             Long transportationId = bookingLineItem.getBookedItemId();
             Optional<Transportation> transportationOptional = transportationRepository.findById(transportationId);
             if (transportationOptional.isPresent()) {
@@ -181,11 +181,11 @@ public class BookingService implements IBookingService {
                 Optional<TravelModeMaster> travelModeMasterOptional = travelModeMasterRepository.findById(transportation.getModeMasterId());
                 if (travelModeMasterOptional.isPresent()) {
                     TravelModeMaster transportationMaster = travelModeMasterOptional.get();
-                    transportationDTO.setTransportationId(transportation.getId());
-                    transportationDTO.setTransportationName(transportationMaster.getMode());
+                    transportationMinDTO.setTransportationId(transportation.getId());
+                    transportationMinDTO.setTransportationName(transportationMaster.getMode());
                 }
             }
-            transportationDTOS.add(transportationDTO);
+            transportationMinDTOS.add(transportationMinDTO);
         }
     }
 
@@ -218,9 +218,9 @@ public class BookingService implements IBookingService {
         }
     }
 
-    private void populateActivityDTOs(List<ActivityDTO> activityDTOs, BookingLineItem bookingLineItem) {
+    private void populateActivityDTOs(List<ActivityMinDTO> activityMinDTOS, BookingLineItem bookingLineItem) {
         if (BookedItem.ACTIVITY.equals(bookingLineItem.getBookedItem())) {
-            ActivityDTO activityDTO = new ActivityDTO();
+            ActivityMinDTO activityMinDTO = new ActivityMinDTO();
             Long activityId = bookingLineItem.getBookedItemId();
 
             if (activityRepository.findById(activityId).isPresent()) {
@@ -228,11 +228,11 @@ public class BookingService implements IBookingService {
                 Optional<ActivityMaster> activityMasterOptional = activityMasterRepository.findById(activity.getActivityMasterId());
                 if (activityMasterOptional.isPresent()) {
                     ActivityMaster activityMaster = activityMasterOptional.get();
-                    activityDTO.setActivityId(activity.getId());
-                    activityDTO.setActivityName(activityMaster.getActivityName());
+                    activityMinDTO.setActivityId(activity.getId());
+                    activityMinDTO.setActivityName(activityMaster.getActivityName());
                 }
             }
-            activityDTOs.add(activityDTO);
+            activityMinDTOS.add(activityMinDTO);
         }
     }
 
