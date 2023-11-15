@@ -1,25 +1,70 @@
 package com.group15.tourassist.service;
 
+import com.group15.tourassist.core.enums.BookedItem;
 import com.group15.tourassist.core.enums.BookingStatus;
 import com.group15.tourassist.core.enums.TransactionStatus;
-import com.group15.tourassist.entity.Booking;
-import com.group15.tourassist.repository.IBookingRepository;
+import com.group15.tourassist.dto.ActivityMinDTO;
+import com.group15.tourassist.dto.BookingDetailsDTO;
+import com.group15.tourassist.dto.GuideDTO;
+import com.group15.tourassist.dto.TransportationMinDTO;
+import com.group15.tourassist.entity.*;
+import com.group15.tourassist.entity.Package;
+import com.group15.tourassist.repository.*;
 import com.group15.tourassist.request.BookingRequest;
+import com.group15.tourassist.response.BookingDetailsWebResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
+
 @Service
-public class BookingService implements IBookingService{
+public class BookingService implements IBookingService {
+    private final IResortMasterRepository resortMasterRepository;
+    private final IActivityRepository activityRepository;
+    private final ITourGuideRepository tourGuideRepository;
+    private final IGuideMasterRepository guideMasterRepository;
+    private final IBookingLineItemService bookingLineItemService;
+    private final IBookingRepository bookingRepository;
+    private final IGuestService guestService;
+    private final ICustomerRepository customerRepository;
+    private final IPackageRepository packageRepository;
+    private final IActivityMasterRepository activityMasterRepository;
+    private final ITransportationRepository transportationRepository;
+    private final ITravelModeMasterRepository travelModeMasterRepository;
+    Logger log = LoggerFactory.getLogger(BookingService.class);
 
     @Autowired
-    private IBookingLineItemService bookingLineItemService;
-
-    @Autowired
-    private IBookingRepository bookingRepository;
-
-    @Autowired
-    private IGuestService guestService;
-
+    public BookingService(
+            IResortMasterRepository resortMasterRepository,
+            IActivityRepository activityRepository,
+            ITourGuideRepository tourGuideRepository,
+            IGuideMasterRepository guideMasterRepository,
+            IBookingLineItemService bookingLineItemService,
+            IBookingRepository bookingRepository,
+            IGuestService guestService,
+            ICustomerRepository customerRepository,
+            IPackageRepository packageRepository,
+            IActivityMasterRepository activityMasterRepository,
+            ITransportationRepository transportationRepository,
+            ITravelModeMasterRepository travelModeMasterRepository
+    ) {
+        this.resortMasterRepository = resortMasterRepository;
+        this.activityRepository = activityRepository;
+        this.tourGuideRepository = tourGuideRepository;
+        this.guideMasterRepository = guideMasterRepository;
+        this.bookingLineItemService = bookingLineItemService;
+        this.bookingRepository = bookingRepository;
+        this.guestService = guestService;
+        this.customerRepository = customerRepository;
+        this.packageRepository = packageRepository;
+        this.activityMasterRepository = activityMasterRepository;
+        this.transportationRepository = transportationRepository;
+        this.travelModeMasterRepository = travelModeMasterRepository;
+    }
 
     /**
      * @param bookingRequest request to create booking for
@@ -54,7 +99,7 @@ public class BookingService implements IBookingService{
     }
 
     /**
-     * @param bookingId bookingId for which status should be updated
+     * @param bookingId         bookingId for which status should be updated
      * @param transactionStatus corresponding transaction status
      */
     @Override
@@ -62,4 +107,134 @@ public class BookingService implements IBookingService{
         BookingStatus bookingStatus = transactionStatus.equals(TransactionStatus.SUCCESS) ? BookingStatus.CONFIRM : BookingStatus.PENDING;
         bookingRepository.updateBookingStatus(bookingId, bookingStatus.toString());
     }
+
+    @Override
+    public BookingDetailsWebResponse getAllBookingForCustomer(Long appUserId) {
+        BookingDetailsWebResponse bookingDetailsWebResponse = new BookingDetailsWebResponse();
+
+        List<BookingDetailsDTO> bookingDetailsDTOList = new LinkedList<>();
+        Optional<Customer> customerOptional = customerRepository.getCustomerByAppUserId(appUserId);
+        if (customerOptional.isPresent()) {
+            Customer customer = customerOptional.get();
+            List<Booking> bookingDetailsList = bookingRepository.getBookingsByCustomerId(customer.getId());
+
+            if (!bookingDetailsList.isEmpty()) {
+                for (Booking booking : bookingDetailsList) {
+                    BookingDetailsDTO bookingDetailsDTO = new BookingDetailsDTO();
+                    populateEachBookingDetailDTO(booking, bookingDetailsDTO);
+                    bookingDetailsDTOList.add(bookingDetailsDTO);
+                }
+                bookingDetailsWebResponse.setBookingDetailsList(bookingDetailsDTOList);
+            } else {
+                log.info("No Bookings found for appUserId: {} ", appUserId);
+            }
+
+        } else {
+            log.info("Invalid appUseId: {}, no customer found !", appUserId);
+        }
+        return bookingDetailsWebResponse;
+    }
+
+    /**
+     * populates each booking (both pending and confirmed) of the customer
+     *
+     * @param booking
+     * @param bookingDetailsDTO
+     */
+    private void populateEachBookingDetailDTO(Booking booking, BookingDetailsDTO bookingDetailsDTO) {
+        bookingDetailsDTO.setPackageId(booking.getPackageId());
+        bookingDetailsDTO.setBookingDate(booking.getBookingDate());
+        bookingDetailsDTO.setTotalPrice(booking.getTotalPrice());
+        bookingDetailsDTO.setBookingStatus(booking.getBookingStatus());
+
+        Optional<Package> packageOptional = packageRepository.findById(booking.getPackageId());
+        if (packageOptional.isPresent()) {
+            log.info("package is present, will populate data");
+            Package travelPackage = packageOptional.get();
+            bookingDetailsDTO.setPackageName(travelPackage.getPackageName());
+
+            List<BookingLineItem> bookingLineItemList = bookingLineItemService.getBookingLineItemsByBookingId(booking.getId());
+            List<ActivityMinDTO> activityMinDTOS = new LinkedList<>();
+            List<GuideDTO> guideDTOS = new LinkedList<>();
+            List<TransportationMinDTO> transportationMinDTOS = new LinkedList<>();
+
+            for (BookingLineItem bookingLineItem : bookingLineItemList) {
+                populateActivityDTOs(activityMinDTOS, bookingLineItem);
+                populateGuideDTOs(guideDTOS, bookingLineItem);
+                populateTransportationDTOs(transportationMinDTOS, bookingLineItem);
+                populateGuideDTO(bookingDetailsDTO, bookingLineItem);
+
+            }
+            bookingDetailsDTO.setActivityMinDTOS(activityMinDTOS);
+            bookingDetailsDTO.setGuideDTOS(guideDTOS);
+            bookingDetailsDTO.setTransportationMinDTOS(transportationMinDTOS);
+        }
+    }
+
+    private void populateTransportationDTOs(List<TransportationMinDTO> transportationMinDTOS, BookingLineItem bookingLineItem) {
+        if (BookedItem.TRANSPORTATION.equals(bookingLineItem.getBookedItem())) {
+            TransportationMinDTO transportationMinDTO = new TransportationMinDTO();
+            Long transportationId = bookingLineItem.getBookedItemId();
+            Optional<Transportation> transportationOptional = transportationRepository.findById(transportationId);
+            if (transportationOptional.isPresent()) {
+                Transportation transportation = transportationOptional.get();
+                Optional<TravelModeMaster> travelModeMasterOptional = travelModeMasterRepository.findById(transportation.getModeMasterId());
+                if (travelModeMasterOptional.isPresent()) {
+                    TravelModeMaster transportationMaster = travelModeMasterOptional.get();
+                    transportationMinDTO.setTransportationId(transportation.getId());
+                    transportationMinDTO.setTransportationName(transportationMaster.getMode());
+                }
+            }
+            transportationMinDTOS.add(transportationMinDTO);
+        }
+    }
+
+    private void populateGuideDTO(BookingDetailsDTO bookingDetailsDTO, BookingLineItem bookingLineItem) {
+        if (BookedItem.RESORT.equals(bookingLineItem.getBookedItem())) {
+            Long resortId = bookingLineItem.getBookedItemId();
+            Optional<ResortMaster> resortMasterOptional = resortMasterRepository.findById(resortId);
+            if (resortMasterOptional.isPresent()) {
+                ResortMaster resortMaster = resortMasterOptional.get();
+                bookingDetailsDTO.setResortDetails(resortMaster);
+            }
+        }
+    }
+
+    private void populateGuideDTOs(List<GuideDTO> guideDTOS, BookingLineItem bookingLineItem) {
+        if (BookedItem.GUIDE.equals(bookingLineItem.getBookedItem())) {
+            GuideDTO guideDTO = new GuideDTO();
+            Long guideId = bookingLineItem.getBookedItemId();
+            Optional<TourGuide> tourGuideOptional = tourGuideRepository.findById(guideId);
+            if (tourGuideOptional.isPresent()) {
+                TourGuide tourGuide = tourGuideOptional.get();
+                Optional<GuideMaster> guideMasterOptional = guideMasterRepository.findById(tourGuide.getGuideMasterId());
+                if (guideMasterOptional.isPresent()) {
+                    GuideMaster guideMaster = guideMasterOptional.get();
+                    guideDTO.setGuideName(guideMaster.getGuideName());
+                    guideDTO.setGuideId(tourGuide.getId());
+                }
+            }
+            guideDTOS.add(guideDTO);
+        }
+    }
+
+    private void populateActivityDTOs(List<ActivityMinDTO> activityMinDTOS, BookingLineItem bookingLineItem) {
+        if (BookedItem.ACTIVITY.equals(bookingLineItem.getBookedItem())) {
+            ActivityMinDTO activityMinDTO = new ActivityMinDTO();
+            Long activityId = bookingLineItem.getBookedItemId();
+
+            if (activityRepository.findById(activityId).isPresent()) {
+                Activity activity = activityRepository.findById(activityId).get();
+                Optional<ActivityMaster> activityMasterOptional = activityMasterRepository.findById(activity.getActivityMasterId());
+                if (activityMasterOptional.isPresent()) {
+                    ActivityMaster activityMaster = activityMasterOptional.get();
+                    activityMinDTO.setActivityId(activity.getId());
+                    activityMinDTO.setActivityName(activityMaster.getActivityName());
+                }
+            }
+            activityMinDTOS.add(activityMinDTO);
+        }
+    }
+
+
 }
