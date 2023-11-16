@@ -27,7 +27,7 @@ const TravelMode = ({ travelMode, handleSwitchChange }) => {
         <strong>Travel Mode</strong>
       </Typography>
       <ActivityItem>
-        <ColoredDay>{travelMode.modeMaster.mode}</ColoredDay>
+        <ColoredDay>{travelMode.mode}</ColoredDay>
         <Typography>
           {travelMode.isCustomizable
             ? `$${travelMode.price}`
