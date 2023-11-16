@@ -2,11 +2,19 @@ package com.group15.tourassist.service;
 
 import com.group15.tourassist.core.enums.BookingStatus;
 import com.group15.tourassist.core.enums.TransactionStatus;
+import com.group15.tourassist.dto.BookingDTO;
+import com.group15.tourassist.entity.Activity;
 import com.group15.tourassist.entity.Booking;
+import com.group15.tourassist.entityToDto.BookingEntityToDto;
 import com.group15.tourassist.repository.IBookingRepository;
 import com.group15.tourassist.request.BookingRequest;
+import com.group15.tourassist.response.BookingResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @Service
 public class BookingService implements IBookingService{
@@ -20,7 +28,8 @@ public class BookingService implements IBookingService{
     @Autowired
     private IGuestService guestService;
 
-
+    @Autowired
+    private BookingEntityToDto bookingEntityToDto;
     /**
      * @param bookingRequest request to create booking for
      * @return booking id
@@ -62,4 +71,24 @@ public class BookingService implements IBookingService{
         BookingStatus bookingStatus = transactionStatus.equals(TransactionStatus.SUCCESS) ? BookingStatus.CONFIRM : BookingStatus.PENDING;
         bookingRepository.updateBookingStatus(bookingId, bookingStatus.toString());
     }
+
+    @Override
+    public List<BookingResponse> getPastBookings(Date bookingDate) {
+        //List<BookingResponse> allPastBookings= new ArrayList<>();
+        BookingResponse bookingResponse= new BookingResponse();
+        java.sql.Date date=new java.sql.Date(System.currentTimeMillis());
+        List<Booking> allBookings= bookingRepository.findAllByPastBookingDates(date);
+        List<BookingDTO> bookingDTO = new ArrayList<>();
+        for (Booking booking:allBookings
+        ) {
+            bookingDTO.add(bookingEntityToDto.bookingEntityToDto(booking));
+        }
+        return null;
+    }
+
+    @Override
+    public List<BookingResponse> getUpcomingBookings(Date bookingDate) {
+        return null;
+    }
+
 }

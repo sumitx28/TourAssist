@@ -108,7 +108,7 @@ public class PackageService implements IPackageService {
         StayDto stayDto= stayEntityToDto.stayEntityToDto(stayRepository.getStayDetailsByPackageId(id));
         PackageDetailResponse details= new PackageDetailResponse();
         details.setMediaPath(packageMediaRepository.findByPackageId(id));
-        details .setAgentDetails(agentDetailsDTO);
+        details.setAgentDetails(agentDetailsDTO);
         details.setSourceDetails(sourceMasterDto1);
         details.setDestinationDetails(destinationMasterDto1);
         details.setTripStartDate(packageD.get().getTripStartDate());
