@@ -8,6 +8,11 @@ import {
   Grid,
   Button,
   Paper,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  TextField,
 } from "@mui/material";
 import TripDetails from "./TripDetails";
 import ActivityDetail from "./ActivityDetail";
@@ -32,9 +37,106 @@ const PackageDetail = () => {
 
   const [packageData, setPackageData] = useState(null);
 
+  const [openDialog, setOpenDialog] = useState(false);
+  const [userDetailsArray, setUserDetailsArray] = useState([
+    {
+      firstName: "",
+      lastName: "",
+      dateOfBirth: "",
+    },
+  ]);
+
+  const openDialogHandler = () => {
+    setOpenDialog(true);
+  };
+
+  const closeDialogHandler = () => {
+    setOpenDialog(false);
+  };
+
+  const handleUserDetailsChange = (index, field, value) => {
+    const updatedUserDetailsArray = [...userDetailsArray];
+    updatedUserDetailsArray[index] = {
+      ...updatedUserDetailsArray[index],
+      [field]: value,
+    };
+    setUserDetailsArray(updatedUserDetailsArray);
+  };
+
   const handleBookClick = () => {
-    alert("Book");
-    console.log(finalPackage);
+    openDialogHandler();
+  };
+
+  const handleConfirmBooking = () => {
+    if (!packageData) {
+      console.error("Package data is not available.");
+      return;
+    }
+
+    const bookingItemRequests = [];
+
+    // Filter and include only selected activities in bookingItemRequests
+    packageData.activity.forEach((activity) => {
+      if (
+        !finalPackage.deselectedActivities.includes(activity.activityMaster.id)
+      ) {
+        bookingItemRequests.push({
+          itemName: "ACTIVITY",
+          itemId: activity.activityMaster.id,
+        });
+      }
+    });
+
+    // Include selected guide
+    if (!finalPackage.deselectedTourGuide && packageData.tourGuide) {
+      bookingItemRequests.push({
+        itemName: "GUIDE",
+        itemId: packageData.tourGuide.id,
+      });
+    }
+
+    // Include selected resort
+    if (!finalPackage.deselectedStay && packageData.stay) {
+      bookingItemRequests.push({
+        itemName: "RESORT",
+        itemId: packageData.stay.id,
+      });
+    }
+
+    // Include selected transportation
+    if (
+      !finalPackage.deselectedTravelMode &&
+      packageData.transportationDetails
+    ) {
+      bookingItemRequests.push({
+        itemName: "TRANSPORTATION",
+        itemId: packageData.transportationDetails.id || 1,
+      });
+    }
+
+    const bookingData = {
+      packageId: id,
+      customerId: 3, // Replace with your actual customerId
+      agentId: packageData.agentDetails.agentId,
+      bookingItemRequests,
+      guests: userDetailsArray.map((user) => ({
+        firstName: user.firstName,
+        lastName: user.lastName,
+        dateOfBirth: new Date(user.dateOfBirth).toISOString(),
+      })),
+    };
+
+    // Log or send the 'bookingData' object to your server
+    console.log(bookingData);
+
+    closeDialogHandler();
+  };
+
+  const handleAddTraveler = () => {
+    setUserDetailsArray([
+      ...userDetailsArray,
+      { firstName: "", lastName: "", dateOfBirth: "" },
+    ]);
   };
 
   const handleSwitchChange = (id) => {
@@ -137,6 +239,60 @@ const PackageDetail = () => {
     finalPackage.deselectedTourGuide,
   ]);
 
+  const dialogContent = (
+    <div>
+      <DialogTitle>Enter User Details</DialogTitle>
+      <DialogContent>
+        {userDetailsArray.map((user, index) => (
+          <Grid container spacing={2} key={index}>
+            <Grid item xs={4}>
+              <TextField
+                label={`Traveler ${index + 1} - First Name`}
+                value={user.firstName}
+                onChange={(e) =>
+                  handleUserDetailsChange(index, "firstName", e.target.value)
+                }
+                fullWidth
+              />
+            </Grid>
+            <Grid item xs={4}>
+              <TextField
+                label={`Traveler ${index + 1} - Last Name`}
+                value={user.lastName}
+                onChange={(e) =>
+                  handleUserDetailsChange(index, "lastName", e.target.value)
+                }
+                fullWidth
+              />
+            </Grid>
+            <Grid item xs={4}>
+              <TextField
+                label={`Traveler ${index + 1} - Date of Birth`}
+                type="date"
+                value={user.dateOfBirth}
+                onChange={(e) =>
+                  handleUserDetailsChange(index, "dateOfBirth", e.target.value)
+                }
+                fullWidth
+              />
+            </Grid>
+          </Grid>
+        ))}
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={closeDialogHandler} color="primary">
+          Cancel
+        </Button>
+        <Button onClick={handleConfirmBooking} color="primary">
+          Confirm Booking
+        </Button>
+        <Button onClick={handleAddTraveler} color="primary">
+          Add Traveler
+        </Button>
+      </DialogActions>
+    </div>
+  );
+
   return (
     <div>
       <NavBar />
@@ -219,6 +375,10 @@ const PackageDetail = () => {
           </Grid>
         </Grid>
       </Container>
+      {/* Dialog component */}
+      <Dialog open={openDialog} onClose={closeDialogHandler}>
+        {dialogContent}
+      </Dialog>
     </div>
   );
 };
