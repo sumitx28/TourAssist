@@ -9,38 +9,40 @@ import ResetPassword from "./components/ResetPassword";
 import SignUp from "./components/Signup";
 import AuthGuard from "./guards/AuthGuard";
 import CreatePackage from "./components/agent/CreatePackage";
-import UserProfile from "./components/UserProfile"
-
+import UserProfile from "./components/UserProfile";
+import SearchResults from "./components/SearchResults";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
-
+import SearchBar from "./components/SearchBar";
 function App() {
   return (
     <Router>
       <div>
         <Routes>
           <Route exact path="/" element={<Home />}></Route>
+          <Route exact path="/search" element={<SearchBar/>}></Route>
           <Route exact path="/login" element={<Login />}></Route>
           <Route exact path="/signup" element={<SignUp />}></Route>
           <Route path="/agent-login" element={<AgentLogin />} />
-          <Route
+          <Route path="/agent-dashboard1" element={<AgentDashboard />} />
+          {/* <Route
             path="/agent-dashboard"
             element={
               <AuthGuard>
                 <AgentDashboard />
               </AuthGuard>
             }
-          />
+          /> */}
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password/:token" element={<ResetPassword />} />
           <Route
             path="/create-package"
             element={
-              <AuthGuard>
+              // <AuthGuard>
                 <AgentDash
                   title="New Travel Package"
                   Component={<CreatePackage />}
                 />
-              </AuthGuard>
+              // </AuthGuard>
             }
           />
 {/*           <Route */}
@@ -51,7 +53,7 @@ function App() {
 {/*                 </AuthGuard> */}
 {/*             } */}
 {/*           /> */}
-          <Route path="/user-profile" element={<UserProfile />} />
+          <Route path="/userprofile" element={<UserProfile />} />
           <Route
             path="/dashboard"
             element={
