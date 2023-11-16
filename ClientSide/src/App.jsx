@@ -11,6 +11,7 @@ import AuthGuard from "./guards/AuthGuard";
 import CreatePackage from "./components/agent/CreatePackage";
 
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import PackageDetail from "./components/travel-package/PackageDetail";
 
 function App() {
   return (
@@ -47,6 +48,14 @@ function App() {
             element={
               <AuthGuard>
                 <Dashboard />
+              </AuthGuard>
+            }
+          />
+          <Route
+            path="/package/:id"
+            element={
+              <AuthGuard>
+                <PackageDetail />
               </AuthGuard>
             }
           />
