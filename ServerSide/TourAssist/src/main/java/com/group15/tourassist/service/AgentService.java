@@ -41,4 +41,13 @@ public class AgentService implements IAgentService {
         return agentDetailsDTO;
 
     }
+
+    /**
+     * @param appUserId appUserId to fetch Agent details
+     * @return Agent for the appUserId
+     */
+    @Override
+    public Agent getAgentByAppUserId(Long appUserId) {
+        return null;
+    }
 }
