@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -73,7 +74,7 @@ public class PackageService implements IPackageService {
 
     // Transaction method to save all or nothing.
     @Override
-    public Long createNewPackage(PackageCreateRequest request, List<MultipartFile> images) {
+    public Long createNewPackage(PackageCreateRequest request, List<MultipartFile> images) throws IOException {
         Package newPackage = createPackage(request);
 
         createStay(request.getStayRequest(), newPackage.getId());
@@ -128,7 +129,7 @@ public class PackageService implements IPackageService {
      * @param images All the images for a package.
      * @param packageId package_id : primary key of package table.
      */
-    private void createPackageMedia(List<MultipartFile> images, Long packageId) {
+    private void createPackageMedia(List<MultipartFile> images, Long packageId) throws IOException {
         packageMediaService.saveAllPackageMedia(images, packageId);
     }
 

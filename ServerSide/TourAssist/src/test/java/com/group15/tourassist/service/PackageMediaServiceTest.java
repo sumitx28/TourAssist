@@ -7,11 +7,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -31,7 +31,7 @@ class PackageMediaServiceTest {
     private List<String> cloudPaths = Arrays.asList("abc.jpg", "test_1.png");
 
     @Test
-    void testSaveAllPackageMedia() {
+    void testSaveAllPackageMedia() throws IOException {
         // Arrange
         when(storageService.uploadImages(any())).thenReturn(cloudPaths);
 
@@ -39,6 +39,6 @@ class PackageMediaServiceTest {
         packageMediaService.saveAllPackageMedia(new ArrayList<>(), 1L);
 
         // Assert
-        verify(packageMediaRepository, times(1)).save(any());
+        verify(packageMediaRepository, times(2)).save(any());
     }
 }

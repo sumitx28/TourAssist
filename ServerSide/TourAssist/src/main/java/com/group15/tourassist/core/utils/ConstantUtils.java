@@ -42,5 +42,7 @@ public class ConstantUtils {
 
     public static final String CLOUD_SECURE = "secure";
 
+    public static final String KEY_URL = "url";
+
 
 }
