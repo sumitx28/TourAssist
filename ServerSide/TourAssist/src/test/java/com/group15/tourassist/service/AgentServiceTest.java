@@ -41,7 +41,7 @@ class AgentServiceTest {
     @Test
     void getAgentByAppUserId() {
         // Arrange
-
+        when(agentRepository.findByAppUserId(1L)).thenReturn(agent);
         // Act
         Agent agentByAppUserId = agentService.getAgentByAppUserId(1L);
 

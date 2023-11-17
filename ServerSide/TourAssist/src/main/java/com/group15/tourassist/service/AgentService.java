@@ -48,6 +48,6 @@ public class AgentService implements IAgentService {
      */
     @Override
     public Agent getAgentByAppUserId(Long appUserId) {
-        return null;
+        return agentRepository.findByAppUserId(appUserId);
     }
 }
