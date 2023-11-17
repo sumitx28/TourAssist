@@ -23,9 +23,9 @@ test:
     - echo $BACKEND_DIR
     - cd $BACKEND_DIR
     - mvn -version
-    - mvn clean install -Dspring.profiles.active=prod
+    - mvn clean test -Dspring.profiles.active=prod
   only:
-    - ci-cd-backend
+    - main
 
 build:
   stage: build
@@ -40,7 +40,7 @@ build:
     paths:
       - $BACKEND_DIR/target/*.jar
   only:
-    - ci-cd-backend
+    - main
 
 package:
   image: docker:latest
@@ -59,7 +59,7 @@ package:
     - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PWD docker.io
     - docker push docker.io/patelraj22777/test:$CI_COMMIT_SHORT_SHA
   only:
-    - ci-cd-backend
+    - main
 
 deploy:
   stage: deploy
@@ -76,7 +76,7 @@ deploy:
     name: production
     url: http://172.17.0.148:8073
   only:
-    - ci-cd-backend
+    - main
 
 package-fe:
   image: docker:latest
@@ -95,7 +95,7 @@ package-fe:
     - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PWD docker.io
     - docker push docker.io/patelraj22777/test:$CI_COMMIT_SHORT_SHA-fe
   only:
-    - ci-cd-backend
+    - main
 
 deploy-fe:
   stage: deploy-fe
@@ -112,4 +112,4 @@ deploy-fe:
     name: production-fe
     url: http://172.17.0.148:8074
   only:
-    - ci-cd-backend
+    - main
