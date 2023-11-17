@@ -1,5 +1,6 @@
 package com.group15.tourassist.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,7 +8,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.time.Instant;
 
 @Entity
 @AllArgsConstructor
@@ -23,6 +23,7 @@ public class Agent implements Serializable {
     private Long id;
 
     @OneToOne
+    @JsonIgnore
     private AppUser appUser;
 
     @Column(name = "company_name")
