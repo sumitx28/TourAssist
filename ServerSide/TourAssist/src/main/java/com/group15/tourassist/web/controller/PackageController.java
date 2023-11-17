@@ -9,7 +9,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.Optional;
 
 @CrossOrigin(
@@ -40,10 +42,10 @@ public class PackageController {
      * @return package_id of the created package.
      */
     @PostMapping("/create-package")
-    private ResponseEntity<Long> createPackage(@RequestBody PackageCreateRequest request) {
+    private ResponseEntity<Long> createPackage(@RequestPart("images") List<MultipartFile> images, @RequestPart("request") PackageCreateRequest request) {
         log.info("** get create-package request {}", request.toString());
 
-        Long packageId = packageService.createNewPackage(request);
+        Long packageId = packageService.createNewPackage(request, images);
         return ResponseEntity.of(Optional.of(packageId));
     }
 

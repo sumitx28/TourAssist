@@ -2,9 +2,9 @@ package com.group15.tourassist.service;
 
 import com.group15.tourassist.entity.PackageMedia;
 import com.group15.tourassist.repository.IPackageMediaRepository;
-import com.group15.tourassist.request.PackageMediaRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 
 import java.time.Instant;
@@ -16,26 +16,33 @@ public class PackageMediaService implements IPackageMediaService {
     @Autowired
     private IPackageMediaRepository packageMediaRepository;
 
+    @Autowired
+    private IStorageService storageService;
+
     @Override
-    public void saveAllPackageMedia(List<PackageMediaRequest> requests, Long packageId) {
-        for(PackageMediaRequest request : requests) {
-            PackageMedia packageMedia = createPackageMedia(request, packageId);
+    public void saveAllPackageMedia(List<MultipartFile> images, Long packageId) {
+        // store images on cloud
+        List<String> paths = storageService.uploadImages(images);
+
+        // store path in database
+        for(String path : paths) {
+            PackageMedia packageMedia = createPackageMedia(path, packageId);
             packageMediaRepository.save(packageMedia);
         }
     }
 
 
     /**
-     * @param request request object
+     * @param path cloud path
      * @param packageId package_id
      * @return PackageMedia object
      */
-    private PackageMedia createPackageMedia(PackageMediaRequest request, Long packageId) {
+    private PackageMedia createPackageMedia(String path, Long packageId) {
         return PackageMedia.builder()
-                .description(request.getDescription())
+                .description("")
                 .uploadDate(Instant.now())
                 .packageId(packageId)
-                .media(request.getImage())
+                .media(path)
                 .build();
     }
 
