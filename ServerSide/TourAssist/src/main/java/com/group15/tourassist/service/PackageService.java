@@ -9,6 +9,7 @@ import com.group15.tourassist.repository.*;
 import com.group15.tourassist.request.*;
 import com.group15.tourassist.response.PackageDetailResponse;
 import com.group15.tourassist.web.controller.PackageController;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,56 +22,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class PackageService implements IPackageService {
     Logger log = LoggerFactory.getLogger(PackageController.class);
-
-    @Autowired
-    private IStayRepository stayRepository;
-
-    @Autowired
-    private ITourGuideRepository tourGuideRepository;
-
-    @Autowired
-    private ITransportationRepository transportationRepository;
-
-    @Autowired
-    private IPackageMediaRepository packageMediaRepository;
-
-    @Autowired
-    private IAgentRepository agentRepository;
-
-    @Autowired
-    private IDestinationMasterRepository destinationMasterRepository;
-
-    @Autowired
-    private IDestinationMasterRepository sourceMasterRepository;
-
-    @Autowired
-    private IPackageRepository packageRepository;
-
-    @Autowired
-    IActivityRepository activityRepository;
-
-    @Autowired
-    IPackageMediaService packageMediaService;
-
-    @Autowired
-    ActivityEntityToDto activityEntityToDto;
-
-    @Autowired
-    TransportationEntityToDto transportationEntityToDto;
-
-    @Autowired
-    DestinationMasterEntityToDto destinationMasterEntityToDto;
-
-    @Autowired
-    SourceMasterEntityToDto sourceMasterEntityToDto;
-
-    @Autowired
-    AgentEntityToDto agentEntityToDto;
-
-    @Autowired
-    StayEntityToDto stayEntityToDto;
+    private final IStayRepository stayRepository;
+    private final ITourGuideRepository tourGuideRepository;
+    private final ITransportationRepository transportationRepository;
+    private final IPackageMediaRepository packageMediaRepository;
+    private final IAgentRepository agentRepository;
+    private final IDestinationMasterRepository destinationMasterRepository;
+    private final IPackageRepository packageRepository;
+    private final IActivityRepository activityRepository;
+    private final IPackageMediaService packageMediaService;
+    private final ActivityEntityToDto activityEntityToDto;
+    private final TransportationEntityToDto transportationEntityToDto;
+    private final DestinationMasterEntityToDto destinationMasterEntityToDto;
+    private final SourceMasterEntityToDto sourceMasterEntityToDto;
+    private final AgentEntityToDto agentEntityToDto;
+    private final StayEntityToDto stayEntityToDto;
 
     // Transaction method to save all or nothing.
     @Override

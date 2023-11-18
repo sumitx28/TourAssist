@@ -1,6 +1,7 @@
 package com.group15.tourassist.service;
 
 import com.group15.tourassist.core.enums.Role;
+import com.group15.tourassist.dto.AgentDetailsDTO;
 import com.group15.tourassist.entity.Agent;
 import com.group15.tourassist.entity.AppUser;
 import com.group15.tourassist.entity.Customer;
@@ -15,6 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
@@ -46,5 +48,70 @@ class AgentServiceTest {
 
         // Assert
         assertEquals(agent, agentByAppUserId);
+    }
+
+
+
+    @Test
+    void testGetAgentById() {
+        // Arrange
+        Long agentId = 1L;
+        Agent mockAgent = new Agent();
+        mockAgent.setId(agentId);
+
+        when(agentRepository.findById(agentId)).thenReturn(Optional.of(mockAgent));
+
+        // Act
+        Agent result = agentService.getAgentById(agentId);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(agentId, result.getId());
+    }
+
+    @Test
+    void testGetAgentByIdWhenNotExists() {
+        // Arrange
+        Long agentId = 1L;
+
+        when(agentRepository.findById(agentId)).thenReturn(Optional.empty());
+
+        // Act
+        Agent result = agentService.getAgentById(agentId);
+
+        // Assert
+        assertNull(result);
+    }
+
+    @Test
+    void testPopulateAgentDetails() {
+        // Arrange
+        Agent mockAgent = new Agent();
+        mockAgent.setId(1L);
+        String testCompany = "Test Company";
+
+        mockAgent.setCompanyName(testCompany);
+
+        // Act
+        AgentDetailsDTO result = agentService.populateAgentDetails(mockAgent);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(mockAgent.getId(), result.getAgentId());
+        assertEquals(mockAgent.getCompanyName(), result.getCompanyName());
+    }
+
+    @Test
+    void testPopulateAgentDetailsWithNullAgent() {
+        // Arrange
+        Agent mockAgent = null;
+
+        // Act
+        AgentDetailsDTO result = agentService.populateAgentDetails(mockAgent);
+
+        // Assert
+        assertNotNull(result);
+        assertNull(result.getAgentId());
+        assertNull(result.getCompanyName());
     }
 }
