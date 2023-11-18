@@ -17,7 +17,7 @@ public interface IBookingService {
 
     void updateBookingStatus(Long bookingId, TransactionStatus transactionStatus);
 
-    List<BookingResponse> getPastBookings(Date bookingDate);
+    List<BookingResponse> getPastBookings(Long agentId);
 
-    List<BookingResponse> getUpcomingBookings(Date bookingDate);
+    List<BookingResponse> getUpcomingBookings(Long agentId);
 }

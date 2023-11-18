@@ -1,10 +1,7 @@
 package com.group15.tourassist.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.io.Serializable;
 import java.time.Instant;
@@ -13,6 +10,8 @@ import java.time.Instant;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@Getter
+@Setter
 @Builder
 @Table(name = "package")
 public class Package implements Serializable {
@@ -20,7 +19,7 @@ public class Package implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-        private Long id;
+    private Long id;
 
     @Column(name = "package_name")
     private String packageName;
