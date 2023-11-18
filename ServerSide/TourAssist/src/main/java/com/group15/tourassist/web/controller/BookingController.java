@@ -1,7 +1,6 @@
 package com.group15.tourassist.web.controller;
 
 import com.group15.tourassist.request.BookingRequest;
-import com.group15.tourassist.response.BookingResponse;
 import com.group15.tourassist.response.BookingDetailsWebResponse;
 import com.group15.tourassist.service.BookingService;
 import com.group15.tourassist.service.IBookingService;
@@ -11,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 
 @CrossOrigin(
@@ -35,6 +33,7 @@ public class BookingController {
     @Autowired
     private IBookingService bookingService;
 
+
     /**
      * @param request booking request to create a booking
      * @return booking id
@@ -56,19 +55,5 @@ public class BookingController {
         BookingDetailsWebResponse bookingDetailsWebResponse = bookingService.getAllBookingForCustomer(appUserId);
 
         return ResponseEntity.ok(bookingDetailsWebResponse);
-    }
-
-    @GetMapping("/past-booking/{agentId}")
-    private ResponseEntity<List<BookingResponse>> pastBookings(@PathVariable Long agentId) {
-        log.info("** get past booking details");
-        var  response = bookingService.getPastBookings(agentId);
-        return ResponseEntity.of(Optional.of(response));
-    }
-
-    @GetMapping("/upcoming-booking/{agentId}")
-    private ResponseEntity<List<BookingResponse>> upcomingBookings(@PathVariable Long agentId) {
-        log.info("** get upcoming booking details");
-        var  response = bookingService.getUpcomingBookings(agentId);
-        return ResponseEntity.of(Optional.of(response));
     }
 }
