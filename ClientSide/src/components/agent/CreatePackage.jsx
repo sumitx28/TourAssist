@@ -83,8 +83,9 @@ function TravelForm() {
 
   const handleImageChange = async (e) => {
     const file = e.target.files[0];
-    const base64Image = await getBase64(file);
-    setFormData({ ...formData, travelImage: base64Image.substring(22) });
+    setFormData({ ...formData, travelImage: file });
+    // const base64Image = await getBase64(file);
+    // setFormData({ ...formData, travelImage: base64Image.substring(22) });
   };
 
   useEffect(() => {
@@ -184,26 +185,38 @@ function TravelForm() {
             isCustomizable: false,
           };
         }),
-        packageMediaRequests: [
-          {
-            image: formData.travelImage,
-            description: "new package image",
-          },
-        ],
+        // packageMediaRequests: [
+        //   {
+        //     image: formData.travelImage,
+        //     description: "new package image",
+        //   },
+        // ],
       };
 
-      console.log(postData);
+      const finalPostData = new FormData();
+      // const blob = await fetch(
+      //   `data:image/jpeg;base64,${formData.travelImage}`
+      // ).then((res) => res.blob());
+      finalPostData.append(
+        "request",
+        new Blob([JSON.stringify(postData)], { type: "application/json" })
+      );
+
+      // finalPostData.append("request", JSON.stringify(postData));
+      finalPostData.append("images", formData.travelImage);
+
+      console.log(formData);
 
       const authToken = localStorage.getItem("authToken");
 
       try {
         const response = await axios.post(
           `${API_URL}/api/v1/create-package`,
-          postData,
+          finalPostData,
           {
             headers: {
               Authorization: `Bearer ${authToken}`,
-              "Content-Type": "application/json",
+              "Content-Type": "multipart/form-data",
             },
           }
         );
