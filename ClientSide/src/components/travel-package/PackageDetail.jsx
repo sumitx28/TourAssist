@@ -1,29 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import {
-  Card,
-  CardContent,
-  Container,
-  Typography,
-  Grid,
-  Button,
-  Paper,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  TextField,
-} from "@mui/material";
-import TripDetails from "./TripDetails";
-import ActivityDetail from "./ActivityDetail";
-import TravelMode from "./TravelMode";
-import Stay from "./Stay";
-import TourGuide from "./TourGuide";
+import { Container, Grid, Dialog } from "@mui/material";
 import PaymentDialog from "./PaymentDialog";
 import axios from "axios";
 import API_URL from "../../../config/config";
 import NavBar from "../commons/NavBar";
 import { jwtDecode } from "jwt-decode";
+import UserDetailsForm from "./UserDetailsForm";
+import PackageCard from "./PackageCard";
 
 const PackageDetail = () => {
   const { id } = useParams();
@@ -38,35 +22,20 @@ const PackageDetail = () => {
     bookingData: {},
   });
 
-  // Add a new state variable for the payment dialog
   const [openPaymentDialog, setOpenPaymentDialog] = useState(false);
 
   const [packageData, setPackageData] = useState(null);
 
   const [openDialog, setOpenDialog] = useState(false);
   const [userDetailsArray, setUserDetailsArray] = useState([
-    {
-      firstName: "",
-      lastName: "",
-      dateOfBirth: "",
-    },
+    { firstName: "", lastName: "", dateOfBirth: "" },
   ]);
 
-  const openDialogHandler = () => {
-    setOpenDialog(true);
-  };
+  const openDialogHandler = () => setOpenDialog(true);
+  const closeDialogHandler = () => setOpenDialog(false);
 
-  const closeDialogHandler = () => {
-    setOpenDialog(false);
-  };
-
-  const openPaymentDialogHandler = () => {
-    setOpenPaymentDialog(true);
-  };
-
-  const closePaymentDialogHandler = () => {
-    setOpenPaymentDialog(false);
-  };
+  const openPaymentDialogHandler = () => setOpenPaymentDialog(true);
+  const closePaymentDialogHandler = () => setOpenPaymentDialog(false);
 
   const handleUserDetailsChange = (index, field, value) => {
     const updatedUserDetailsArray = [...userDetailsArray];
@@ -77,9 +46,7 @@ const PackageDetail = () => {
     setUserDetailsArray(updatedUserDetailsArray);
   };
 
-  const handleBookClick = () => {
-    openDialogHandler();
-  };
+  const handleBookClick = () => openDialogHandler();
 
   const handleConfirmBooking = async () => {
     if (!packageData) {
@@ -89,7 +56,6 @@ const PackageDetail = () => {
 
     const bookingItemRequests = [];
 
-    // Filter and include only selected activities in bookingItemRequests
     packageData.activity.forEach((activity) => {
       if (
         !finalPackage.deselectedActivities.includes(activity.activityMaster.id)
@@ -101,7 +67,6 @@ const PackageDetail = () => {
       }
     });
 
-    // Include selected guide
     if (!finalPackage.deselectedTourGuide && packageData.tourGuide) {
       bookingItemRequests.push({
         itemName: "GUIDE",
@@ -109,7 +74,6 @@ const PackageDetail = () => {
       });
     }
 
-    // Include selected resort
     if (!finalPackage.deselectedStay && packageData.stay) {
       bookingItemRequests.push({
         itemName: "RESORT",
@@ -117,7 +81,6 @@ const PackageDetail = () => {
       });
     }
 
-    // Include selected transportation
     if (
       !finalPackage.deselectedTravelMode &&
       packageData.transportationDetails
@@ -170,7 +133,7 @@ const PackageDetail = () => {
         finalPackage.pricePerPerson * userDetailsArray.length;
       bookingData.user = user;
 
-      setFinalPackage({ ...finalPackage, bookingData: bookingData });
+      setFinalPackage({ ...finalPackage, bookingData });
 
       closeDialogHandler();
       openPaymentDialogHandler();
@@ -179,11 +142,16 @@ const PackageDetail = () => {
     }
   };
 
-  const handleAddTraveler = () => {
+  const handleAddTraveler = () =>
     setUserDetailsArray([
       ...userDetailsArray,
       { firstName: "", lastName: "", dateOfBirth: "" },
     ]);
+
+  const handleRemoveTraveler = (index) => {
+    const updatedUserDetailsArray = [...userDetailsArray];
+    updatedUserDetailsArray.splice(index, 1);
+    setUserDetailsArray(updatedUserDetailsArray);
   };
 
   const handleSwitchChange = (id) => {
@@ -236,7 +204,7 @@ const PackageDetail = () => {
     };
 
     fetchData();
-  }, []);
+  }, [id, navigate]);
 
   useEffect(() => {
     let cost = 0;
@@ -274,10 +242,7 @@ const PackageDetail = () => {
       cost = travelCost + activitiesCost + stayCost + tourGuideCost;
     }
 
-    setFinalPackage({
-      ...finalPackage,
-      pricePerPerson: cost,
-    });
+    setFinalPackage({ ...finalPackage, pricePerPerson: cost });
   }, [
     packageData,
     finalPackage.deselectedActivities,
@@ -286,148 +251,32 @@ const PackageDetail = () => {
     finalPackage.deselectedTourGuide,
   ]);
 
-  const dialogContent = (
-    <div>
-      <DialogTitle>Enter Traveller Details</DialogTitle>
-      <DialogContent>
-        {userDetailsArray.map((user, index) => (
-          <Grid container spacing={2} key={index} style={{ marginTop: 2 }}>
-            <Grid item xs={4}>
-              <TextField
-                label={`T${index + 1} - First Name`}
-                value={user.firstName}
-                onChange={(e) =>
-                  handleUserDetailsChange(index, "firstName", e.target.value)
-                }
-                fullWidth
-              />
-            </Grid>
-            <Grid item xs={4}>
-              <TextField
-                label={`T${index + 1} - Last Name`}
-                value={user.lastName}
-                onChange={(e) =>
-                  handleUserDetailsChange(index, "lastName", e.target.value)
-                }
-                fullWidth
-              />
-            </Grid>
-            <Grid item xs={4}>
-              <TextField
-                // label={`T ${index + 1} - Date of Birth`}
-                type="date"
-                value={user.dateOfBirth}
-                onChange={(e) =>
-                  handleUserDetailsChange(index, "dateOfBirth", e.target.value)
-                }
-                fullWidth
-              />
-            </Grid>
-          </Grid>
-        ))}
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={closeDialogHandler} color="primary">
-          Cancel
-        </Button>
-        <Button onClick={handleConfirmBooking} color="primary">
-          Confirm Booking
-        </Button>
-        <Button onClick={handleAddTraveler} color="primary">
-          Add Traveler
-        </Button>
-      </DialogActions>
-    </div>
-  );
-
   return (
     <div>
       <NavBar />
-      <Container maxWidth="md" sx={{ marginTop: 2 }}>
-        <Grid container justifyContent="center" spacing={2}>
-          <Grid item xs={12} md={6}>
-            <Card sx={{ width: "100%" }}>
-              <CardContent>
-                {packageData && (
-                  <div>
-                    <Typography variant="h6" gutterBottom>
-                      <img src={packageData.mediaPath[0].media} alt="" />
-                    </Typography>
-
-                    <TravelMode
-                      travelMode={packageData.transportationDetails}
-                      handleSwitchChange={handleSwitchChange}
-                    />
-
-                    <Stay
-                      stay={packageData.stay}
-                      handleSwitchChange={handleSwitchChange}
-                    />
-
-                    <TourGuide
-                      tourGuide={packageData.tourGuide}
-                      handleSwitchChange={handleSwitchChange}
-                    />
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          </Grid>
-
-          <Grid item xs={12} md={6}>
-            <Card sx={{ width: "100%" }}>
-              <CardContent>
-                <Typography variant="h4" gutterBottom>
-                  Tour Package
-                </Typography>
-                {packageData && (
-                  <div>
-                    <Typography variant="h6" gutterBottom>
-                      Offered By: {packageData.agentDetails.companyName}
-                    </Typography>
-
-                    <TripDetails
-                      source={packageData.sourceDetails}
-                      destination={packageData.destinationDetails}
-                      startDate={packageData.tripStartDate}
-                      endDate={packageData.tripEndDate}
-                    />
-
-                    <ActivityDetail
-                      activities={packageData.activity}
-                      handleSwitchChange={handleSwitchChange}
-                    />
-
-                    <Paper elevation={3} sx={{ padding: 2, marginBottom: 2 }}>
-                      <Typography variant="h6" gutterBottom>
-                        Total Travel Cost:
-                      </Typography>
-                      <Typography variant="h5">
-                        {" "}
-                        <strong>${finalPackage.pricePerPerson}</strong>/Person*
-                      </Typography>
-                    </Paper>
-
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      onClick={handleBookClick}
-                    >
-                      Book
-                    </Button>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
+      <Container maxWidth="lg" sx={{ marginTop: 2 }}>
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <PackageCard
+              packageData={packageData}
+              finalPackage={finalPackage}
+              handleSwitchChange={handleSwitchChange}
+              handleBookClick={handleBookClick}
+            />
           </Grid>
         </Grid>
       </Container>
-      {/* Dialog component */}
+
       <Dialog open={openDialog} onClose={closeDialogHandler}>
-        {dialogContent}
+        <UserDetailsForm
+          userDetailsArray={userDetailsArray}
+          handleUserDetailsChange={handleUserDetailsChange}
+          handleAddTraveler={handleAddTraveler}
+          handleConfirmBooking={handleConfirmBooking}
+          handleRemoveTraveler={handleRemoveTraveler}
+        />
       </Dialog>
 
-      {/* Payment component */}
       <PaymentDialog
         open={openPaymentDialog}
         onClose={closePaymentDialogHandler}
