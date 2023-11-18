@@ -2,8 +2,6 @@ package com.group15.tourassist.service;
 
 import com.group15.tourassist.core.enums.BookingStatus;
 import com.group15.tourassist.core.enums.TransactionStatus;
-import com.group15.tourassist.dto.BookingDTO;
-import com.group15.tourassist.entity.Activity;
 import com.group15.tourassist.entity.Booking;
 import com.group15.tourassist.entityToDto.AgentEntityToDto;
 import com.group15.tourassist.entityToDto.BookingEntityToDto;
@@ -22,7 +20,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Service

@@ -16,7 +16,7 @@ import java.util.Optional;
 public class PackageDTO {
     private Long id;
     private String packageName;
-    private Agent agent;
+    private AgentDetailsDTO agent;
     private Instant tripStartDate;
     private Instant tripEndDate;
     private SourceMasterDTO source;

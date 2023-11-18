@@ -21,11 +21,14 @@ public class PackageEntityToDto {
     @Autowired
     SourceMasterEntityToDto sourceMasterEntityToDto;
 
+    @Autowired
+    AgentEntityToDto agentEntityToDto;
+
     public PackageDTO packageEntityToDto( Package packageDetails){
         PackageDTO packageDTO = new PackageDTO();
         packageDTO.setId(packageDetails.getId());
         packageDTO.setPackageName(packageDetails.getPackageName());
-        packageDTO.setAgent(agentRepository.findById(packageDetails.getAgentId()).get());
+        packageDTO.setAgent(agentEntityToDto.agentEntityToDto(agentRepository.findById(packageDetails.getAgentId()).get()));
         packageDTO.setTripStartDate(packageDetails.getTripStartDate());
         packageDTO.setTripEndDate(packageDetails.getTripEndDate());
         packageDTO.setSource(sourceMasterEntityToDto.sourceMasterEntityToDto( destinationMasterRepository.findById(packageDetails.getSourceId()).get()));

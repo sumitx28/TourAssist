@@ -2,7 +2,6 @@ package com.group15.tourassist.web.controller;
 
 import com.group15.tourassist.request.BookingRequest;
 import com.group15.tourassist.response.BookingResponse;
-import com.group15.tourassist.response.PackageDetailResponse;
 import com.group15.tourassist.service.BookingService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +33,7 @@ public class BookingController {
         @Autowired
         private BookingService bookingService;
 
+
         /**
          * @param request booking request to create a booking
          * @return booking id
@@ -50,7 +50,6 @@ public class BookingController {
         private ResponseEntity<List<BookingResponse>> pastBookings(@PathVariable Long agentId) {
                 log.info("** get past booking details");
                 var  response = bookingService.getPastBookings(agentId);
-                log.info("in controller"+response.toString());
                 return ResponseEntity.of(Optional.of(response));
         }
 
