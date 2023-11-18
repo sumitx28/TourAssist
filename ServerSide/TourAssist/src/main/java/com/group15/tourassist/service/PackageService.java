@@ -81,7 +81,7 @@ public class PackageService implements IPackageService {
         PackageDetailResponse details= new PackageDetailResponse();
         details.setPackageName(packageD.get().getPackageName());
         details.setMediaPath(packageMediaRepository.findByPackageId(id));
-        details .setAgentDetails(agentDetailsDTO);
+        details.setAgentDetails(agentDetailsDTO);
         details.setSourceDetails(sourceMasterDto1);
         details.setDestinationDetails(destinationMasterDto1);
         details.setTripStartDate(packageD.get().getTripStartDate());
