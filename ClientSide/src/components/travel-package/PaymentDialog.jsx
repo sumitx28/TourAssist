@@ -34,6 +34,12 @@ const PaymentDialog = ({ open, onClose, bookingData }) => {
   const [isProcessingPayment, setProcessingPayment] = React.useState(false);
   const [paymentResult, setPaymentResult] = React.useState(null);
 
+  const [validationMessages, setValidationMessages] = React.useState({
+    cardNumber: "",
+    cvv: "",
+    expiryDate: "",
+  });
+
   const isValidCardNumber = (cardNumber) => {
     return /^\d{16}$/.test(cardNumber);
   };
@@ -47,12 +53,40 @@ const PaymentDialog = ({ open, onClose, bookingData }) => {
   };
 
   const handlePay = async () => {
+    // Clear previous validation messages
+    setValidationMessages({
+      cardNumber: "",
+      cvv: "",
+      expiryDate: "",
+    });
+
+    if (!isValidCardNumber(cardNumber)) {
+      setValidationMessages((prevMessages) => ({
+        ...prevMessages,
+        cardNumber: "Invalid card number",
+      }));
+    }
+
+    if (!isValidCVV(cvv)) {
+      setValidationMessages((prevMessages) => ({
+        ...prevMessages,
+        cvv: "Invalid CVV",
+      }));
+    }
+
+    if (!isValidExpiryDate(expiryDate)) {
+      setValidationMessages((prevMessages) => ({
+        ...prevMessages,
+        expiryDate: "Invalid expiry date (MM/YYYY)",
+      }));
+    }
+
+    // Check for any validation errors before proceeding with payment
     if (
-      !isValidCardNumber(cardNumber) ||
-      !isValidCVV(cvv) ||
-      !isValidExpiryDate(expiryDate)
+      validationMessages.cardNumber ||
+      validationMessages.cvv ||
+      validationMessages.expiryDate
     ) {
-      alert("Invalid card details. Please check your card information.");
       return;
     }
 
@@ -79,8 +113,6 @@ const PaymentDialog = ({ open, onClose, bookingData }) => {
       paymentType: paymentType,
       price: bookingData.totalPrice,
     };
-
-    console.log(paymentData);
 
     if (isPaymentSuccessful) {
       paymentData.transactionStatus = "SUCCESS";
@@ -139,6 +171,8 @@ const PaymentDialog = ({ open, onClose, bookingData }) => {
           margin="normal"
           value={cardNumber}
           onChange={(e) => setCardNumber(e.target.value)}
+          error={Boolean(validationMessages.cardNumber)}
+          helperText={validationMessages.cardNumber}
         />
         <TextField
           label="CVV"
@@ -147,6 +181,8 @@ const PaymentDialog = ({ open, onClose, bookingData }) => {
           margin="normal"
           value={cvv}
           onChange={(e) => setCVV(e.target.value)}
+          error={Boolean(validationMessages.cvv)}
+          helperText={validationMessages.cvv}
         />
         <TextField
           label="Expiry Date (MM/YYYY)"
@@ -155,6 +191,8 @@ const PaymentDialog = ({ open, onClose, bookingData }) => {
           margin="normal"
           value={expiryDate}
           onChange={(e) => setExpiryDate(e.target.value)}
+          error={Boolean(validationMessages.expiryDate)}
+          helperText={validationMessages.expiryDate}
         />
         <Typography variant="h6" color="primary" style={totalAmountStyle}>
           Total Payable Amount: ${bookingData.totalPrice}

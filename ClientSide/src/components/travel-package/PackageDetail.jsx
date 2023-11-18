@@ -8,6 +8,7 @@ import NavBar from "../commons/NavBar";
 import { jwtDecode } from "jwt-decode";
 import UserDetailsForm from "./UserDetailsForm";
 import PackageCard from "./PackageCard";
+import ErrorDialog from "./ErrorDialog";
 
 const PackageDetail = () => {
   const { id } = useParams();
@@ -22,6 +23,11 @@ const PackageDetail = () => {
     bookingData: {},
   });
 
+  const [errorDialog, setErrorDialog] = useState({
+    open: false,
+    message: "",
+  });
+
   const [openPaymentDialog, setOpenPaymentDialog] = useState(false);
 
   const [packageData, setPackageData] = useState(null);
@@ -30,6 +36,14 @@ const PackageDetail = () => {
   const [userDetailsArray, setUserDetailsArray] = useState([
     { firstName: "", lastName: "", dateOfBirth: "" },
   ]);
+
+  const openErrorDialog = (message) => {
+    setErrorDialog({ open: true, message });
+  };
+
+  const closeErrorDialog = () => {
+    setErrorDialog({ open: false, message: "" });
+  };
 
   const openDialogHandler = () => setOpenDialog(true);
   const closeDialogHandler = () => setOpenDialog(false);
@@ -198,8 +212,8 @@ const PackageDetail = () => {
         const response = await axios.get(`${API_URL}/api/v1/package/${id}`);
         setPackageData(response.data);
       } catch (error) {
-        alert("Package does not exist!");
-        navigate("/dashboard");
+        console.log(error);
+        openErrorDialog("Package does not exist!");
       }
     };
 
@@ -266,6 +280,12 @@ const PackageDetail = () => {
           </Grid>
         </Grid>
       </Container>
+
+      <ErrorDialog
+        open={errorDialog.open}
+        message={errorDialog.message}
+        onClose={closeErrorDialog}
+      />
 
       <Dialog open={openDialog} onClose={closeDialogHandler}>
         <UserDetailsForm
