@@ -351,7 +351,7 @@ const PackageDetail = () => {
                 {packageData && (
                   <div>
                     <Typography variant="h6" gutterBottom>
-                      <img src="https://picsum.photos/420/200" alt="" />
+                      <img src={packageData.mediaPath[0].media} alt="" />
                     </Typography>
 
                     <TravelMode
