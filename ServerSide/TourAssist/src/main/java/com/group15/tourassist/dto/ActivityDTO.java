@@ -12,6 +12,7 @@ import java.util.Optional;
 @Getter
 @Setter
 public class ActivityDTO {
+    private Long id;
     private Long packageId;
     private Optional<ActivityMaster> activityMaster;
     private Instant activityDate;

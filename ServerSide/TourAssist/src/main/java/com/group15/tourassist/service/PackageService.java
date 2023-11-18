@@ -40,7 +40,7 @@ public class PackageService implements IPackageService {
     private final SourceMasterEntityToDto sourceMasterEntityToDto;
     private final AgentEntityToDto agentEntityToDto;
     private final StayEntityToDto stayEntityToDto;
-
+    private final TourGuideEntityToDto tourGuideEntityToDto;
     // Transaction method to save all or nothing.
     @Override
     public Long createNewPackage(PackageCreateRequest request, List<MultipartFile> images) throws IOException {
@@ -79,6 +79,7 @@ public class PackageService implements IPackageService {
         AgentDetailsDTO agentDetailsDTO= agentEntityToDto.agentEntityToDto(agentRepository.findById(packageD.get().getAgentId()).get());
         StayDto stayDto= stayEntityToDto.stayEntityToDto(stayRepository.getStayDetailsByPackageId(id));
         PackageDetailResponse details= new PackageDetailResponse();
+        details.setPackageName(packageD.get().getPackageName());
         details.setMediaPath(packageMediaRepository.findByPackageId(id));
         details .setAgentDetails(agentDetailsDTO);
         details.setSourceDetails(sourceMasterDto1);
@@ -88,7 +89,7 @@ public class PackageService implements IPackageService {
         details.setActivity(listActivityDto);
         details.setTransportationDetails(transportationDto);
         details.setStay(stayDto);
-        details.setTourGuide(tourGuideRepository.getTourGuideByPackageId(id));
+        details.setTourGuide(tourGuideEntityToDto.tourGuideEntityToDto(tourGuideRepository.getTourGuideByPackageId(id)));
         details.setIsCustomizable(packageD.get().getIsCustomizable());
         return details;
     }

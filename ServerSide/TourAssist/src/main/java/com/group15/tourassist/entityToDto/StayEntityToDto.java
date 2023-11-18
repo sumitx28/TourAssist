@@ -23,6 +23,7 @@ public class StayEntityToDto {
 
     public StayDto stayEntityToDto(Stay stay){
         StayDto stayDto = new StayDto();
+        stayDto.setId(stay.getId());
         stayDto.setPackageId(stay.getPackageId());
         stayDto.setResortMaster(resortMasterRepository.findById(stay.getResortMasterId()));
         stayDto.setSuiteMaster(suiteMasterRepository.findById(stay.getSuiteMasterId()));
