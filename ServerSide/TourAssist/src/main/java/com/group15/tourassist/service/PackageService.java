@@ -13,7 +13,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -69,16 +71,17 @@ public class PackageService implements IPackageService {
 
     @Autowired
     StayEntityToDto stayEntityToDto;
+
     // Transaction method to save all or nothing.
     @Override
-    public Long createNewPackage(PackageCreateRequest request) {
+    public Long createNewPackage(PackageCreateRequest request, List<MultipartFile> images) throws IOException {
         Package newPackage = createPackage(request);
 
         createStay(request.getStayRequest(), newPackage.getId());
         createTourGuide(request.getTourGuideRequest(), newPackage.getId());
         createTransportation(request.getTransportationRequest(), newPackage.getId());
         createActivities(request.getActivities(), newPackage.getId());
-        createPackageMedia(request.getPackageMediaRequests(), newPackage.getId());
+        createPackageMedia(images, newPackage.getId());
 
         return newPackage.getId();
     }
@@ -123,11 +126,11 @@ public class PackageService implements IPackageService {
 
 
     /**
-     * @param packageMediaRequests All the images for a package.
+     * @param images All the images for a package.
      * @param packageId package_id : primary key of package table.
      */
-    private void createPackageMedia(List<PackageMediaRequest> packageMediaRequests, Long packageId) {
-        packageMediaService.saveAllPackageMedia(packageMediaRequests, packageId);
+    private void createPackageMedia(List<MultipartFile> images, Long packageId) throws IOException {
+        packageMediaService.saveAllPackageMedia(images, packageId);
     }
 
     // Create a Stay entity from request.
