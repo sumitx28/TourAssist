@@ -13,16 +13,12 @@ import java.util.Optional;
 @Setter
 public class TransportationDTO {
 
+    private Long id;
     private Long packageId;
-
     private String mode;
     //private Optional<TravelModeMaster> modeMaster;
-
     // private Instant priceStartDate;
-
     //private Instant priceExpiryDate;
-
     private Double price;
-
     private Boolean isCustomizable;
 }

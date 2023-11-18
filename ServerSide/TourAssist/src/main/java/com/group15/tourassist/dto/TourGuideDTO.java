@@ -13,6 +13,8 @@ import java.util.Optional;
 @Setter
 public class TourGuideDTO {
 
+    private Long id;
+
     private Long packageId;
 
     private Optional<GuideMaster> guideMaster;

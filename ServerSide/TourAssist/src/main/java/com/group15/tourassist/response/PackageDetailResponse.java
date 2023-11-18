@@ -15,6 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PackageDetailResponse {
+    private String packageName;
     private List<PackageMedia> mediaPath;
     private AgentDetailsDTO agentDetails;
     private SourceMasterDTO sourceDetails;
@@ -25,7 +26,7 @@ public class PackageDetailResponse {
     private TransportationDTO transportationDetails;
     private StayDto stay;
     //private ResortMaster resorts;
-    private TourGuide tourGuide;
+    private TourGuideDTO tourGuide;
     private Boolean isCustomizable;
 }
 

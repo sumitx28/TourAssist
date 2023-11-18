@@ -14,6 +14,7 @@ public class ActivityEntityToDto {
 
     public ActivityDTO activityEntityToDto(Activity activity){
         ActivityDTO activitydto= new ActivityDTO();
+        activitydto.setId(activity.getId());
         activitydto.setPackageId(activity.getPackageId());
         activitydto.setActivityMaster(activityMasterRepository.findById(activity.getActivityMasterId()));
         activitydto.setActivityDate(activity.getActivityDate());

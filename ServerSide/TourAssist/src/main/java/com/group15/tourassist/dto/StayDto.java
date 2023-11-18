@@ -17,6 +17,7 @@ import java.util.Optional;
 @Getter
 @Setter
 public class StayDto {
+    private Long id;
     private Long packageId;
     private Optional<ResortMaster> resortMaster;
     private Optional<SuiteMaster> suiteMaster;

@@ -14,6 +14,7 @@ public class TransportationEntityToDto {
 
     public TransportationDTO transportationEntityToDto(Transportation transportation){
         TransportationDTO transportationDTO = new TransportationDTO();
+        transportationDTO.setId(transportation.getId());
         transportationDTO.setPackageId(transportation.getPackageId());
         //transportationDTO.setModeMaster(travelModeMasterRepository.findById(transportation.getModeMasterId()));
         transportationDTO.setMode(travelModeMasterRepository.findById(transportation.getModeMasterId()).get().getMode());
