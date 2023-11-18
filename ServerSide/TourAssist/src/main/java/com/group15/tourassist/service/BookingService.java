@@ -3,16 +3,6 @@ package com.group15.tourassist.service;
 import com.group15.tourassist.core.enums.BookedItem;
 import com.group15.tourassist.core.enums.BookingStatus;
 import com.group15.tourassist.core.enums.TransactionStatus;
-import com.group15.tourassist.entity.Booking;
-import com.group15.tourassist.entityToDto.AgentEntityToDto;
-import com.group15.tourassist.entityToDto.CustomerEntityToDto;
-import com.group15.tourassist.entityToDto.PackageEntityToDto;
-import com.group15.tourassist.repository.IAgentRepository;
-import com.group15.tourassist.repository.IBookingRepository;
-import com.group15.tourassist.repository.ICustomerRepository;
-import com.group15.tourassist.repository.IPackageRepository;
-import com.group15.tourassist.request.BookingRequest;
-import com.group15.tourassist.response.BookingResponse;
 import com.group15.tourassist.dto.ActivityMinDTO;
 import com.group15.tourassist.dto.BookingDetailsDTO;
 import com.group15.tourassist.dto.GuideDTO;
@@ -20,14 +10,13 @@ import com.group15.tourassist.dto.TransportationMinDTO;
 import com.group15.tourassist.entity.*;
 import com.group15.tourassist.entity.Package;
 import com.group15.tourassist.repository.*;
+import com.group15.tourassist.request.BookingRequest;
 import com.group15.tourassist.response.BookingDetailsWebResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -46,11 +35,6 @@ public class BookingService implements IBookingService {
     private final IActivityMasterRepository activityMasterRepository;
     private final ITransportationRepository transportationRepository;
     private final ITravelModeMasterRepository travelModeMasterRepository;
-    private final IAgentRepository agentRepository;
-    private final PackageEntityToDto packageEntityToDto;
-    private final CustomerEntityToDto customerEntityToDto;
-    private final AgentEntityToDto agentEntityToDto;
-
     Logger log = LoggerFactory.getLogger(BookingService.class);
 
     @Autowired
@@ -66,8 +50,8 @@ public class BookingService implements IBookingService {
             IPackageRepository packageRepository,
             IActivityMasterRepository activityMasterRepository,
             ITransportationRepository transportationRepository,
-            ITravelModeMasterRepository travelModeMasterRepository,
-            IAgentRepository agentRepository, PackageEntityToDto packageEntityToDto, CustomerEntityToDto customerEntityToDto, AgentEntityToDto agentEntityToDto) {
+            ITravelModeMasterRepository travelModeMasterRepository
+    ) {
         this.resortMasterRepository = resortMasterRepository;
         this.activityRepository = activityRepository;
         this.tourGuideRepository = tourGuideRepository;
@@ -80,10 +64,6 @@ public class BookingService implements IBookingService {
         this.activityMasterRepository = activityMasterRepository;
         this.transportationRepository = transportationRepository;
         this.travelModeMasterRepository = travelModeMasterRepository;
-        this.agentRepository = agentRepository;
-        this.packageEntityToDto = packageEntityToDto;
-        this.customerEntityToDto = customerEntityToDto;
-        this.agentEntityToDto = agentEntityToDto;
     }
 
     /**
@@ -129,56 +109,6 @@ public class BookingService implements IBookingService {
     }
 
     @Override
-    public List<BookingResponse> getPastBookings(Long agentId) {
-        java.sql.Date date=new java.sql.Date(System.currentTimeMillis());
-        List<BookingResponse> response= new ArrayList<>();
-        List<Booking> allBookings= bookingRepository.findAllByPastBookingDates(date, agentId);
-        for (Booking booking:allBookings) {
-            BookingResponse bookingResponse= new BookingResponse();
-            bookingResponse.setId(booking.getId());
-            bookingResponse.setPackageD(packageEntityToDto.packageEntityToDto(packageRepository.findById(booking.getPackageId()).get()));
-            log.info("completed package");
-            log.info(packageRepository.findById(booking.getPackageId()).get().toString());
-            bookingResponse.setCustomer(customerEntityToDto.customerEntityToDto(customerRepository.findById(booking.getCustomerId()).get()));
-            log.info("completed customer");
-
-            bookingResponse.setAgent(agentEntityToDto.agentEntityToDto(agentRepository.findById(booking.getAgentId()).get()));
-            log.info("3");
-
-            bookingResponse.setBookingDate(booking.getBookingDate());
-            log.info("4");
-
-            bookingResponse.setTotalPrice(booking.getTotalPrice());
-            log.info("5");
-
-            bookingResponse.setBookingStatus(booking.getBookingStatus());
-            log.info("6");
-            response.add(bookingResponse);
-        }
-        log.info(response.toString());
-        return response;
-    }
-
-    @Override
-    public List<BookingResponse> getUpcomingBookings(Long agentId) {
-        java.sql.Date date=new java.sql.Date(System.currentTimeMillis());
-        List<BookingResponse> response= new ArrayList<>();
-        List<Booking> allBookings= bookingRepository.findAllByUpcomingBookingDates(date,agentId);
-        for (Booking booking1:allBookings
-        ) {
-            BookingResponse bookingResponse= new BookingResponse();
-            bookingResponse.setId(booking1.getId());
-            bookingResponse.setPackageD(packageEntityToDto.packageEntityToDto(packageRepository.findById(booking1.getPackageId()).get()));
-            bookingResponse.setCustomer(customerEntityToDto.customerEntityToDto(customerRepository.findById(booking1.getCustomerId()).get()));
-            bookingResponse.setAgent(agentEntityToDto.agentEntityToDto(agentRepository.findById(booking1.getAgentId()).get()));
-            bookingResponse.setBookingDate(booking1.getBookingDate());
-            bookingResponse.setTotalPrice(booking1.getTotalPrice());
-            bookingResponse.setBookingStatus(booking1.getBookingStatus());
-            response.add(bookingResponse);
-        }
-        return response;
-    }
-
     public BookingDetailsWebResponse getAllBookingForCustomer(Long appUserId) {
         BookingDetailsWebResponse bookingDetailsWebResponse = new BookingDetailsWebResponse();
 
@@ -305,4 +235,6 @@ public class BookingService implements IBookingService {
             activityMinDTOS.add(activityMinDTO);
         }
     }
+
+
 }
