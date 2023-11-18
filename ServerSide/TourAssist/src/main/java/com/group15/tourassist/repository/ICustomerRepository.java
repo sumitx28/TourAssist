@@ -25,6 +25,7 @@ public interface ICustomerRepository extends JpaRepository<Customer, Long> {
     @Query("UPDATE Customer c SET c.mobile = :mobile WHERE c.appUser.id = :appUserId")
     int updateCustomerMobile(@Param("appUserId") Long appUserId, @Param("mobile") String mobile);
 
-
+    @Query("SELECT c FROM Customer c WHERE c.appUser.id = :appUserId")
+    Optional<Customer> getCustomerByAppUserId(@Param("appUserId") Long appUserId);
 }
 

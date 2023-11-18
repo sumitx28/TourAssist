@@ -10,9 +10,9 @@ import com.group15.tourassist.repository.IPackageRepository;
 import com.group15.tourassist.repository.IPackageReviewRepository;
 import com.group15.tourassist.request.CustomerSearchPackageRequest;
 import com.group15.tourassist.response.SearchPackagesWebResponse;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class SearchPackageService implements ISearchPackageService {
 
     private final IPackageRepository packageRepository;
@@ -30,20 +31,6 @@ public class SearchPackageService implements ISearchPackageService {
     private final IPackageReviewService packageReviewService;
     Logger log = LoggerFactory.getLogger(SearchPackageService.class);
 
-
-    @Autowired
-    public SearchPackageService(IPackageRepository packageRepository, IAgentService agentService,
-                                IPackageReviewRepository packageReviewRepository,
-                                ITotalPackagePriceCalculatorService totalPackagePriceCalculatorService,
-                                IPackageFilterSortService packageFilterSortService,
-                                IPackageReviewService packageReviewService) {
-        this.packageRepository = packageRepository;
-        this.agentService = agentService;
-        this.packageReviewRepository = packageReviewRepository;
-        this.totalPackagePriceCalculatorService = totalPackagePriceCalculatorService;
-        this.packageFilterSortService = packageFilterSortService;
-        this.packageReviewService = packageReviewService;
-    }
 
     @Override
     public List<Package> getPackagesDetails(CustomerSearchPackageRequest customerSearchPackageRequest, String sortBy, String filterBy) {

@@ -9,6 +9,7 @@ import ResetPassword from "./components/ResetPassword";
 import SignUp from "./components/Signup";
 import AuthGuard from "./guards/AuthGuard";
 import CreatePackage from "./components/agent/CreatePackage";
+import UserProfile from "./components/UserProfile";
 
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import PackageDetail from "./components/travel-package/PackageDetail";
@@ -43,6 +44,15 @@ function App() {
               </AuthGuard>
             }
           />
+          {/*           <Route */}
+          {/*             path="/user-profile" */}
+          {/*             element={ */}
+          {/*                 <AuthGuard> */}
+          {/*                     <UserProfile /> */}
+          {/*                 </AuthGuard> */}
+          {/*             } */}
+          {/*           /> */}
+          <Route path="/user-profile" element={<UserProfile />} />
           <Route
             path="/dashboard"
             element={

@@ -19,7 +19,7 @@ import java.util.Optional;
 
 @CrossOrigin(
         origins = {
-                "http://localhost:5173",
+                "*",
         },
         methods = {
                 RequestMethod.OPTIONS,

@@ -9,12 +9,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 @CrossOrigin(
         origins = {
-                "http://localhost:5173",
+                "*",
         },
         methods = {
                 RequestMethod.OPTIONS,
@@ -36,14 +39,16 @@ public class PackageController {
 
 
     /**
-     * @param request Package request object
-     * @return package_id of the created package.
+     * @param images List of package images
+     * @param request request json for other details
+     * @return package id
+     * @throws IOException IO exception while uploading images
      */
     @PostMapping("/create-package")
-    private ResponseEntity<Long> createPackage(@RequestBody PackageCreateRequest request) {
+    private ResponseEntity<Long> createPackage(@RequestPart("images") List<MultipartFile> images, @RequestPart("request") PackageCreateRequest request) throws IOException {
         log.info("** get create-package request {}", request.toString());
 
-        Long packageId = packageService.createNewPackage(request);
+        Long packageId = packageService.createNewPackage(request, images);
         return ResponseEntity.of(Optional.of(packageId));
     }
 

@@ -2,7 +2,6 @@ package com.group15.tourassist.core.config;
 
 import com.group15.tourassist.core.utils.ConstantUtils;
 import com.group15.tourassist.repository.TokenRepository;
-import com.group15.tourassist.web.controller.DemoController;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
@@ -23,7 +22,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class LogoutService implements LogoutHandler {
 
-    Logger log = LoggerFactory.getLogger(DemoController.class);
+    Logger log = LoggerFactory.getLogger(LogoutService.class);
 
     private final TokenRepository tokenRepository;
 

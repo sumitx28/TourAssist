@@ -9,76 +9,48 @@ import com.group15.tourassist.repository.*;
 import com.group15.tourassist.request.*;
 import com.group15.tourassist.response.PackageDetailResponse;
 import com.group15.tourassist.web.controller.PackageController;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class PackageService implements IPackageService {
     Logger log = LoggerFactory.getLogger(PackageController.class);
+    private final IStayRepository stayRepository;
+    private final ITourGuideRepository tourGuideRepository;
+    private final ITransportationRepository transportationRepository;
+    private final IPackageMediaRepository packageMediaRepository;
+    private final IAgentRepository agentRepository;
+    private final IDestinationMasterRepository destinationMasterRepository;
+    private final IPackageRepository packageRepository;
+    private final IActivityRepository activityRepository;
+    private final IPackageMediaService packageMediaService;
+    private final ActivityEntityToDto activityEntityToDto;
+    private final TransportationEntityToDto transportationEntityToDto;
+    private final DestinationMasterEntityToDto destinationMasterEntityToDto;
+    private final SourceMasterEntityToDto sourceMasterEntityToDto;
+    private final AgentEntityToDto agentEntityToDto;
+    private final StayEntityToDto stayEntityToDto;
 
-    @Autowired
-    private IStayRepository stayRepository;
-
-    @Autowired
-    private ITourGuideRepository tourGuideRepository;
-
-    @Autowired
-    private ITransportationRepository transportationRepository;
-
-    @Autowired
-    private IPackageMediaRepository packageMediaRepository;
-
-    @Autowired
-    private IAgentRepository agentRepository;
-
-    @Autowired
-    private IDestinationMasterRepository destinationMasterRepository;
-
-    @Autowired
-    private IDestinationMasterRepository sourceMasterRepository;
-
-    @Autowired
-    private IPackageRepository packageRepository;
-
-    @Autowired
-    IActivityRepository activityRepository;
-
-    @Autowired
-    IPackageMediaService packageMediaService;
-
-    @Autowired
-    ActivityEntityToDto activityEntityToDto;
-
-    @Autowired
-    TransportationEntityToDto transportationEntityToDto;
-
-    @Autowired
-    DestinationMasterEntityToDto destinationMasterEntityToDto;
-
-    @Autowired
-    SourceMasterEntityToDto sourceMasterEntityToDto;
-
-    @Autowired
-    AgentEntityToDto agentEntityToDto;
-
-    @Autowired
-    StayEntityToDto stayEntityToDto;
     // Transaction method to save all or nothing.
     @Override
-    public Long createNewPackage(PackageCreateRequest request) {
+    public Long createNewPackage(PackageCreateRequest request, List<MultipartFile> images) throws IOException {
         Package newPackage = createPackage(request);
 
         createStay(request.getStayRequest(), newPackage.getId());
         createTourGuide(request.getTourGuideRequest(), newPackage.getId());
         createTransportation(request.getTransportationRequest(), newPackage.getId());
         createActivities(request.getActivities(), newPackage.getId());
-        createPackageMedia(request.getPackageMediaRequests(), newPackage.getId());
+        createPackageMedia(images, newPackage.getId());
 
         return newPackage.getId();
     }
@@ -123,11 +95,11 @@ public class PackageService implements IPackageService {
 
 
     /**
-     * @param packageMediaRequests All the images for a package.
+     * @param images All the images for a package.
      * @param packageId package_id : primary key of package table.
      */
-    private void createPackageMedia(List<PackageMediaRequest> packageMediaRequests, Long packageId) {
-        packageMediaService.saveAllPackageMedia(packageMediaRequests, packageId);
+    private void createPackageMedia(List<MultipartFile> images, Long packageId) throws IOException {
+        packageMediaService.saveAllPackageMedia(images, packageId);
     }
 
     // Create a Stay entity from request.

@@ -31,12 +31,12 @@ const ActivityDetail = ({ activities, handleSwitchChange }) => {
         <ActivityItem key={index}>
           <ColoredDay>Day {index + 1}</ColoredDay>
           <Typography>
-            {activity.activityName} ${activity.price}
+            {activity.activityMaster.activityName} ${activity.price}
           </Typography>
           {activity.isCustomizable && (
             <Switch
               color="primary"
-              onChange={() => handleSwitchChange(activity.activityMasterId)}
+              onChange={() => handleSwitchChange(activity.activityMaster.id)}
               defaultChecked
             />
           )}

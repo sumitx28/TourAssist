@@ -4,11 +4,15 @@ import com.group15.tourassist.core.enums.BookedItem;
 import com.group15.tourassist.core.enums.BookingStatus;
 import com.group15.tourassist.core.enums.TransactionStatus;
 import com.group15.tourassist.entity.Booking;
+import com.group15.tourassist.entity.Customer;
 import com.group15.tourassist.entity.Guest;
 import com.group15.tourassist.repository.IBookingRepository;
+import com.group15.tourassist.repository.ICustomerRepository;
 import com.group15.tourassist.repository.IGuestRepository;
+import com.group15.tourassist.repository.IPackageRepository;
 import com.group15.tourassist.request.BookingItemRequest;
 import com.group15.tourassist.request.BookingRequest;
+import com.group15.tourassist.response.BookingDetailsWebResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -35,6 +39,9 @@ class BookingServiceTest {
     private IBookingRepository bookingRepository;
 
     @Mock
+    private ICustomerRepository customerRepository;
+
+    @Mock
     private BookingLineItemService bookingLineItemService;
 
     @Mock
@@ -42,6 +49,9 @@ class BookingServiceTest {
 
     @Mock
     private IGuestRepository guestRepository;
+
+    @Mock
+    private IPackageRepository packageRepository;
 
     private Booking confirmBooking;
 
@@ -60,6 +70,8 @@ class BookingServiceTest {
         guest = new Guest(1L, null, "Raj", "Patel", Instant.parse("1996-02-11T00:00:00Z"));
         bookingRequest = new BookingRequest(1L, 2L, 3L, Collections.singletonList(bookingItemRequest), Collections.singletonList(guest));
         pendingBooking = new Booking(2L, 1L, 2L, 3L, Instant.parse("2023-08-20T00:00:00Z"), 100D, BookingStatus.PENDING);
+        //MockitoAnnotations.initMocks(this);
+
     }
 
     @Test
@@ -96,6 +108,44 @@ class BookingServiceTest {
         bookingService.updateBookingStatus(pendingBooking.getId(), TransactionStatus.SUCCESS);
 
         // Assert -- Verify that updateBookingStatus gets called 1 time.
-        verify(bookingRepository,times(1)).updateBookingStatus(pendingBooking.getId(), "CONFIRM");
+        verify(bookingRepository, times(1)).updateBookingStatus(pendingBooking.getId(), "CONFIRM");
+    }
+
+    @Test
+    void testGetAllBookingForCustomer() {
+        // Arrange
+        long appUserId = 1L;
+        Customer customer = new Customer();
+        customer.setId(1L);
+        Booking booking = new Booking();
+        booking.setId(1L);
+        booking.setCustomerId(customer.getId());
+        when(customerRepository.getCustomerByAppUserId(appUserId)).thenReturn(Optional.of(customer));
+        when(bookingRepository.getBookingsByCustomerId(customer.getId())).thenReturn(Collections.singletonList(booking));
+
+        // Act
+        BookingDetailsWebResponse result = bookingService.getAllBookingForCustomer(appUserId);
+
+        // Assert
+        verify(customerRepository, times(1)).getCustomerByAppUserId(appUserId);
+        verify(bookingRepository, times(1)).getBookingsByCustomerId(customer.getId());
+    }
+
+    @Test
+    void testGetAllBookingForCustomerNoBookings() {
+        // Arrange
+        long appUserId = 1L;
+        Customer customer = new Customer();
+        customer.setId(1L);
+        when(customerRepository.getCustomerByAppUserId(appUserId)).thenReturn(Optional.of(customer));
+        when(bookingRepository.getBookingsByCustomerId(customer.getId())).thenReturn(Collections.emptyList());
+
+        // Act
+        BookingDetailsWebResponse result = bookingService.getAllBookingForCustomer(appUserId);
+
+        // Assert
+        assertNull(result.getBookingDetailsList());
+        verify(customerRepository, times(1)).getCustomerByAppUserId(appUserId);
+        verify(bookingRepository, times(1)).getBookingsByCustomerId(customer.getId());
     }
 }

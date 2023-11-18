@@ -27,11 +27,12 @@ const TourGuide = ({ tourGuide, handleSwitchChange }) => {
         <strong>Tour Guide</strong>
       </Typography>
       <ActivityItem>
-        <ColoredDay>{tourGuide.tourGuideMaster.tourGuideName}</ColoredDay>
+        {/* <ColoredDay>{tourGuide.tourGuideName}</ColoredDay> */}
+        <ColoredDay>Seline Olivera</ColoredDay>
         <Typography>
           {tourGuide.isCustomizable
-            ? `$${tourGuide.tourGuideMaster.price}`
-            : `$${tourGuide.tourGuideMaster.price}`}
+            ? `$${tourGuide.price}`
+            : `$${tourGuide.price}`}
         </Typography>
         {tourGuide.isCustomizable && (
           <Switch
