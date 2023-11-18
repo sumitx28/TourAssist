@@ -3,18 +3,15 @@ package com.group15.tourassist.service;
 import com.group15.tourassist.dto.AgentDetailsDTO;
 import com.group15.tourassist.entity.Agent;
 import com.group15.tourassist.repository.IAgentRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class AgentService implements IAgentService {
 
     private final IAgentRepository agentRepository;
-
-    @Autowired
-    public AgentService(IAgentRepository agentRepository) {
-        this.agentRepository = agentRepository;
-    }
 
     /**
      * @param agentId id of the agent
