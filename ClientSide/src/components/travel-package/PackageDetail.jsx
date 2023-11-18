@@ -128,12 +128,22 @@ const PackageDetail = () => {
       });
     }
 
-    const token = localStorage.getItem("authToken");
-    const user = jwtDecode(token);
+    const authToken = localStorage.getItem("authToken");
+    const user = jwtDecode(authToken);
+
+    const response = await axios.get(
+      `${API_URL}/api/v1/customer/${user.appUserId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
     const bookingData = {
       packageId: id,
-      customerId: user.appUserId || 1,
+      customerId: response.data.id,
       agentId: packageData.agentDetails.agentId,
       bookingItemRequests,
       guests: userDetailsArray.map((user) => ({
@@ -142,8 +152,6 @@ const PackageDetail = () => {
         dateOfBirth: new Date(user.dateOfBirth).toISOString(),
       })),
     };
-
-    const authToken = localStorage.getItem("authToken");
 
     try {
       const response = await axios.post(
