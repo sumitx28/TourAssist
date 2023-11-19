@@ -10,15 +10,35 @@ import {
   MenuItem,
   FormControl,
   InputLabel,
+  Typography,
+  CircularProgress,
 } from "@mui/material";
 import API_URL from "../../../config/config";
 import axios from "axios";
 
 const PaymentDialog = ({ open, onClose, bookingData }) => {
+  const formControlStyle = {
+    marginBottom: "16px",
+    marginTop: "16px",
+  };
+
+  const totalAmountStyle = {
+    marginTop: "16px",
+    marginBottom: "8px",
+  };
+
   const [cardNumber, setCardNumber] = React.useState("");
   const [cvv, setCVV] = React.useState("");
   const [expiryDate, setExpiryDate] = React.useState("");
   const [paymentType, setPaymentType] = React.useState("Credit Card");
+  const [isProcessingPayment, setProcessingPayment] = React.useState(false);
+  const [paymentResult, setPaymentResult] = React.useState(null);
+
+  const [validationMessages, setValidationMessages] = React.useState({
+    cardNumber: "",
+    cvv: "",
+    expiryDate: "",
+  });
 
   const isValidCardNumber = (cardNumber) => {
     return /^\d{16}$/.test(cardNumber);
@@ -33,16 +53,44 @@ const PaymentDialog = ({ open, onClose, bookingData }) => {
   };
 
   const handlePay = async () => {
+    // Clear previous validation messages
+    setValidationMessages({
+      cardNumber: "",
+      cvv: "",
+      expiryDate: "",
+    });
+
+    if (!isValidCardNumber(cardNumber)) {
+      setValidationMessages((prevMessages) => ({
+        ...prevMessages,
+        cardNumber: "Invalid card number",
+      }));
+    }
+
+    if (!isValidCVV(cvv)) {
+      setValidationMessages((prevMessages) => ({
+        ...prevMessages,
+        cvv: "Invalid CVV",
+      }));
+    }
+
+    if (!isValidExpiryDate(expiryDate)) {
+      setValidationMessages((prevMessages) => ({
+        ...prevMessages,
+        expiryDate: "Invalid expiry date (MM/YYYY)",
+      }));
+    }
+
+    // Check for any validation errors before proceeding with payment
     if (
-      !isValidCardNumber(cardNumber) ||
-      !isValidCVV(cvv) ||
-      !isValidExpiryDate(expiryDate)
+      validationMessages.cardNumber ||
+      validationMessages.cvv ||
+      validationMessages.expiryDate
     ) {
-      alert("Invalid card details. Please check your card information.");
       return;
     }
 
-    alert("Processing payment...");
+    setProcessingPayment(true);
 
     const authToken = localStorage.getItem("authToken");
 
@@ -51,12 +99,6 @@ const PaymentDialog = ({ open, onClose, bookingData }) => {
       number: "4111111111111111",
       cvv: "123",
       expiryDate: "12/2024",
-    };
-
-    const failedCard = {
-      number: "4000123412341234",
-      cvv: "999",
-      expiryDate: "06/2022",
     };
 
     const isPaymentSuccessful =
@@ -72,36 +114,46 @@ const PaymentDialog = ({ open, onClose, bookingData }) => {
       price: bookingData.totalPrice,
     };
 
-    console.log(paymentData);
-
     if (isPaymentSuccessful) {
       paymentData.transactionStatus = "SUCCESS";
-      alert("Payment Successful");
     } else {
       paymentData.transactionStatus = "FAILED";
-      alert("Payment Failed. Please use valid card details.");
     }
 
-    const response = await axios.post(
-      `${API_URL}/api/v1/payment/payment-transaction`,
-      paymentData,
-      {
-        headers: {
-          Authorization: `Bearer ${authToken}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    try {
+      const response = await axios.post(
+        `${API_URL}/api/v1/payment/payment-transaction`,
+        paymentData,
+        {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
+      setPaymentResult(isPaymentSuccessful ? "success" : "failed");
+    } catch (error) {
+      console.error("Error processing payment:", error);
+      setPaymentResult("failed");
+    } finally {
+      setProcessingPayment(false);
+    }
+  };
+
+  const handleClose = () => {
+    setPaymentResult(null);
     onClose();
   };
 
   return (
-    <Dialog open={open} onClose={onClose}>
+    <Dialog open={open} onClose={handleClose}>
       <DialogTitle>Payment</DialogTitle>
       <DialogContent>
-        <FormControl fullWidth variant="outlined" margin="normal">
-          <InputLabel id="payment-type-label">Payment Type</InputLabel>
+        <FormControl fullWidth variant="outlined" style={formControlStyle}>
+          <InputLabel id="payment-type-label" shrink>
+            Payment Type
+          </InputLabel>
           <Select
             label="Payment Type"
             value={paymentType}
@@ -119,6 +171,8 @@ const PaymentDialog = ({ open, onClose, bookingData }) => {
           margin="normal"
           value={cardNumber}
           onChange={(e) => setCardNumber(e.target.value)}
+          error={Boolean(validationMessages.cardNumber)}
+          helperText={validationMessages.cardNumber}
         />
         <TextField
           label="CVV"
@@ -127,6 +181,8 @@ const PaymentDialog = ({ open, onClose, bookingData }) => {
           margin="normal"
           value={cvv}
           onChange={(e) => setCVV(e.target.value)}
+          error={Boolean(validationMessages.cvv)}
+          helperText={validationMessages.cvv}
         />
         <TextField
           label="Expiry Date (MM/YYYY)"
@@ -135,14 +191,41 @@ const PaymentDialog = ({ open, onClose, bookingData }) => {
           margin="normal"
           value={expiryDate}
           onChange={(e) => setExpiryDate(e.target.value)}
+          error={Boolean(validationMessages.expiryDate)}
+          helperText={validationMessages.expiryDate}
         />
+        <Typography variant="h6" color="primary" style={totalAmountStyle}>
+          Total Payable Amount: ${bookingData.totalPrice}
+        </Typography>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} color="primary">
-          Close
+        {paymentResult === "success" && (
+          <Typography variant="body1" style={{ color: "green" }}>
+            Payment Successful
+          </Typography>
+        )}
+        {paymentResult === "failed" && (
+          <Typography variant="body1" style={{ color: "red" }}>
+            Payment Failed. Please try again.
+          </Typography>
+        )}
+        <Button onClick={handleClose} color="primary">
+          Cancel
         </Button>
-        <Button onClick={handlePay} color="primary" variant="contained">
-          Pay
+        <Button
+          onClick={handlePay}
+          color="primary"
+          variant="contained"
+          disabled={isProcessingPayment}
+          style={{
+            backgroundColor: paymentResult === "success" ? "green" : "red",
+          }}
+        >
+          {isProcessingPayment ? (
+            <CircularProgress size={24} color="primary" />
+          ) : (
+            "Pay"
+          )}
         </Button>
       </DialogActions>
     </Dialog>
