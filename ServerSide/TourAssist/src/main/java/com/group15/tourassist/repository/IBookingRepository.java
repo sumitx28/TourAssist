@@ -30,4 +30,6 @@ public interface IBookingRepository extends JpaRepository<Booking, Long> {
     @Query(value="SELECT * FROM booking b WHERE b.booking_date > :date AND agent_id = :agentId", nativeQuery = true)
     List<Booking> findAllByUpcomingBookingDates(@Param("date") Date date, @Param("agentId") Long agentId);
 
+    @Query(value="SELECT * FROM booking b WHERE b.agent_id = :agentId", nativeQuery = true)
+    List<Booking> getCustomersBookedByAgentID(Long agentId);
 }

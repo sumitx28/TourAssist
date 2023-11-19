@@ -16,6 +16,7 @@ import com.group15.tourassist.repository.*;
 import com.group15.tourassist.request.BookingRequest;
 import com.group15.tourassist.response.BookingDetailsWebResponse;
 import com.group15.tourassist.response.BookingResponse;
+import com.group15.tourassist.response.CustomerDetailsBookedByAgentIDResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -299,5 +300,16 @@ public class BookingService implements IBookingService {
         return response;
     }
 
-
+    @Override
+    public List<CustomerDetailsBookedByAgentIDResponse> getCustomersBookedByAgentID(Long agentId) {
+        var bookings= bookingRepository.getCustomersBookedByAgentID(agentId);
+        List<CustomerDetailsBookedByAgentIDResponse> response= new ArrayList<>();
+        for (Booking booking: bookings){
+            CustomerDetailsBookedByAgentIDResponse customerDetailsBookedByAgentIDResponse= new CustomerDetailsBookedByAgentIDResponse();
+            customerDetailsBookedByAgentIDResponse.setAgent(agentEntityToDto.agentEntityToDto(agentRepository.findById(booking.getAgentId()).get()));
+            customerDetailsBookedByAgentIDResponse.setCustomer(customerRepository.findById(booking.getCustomerId()).get());
+            response.add(customerDetailsBookedByAgentIDResponse);
+        }
+        return response;
+    }
 }
