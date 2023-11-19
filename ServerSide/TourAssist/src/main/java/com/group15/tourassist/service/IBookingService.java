@@ -5,6 +5,7 @@ import com.group15.tourassist.entity.Booking;
 import com.group15.tourassist.request.BookingRequest;
 import com.group15.tourassist.response.BookingDetailsWebResponse;
 import com.group15.tourassist.response.BookingResponse;
+import com.group15.tourassist.response.CustomerDetailsBookedByAgentIDResponse;
 
 import java.util.List;
 
@@ -21,4 +22,7 @@ public interface IBookingService {
     List<BookingResponse> getPastBookings(Long agentId);
 
     List<BookingResponse> getUpcomingBookings(Long agentId);
+
+    List<CustomerDetailsBookedByAgentIDResponse> getCustomersBookedByAgentID(Long agentId);
+
 }

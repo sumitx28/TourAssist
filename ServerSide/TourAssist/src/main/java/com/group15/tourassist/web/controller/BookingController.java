@@ -3,6 +3,7 @@ package com.group15.tourassist.web.controller;
 import com.group15.tourassist.request.BookingRequest;
 import com.group15.tourassist.response.BookingDetailsWebResponse;
 import com.group15.tourassist.response.BookingResponse;
+import com.group15.tourassist.response.CustomerDetailsBookedByAgentIDResponse;
 import com.group15.tourassist.service.BookingService;
 import com.group15.tourassist.service.IBookingService;
 import org.slf4j.Logger;
@@ -71,5 +72,12 @@ public class BookingController {
         log.info("** get upcoming booking details");
         var  response = bookingService.getUpcomingBookings(agentId);
         return ResponseEntity.of(Optional.of(response));
+    }
+
+    @GetMapping("/customer-details/{agentId}")
+    public ResponseEntity<List<CustomerDetailsBookedByAgentIDResponse>> getCustomersBookedByAgent(@PathVariable Long agentId) {
+        List<CustomerDetailsBookedByAgentIDResponse> serviceResponse = bookingService.getCustomersBookedByAgentID(agentId);
+
+        return ResponseEntity.of(Optional.of(serviceResponse));
     }
 }
