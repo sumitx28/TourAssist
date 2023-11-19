@@ -210,7 +210,7 @@ const PaymentDialog = ({ open, onClose, bookingData }) => {
           </Typography>
         )}
         <Button onClick={handleClose} color="primary">
-          Close
+          Cancel
         </Button>
         <Button
           onClick={handlePay}
