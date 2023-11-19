@@ -4,6 +4,9 @@ import com.group15.tourassist.core.enums.TransactionStatus;
 import com.group15.tourassist.entity.Booking;
 import com.group15.tourassist.request.BookingRequest;
 import com.group15.tourassist.response.BookingDetailsWebResponse;
+import com.group15.tourassist.response.BookingResponse;
+
+import java.util.List;
 
 
 public interface IBookingService {
@@ -14,4 +17,8 @@ public interface IBookingService {
     void updateBookingStatus(Long bookingId, TransactionStatus transactionStatus);
 
     BookingDetailsWebResponse getAllBookingForCustomer(Long appUserId);
+
+    List<BookingResponse> getPastBookings(Long agentId);
+
+    List<BookingResponse> getUpcomingBookings(Long agentId);
 }
