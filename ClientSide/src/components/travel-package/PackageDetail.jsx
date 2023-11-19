@@ -76,7 +76,7 @@ const PackageDetail = () => {
       ) {
         bookingItemRequests.push({
           itemName: "ACTIVITY",
-          itemId: activity.id || 50,
+          itemId: activity.id,
         });
       }
     });
@@ -91,7 +91,7 @@ const PackageDetail = () => {
     if (!finalPackage.deselectedStay && packageData.stay) {
       bookingItemRequests.push({
         itemName: "RESORT",
-        itemId: packageData.stay.id || 21,
+        itemId: packageData.stay.id,
       });
     }
 
@@ -101,7 +101,7 @@ const PackageDetail = () => {
     ) {
       bookingItemRequests.push({
         itemName: "TRANSPORTATION",
-        itemId: packageData.transportationDetails.id || 24,
+        itemId: packageData.transportationDetails.id,
       });
     }
 
