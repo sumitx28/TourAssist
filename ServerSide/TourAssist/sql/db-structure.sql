@@ -292,6 +292,58 @@ INSERT INTO resort_master (id, resort_name, destination_master_id) VALUES (18, '
 INSERT INTO resort_master (id, resort_name, destination_master_id) VALUES (19, 'Royal Gardens Resort', 17);
 INSERT INTO resort_master (id, resort_name, destination_master_id) VALUES (20, 'Harbor View Hotel', 20);
 
+
+INSERT INTO resort_master (resort_name, destination_master_id) VALUES ('Sunny Shores Retreat', 1);
+INSERT INTO resort_master (resort_name, destination_master_id) VALUES ('Mountain Vista Lodge', 2);
+INSERT INTO resort_master (resort_name, destination_master_id) VALUES ('Ocean Breeze Resort', 3);
+INSERT INTO resort_master (resort_name, destination_master_id) VALUES ('Tranquil Pines Lodge', 4);
+INSERT INTO resort_master (resort_name, destination_master_id) VALUES ('Golden Sands Oasis', 5);
+INSERT INTO resort_master (resort_name, destination_master_id) VALUES ('Alpine Serenity Resort', 6);
+INSERT INTO resort_master (resort_name, destination_master_id) VALUES ('Tropical Paradise Inn', 7);
+INSERT INTO resort_master (resort_name, destination_master_id) VALUES ('Majestic Peaks Retreat', 8);
+INSERT INTO resort_master (resort_name, destination_master_id) VALUES ('Whispering Palms Resort', 9);
+INSERT INTO resort_master (resort_name, destination_master_id) VALUES ('Eternal Springs Lodge', 10);
+INSERT INTO resort_master (resort_name, destination_master_id) VALUES ('Sunset Haven Resort', 1);
+INSERT INTO resort_master (resort_name, destination_master_id) VALUES ('Emerald Isle Lodge', 2);
+INSERT INTO resort_master (resort_name, destination_master_id) VALUES ('Azure Waters Retreat', 3);
+INSERT INTO resort_master (resort_name, destination_master_id) VALUES ('Tranquil Oasis Lodge', 4);
+INSERT INTO resort_master (resort_name, destination_master_id) VALUES ('Silver Sands Resort', 5);
+INSERT INTO resort_master (resort_name, destination_master_id) VALUES ('Alpine Escape Lodge', 6);
+INSERT INTO resort_master (resort_name, destination_master_id) VALUES ('Coral Coast Oasis', 7);
+INSERT INTO resort_master (resort_name, destination_master_id) VALUES ('Mystic Valley Retreat', 8);
+INSERT INTO resort_master (resort_name, destination_master_id) VALUES ('Serene Shores Resort', 9);
+INSERT INTO resort_master (resort_name, destination_master_id) VALUES ('Eternal Bliss Lodge', 10);
+INSERT INTO resort_master (resort_name, destination_master_id) VALUES ('Harmony Hills Resort', 1);
+INSERT INTO resort_master (resort_name, destination_master_id) VALUES ('Tranquil Waters Lodge', 2);
+INSERT INTO resort_master (resort_name, destination_master_id) VALUES ('Tropical Breeze Resort', 3);
+INSERT INTO resort_master (resort_name, destination_master_id) VALUES ('Mountain Retreat Lodge', 4);
+INSERT INTO resort_master (resort_name, destination_master_id) VALUES ('Golden Sunset Resort', 5);
+INSERT INTO resort_master (resort_name, destination_master_id) VALUES ('Whispering Pines Lodge', 6);
+INSERT INTO resort_master (resort_name, destination_master_id) VALUES ('Paradise Cove Oasis', 7);
+INSERT INTO resort_master (resort_name, destination_master_id) VALUES ('Ethereal Peaks Retreat', 8);
+INSERT INTO resort_master (resort_name, destination_master_id) VALUES ('Sapphire Shores Resort', 9);
+INSERT INTO resort_master (resort_name, destination_master_id) VALUES ('Timeless Meadows Lodge', 10);
+INSERT INTO resort_master (resort_name, destination_master_id) VALUES ('Seaside Serenity Resort', 1);
+INSERT INTO resort_master (resort_name, destination_master_id) VALUES ('Majestic Ridge Lodge', 2);
+INSERT INTO resort_master (resort_name, destination_master_id) VALUES ('Coastal Haven Retreat', 3);
+INSERT INTO resort_master (resort_name, destination_master_id) VALUES ('Peaceful Pines Lodge', 4);
+INSERT INTO resort_master (resort_name, destination_master_id) VALUES ('Sun-kissed Sands Resort', 5);
+INSERT INTO resort_master (resort_name, destination_master_id) VALUES ('Snowy Summit Lodge', 6);
+INSERT INTO resort_master (resort_name, destination_master_id) VALUES ('Lagoon Paradise Oasis', 7);
+INSERT INTO resort_master (resort_name, destination_master_id) VALUES ('Eternal Peaks Retreat', 8);
+INSERT INTO resort_master (resort_name, destination_master_id) VALUES ('Tranquil Tides Resort', 9);
+INSERT INTO resort_master (resort_name, destination_master_id) VALUES ('Harmony Meadows Lodge', 10);
+INSERT INTO resort_master (resort_name, destination_master_id) VALUES ('Garden of Eden Resort', 1);
+INSERT INTO resort_master (resort_name, destination_master_id) VALUES ('Serenity Springs Lodge', 2);
+INSERT INTO resort_master (resort_name, destination_master_id) VALUES ('Blue Lagoon Retreat', 3);
+INSERT INTO resort_master (resort_name, destination_master_id) VALUES ('Whispering Willows Lodge', 4);
+INSERT INTO resort_master (resort_name, destination_master_id) VALUES ('Crimson Sunset Resort', 5);
+INSERT INTO resort_master (resort_name, destination_master_id) VALUES ('Misty Mountain Lodge', 6);
+INSERT INTO resort_master (resort_name, destination_master_id) VALUES ('Golden Horizon Oasis', 7);
+INSERT INTO resort_master (resort_name, destination_master_id) VALUES ('Eternal Harmony Retreat', 8);
+INSERT INTO resort_master (resort_name, destination_master_id) VALUES ('Tranquil Gardens Resort', 9);
+INSERT INTO resort_master (resort_name, destination_master_id) VALUES ('Celestial Peaks Lodge', 10);
+
 --
 
 INSERT INTO suite_master (id, suite_type) VALUES (1, 'Standard Suite');
@@ -389,6 +441,27 @@ INSERT INTO guide_master (id, guide_name, experience_years, destination_master_i
 INSERT INTO guide_master (id, guide_name, experience_years, destination_master_id, description) VALUES (8, 'Hiroshi Tanaka', 14, 8, 'Provides an immersive journey through the juxtaposition of ancient traditions and cutting-edge technology in Japan.');
 INSERT INTO guide_master (id, guide_name, experience_years, destination_master_id, description) VALUES (9, 'Svetlana Ivanova', 6, 9, 'Shares the rich history and cultural treasures of Russia.');
 INSERT INTO guide_master (id, guide_name, experience_years, destination_master_id, description) VALUES (10, 'Carlos Fernandez', 13, 10, 'Offers an exploration of the diverse landscapes, tango rhythms, and culinary delights of Argentina.');
+
+INSERT INTO guide_master (guide_name, experience_years, destination_master_id, description) VALUES ('John Smith', 5, 1, 'Experienced guide with a passion for adventure.');
+INSERT INTO guide_master (guide_name, experience_years, destination_master_id, description) VALUES ('Emily Johnson', 3, 2, 'Knowledgeable guide specializing in nature walks.');
+INSERT INTO guide_master (guide_name, experience_years, destination_master_id, description) VALUES ('Daniel Turner', 8, 3, 'Outdoor enthusiast with expertise in mountain trails.');
+INSERT INTO guide_master (guide_name, experience_years, destination_master_id, description) VALUES ('Olivia Davis', 6, 4, 'Skilled guide for historical and cultural tours.');
+INSERT INTO guide_master (guide_name, experience_years, destination_master_id, description) VALUES ('Michael Brown', 4, 5, 'Passionate guide for wildlife safaris.');
+INSERT INTO guide_master (guide_name, experience_years, destination_master_id, description) VALUES ('Sophia White', 7, 6, 'Adventurous guide with knowledge of river expeditions.');
+INSERT INTO guide_master (guide_name, experience_years, destination_master_id, description) VALUES ('Matthew Miller', 2, 7, 'Friendly guide for family-friendly tours.');
+INSERT INTO guide_master (guide_name, experience_years, destination_master_id, description) VALUES ('Emma Wilson', 9, 8, 'Experienced guide specializing in birdwatching.');
+INSERT INTO guide_master (guide_name, experience_years, destination_master_id, description) VALUES ('Christopher Davis', 5, 9, 'Knowledgeable guide for photography tours.');
+INSERT INTO guide_master (guide_name, experience_years, destination_master_id, description) VALUES ('Ava Anderson', 6, 10, 'Passionate guide with expertise in beach excursions.');
+INSERT INTO guide_master (guide_name, experience_years, destination_master_id, description) VALUES ('Liam Robinson', 3, 1, 'Nature lover and guide for eco-friendly tours.');
+INSERT INTO guide_master (guide_name, experience_years, destination_master_id, description) VALUES ('Mia Martinez', 7, 2, 'Skilled guide for hiking and trekking adventures.');
+INSERT INTO guide_master (guide_name, experience_years, destination_master_id, description) VALUES ('Ethan Turner', 4, 3, 'Outdoor enthusiast with knowledge of camping trips.');
+INSERT INTO guide_master (guide_name, experience_years, destination_master_id, description) VALUES ('Isabella Hall', 8, 4, 'Adventurous guide for extreme sports tours.');
+INSERT INTO guide_master (guide_name, experience_years, destination_master_id, description) VALUES ('Noah Scott', 6, 5, 'Experienced guide for cultural and historical explorations.');
+INSERT INTO guide_master (guide_name, experience_years, destination_master_id, description) VALUES ('Avery Garcia', 5, 6, 'Passionate guide with expertise in rainforest tours.');
+INSERT INTO guide_master (guide_name, experience_years, destination_master_id, description) VALUES ('Logan Adams', 2, 7, 'Friendly guide for family adventures.');
+INSERT INTO guide_master (guide_name, experience_years, destination_master_id, description) VALUES ('Grace Hall', 9, 8, 'Skilled guide for wildlife photography.');
+INSERT INTO guide_master (guide_name, experience_years, destination_master_id, description) VALUES ('Elijah Turner', 4, 9, 'Outdoor enthusiast with a love for mountain trails.');
+INSERT INTO guide_master (guide_name, experience_years, destination_master_id, description) VALUES ('Aria White', 7, 10, 'Adventurous guide for water sports excursions.');
 
 --
 
