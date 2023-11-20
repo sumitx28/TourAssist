@@ -6,35 +6,45 @@ const Search = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  // API token and headers
   const authToken = localStorage.getItem("authToken");
   const headers = {
     'Content-Type': 'application/json',
     'Authorization': `Bearer ${authToken}`,
   };
 
-   // Search parameters
    const [sourceCity, setSourceCity] = useState('');
    const [destinationCity, setDestinationCity] = useState('');
    const [packageStartDate, setPackageStartDate] = useState('');
    const [packageEndDate, setPackageEndDate] = useState('');
    const [numberOfGuest, setNumberOfGuest] = useState(1);
+   const [priceRange, setPriceRange] = useState('');
+   const [isCustomizable, setIsCustomizable] = useState('');
+   const [packageName, setPackageName] = useState('');
+   const [packageRating, setPackageRating] = useState('');
+   const [sortBy, setSortBy] = useState('');
 
    const fetchTravelPackages = async () => {
     setLoading(true);
     setError('');
+
+    const filters = [];
+    if (priceRange) filters.push(`price:${priceRange}`);
+    if (isCustomizable) filters.push(`isCustomizable:${isCustomizable}`);
+    if (packageName) filters.push(`packageName:${packageName}`);
+    if (packageRating) filters.push(`packageRating:${packageRating}`);
+
     try {
       const response = await axios({
         method: 'get',
         url: 'http://localhost:8080/api/v1/search/travel-packages',
         headers: headers,
         params: {
-          sortBy: 'packageName', // Sorting by package name
-          // Add other parameters here if needed
+          filterBy: filters.length ? filters.join(',') : undefined,
+          sortBy: sortBy || undefined,
         },
         data: {
           sourceCity,
-          destinationCity,
+          destinationCity,  
           packageStartDate,
           packageEndDate,
           numberOfGuest,
@@ -53,6 +63,11 @@ const Search = () => {
   const handlePackageStartDateChange = (e) => setPackageStartDate(e.target.value);
   const handlePackageEndDateChange = (e) => setPackageEndDate(e.target.value);
   const handleNumberOfGuestChange = (e) => setNumberOfGuest(e.target.value);
+  const handlePriceRangeChange = (e) => setPriceRange(e.target.value);
+  const handleIsCustomizableChange = (e) => setIsCustomizable(e.target.value);
+  const handlePackageNameChange = (e) => setPackageName(e.target.value);
+  const handlePackageRatingChange = (e) => setPackageRating(e.target.value);
+  const handleSortByChange = (e) => setSortBy(e.target.value);
 
   return (
     <div>
@@ -67,7 +82,7 @@ const Search = () => {
       {results.length > 0 && (
         <ul>
           {results.map((packageItem, index) => (
-            <li key={index}>{packageItem.packageName}</li> // Replace with actual property names
+            <li key={index}>{packageItem.packageName}</li>
           ))}
         </ul>
       )}
