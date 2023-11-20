@@ -81,4 +81,12 @@ public class AppUser implements UserDetails {
                 ", email='" + email + '\'' +
                 '}';
     }
+
+    public static AppUser getAppUserForRegister(String email, String password, Role role) {
+        AppUser appUser = new AppUser();
+        appUser.setEmail(email);
+        appUser.setPassword(password);
+        appUser.setRole(role);
+        return appUser;
+    }
 }
