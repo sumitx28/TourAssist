@@ -21,7 +21,6 @@ import API_URL from "../../../config/config";
 function TravelForm() {
   const [formData, setFormData] = useState({
     packageName: "",
-    tripStartDate: "",
     tripEndDate: "",
     tripSource: "",
     tripDestination: "",
@@ -37,6 +36,7 @@ function TravelForm() {
     isRoomTypeCustomizable: false,
     customRoomTypePrice: "",
     travelImage: null,
+    tripStartDate: getCurrentDate(),
   });
 
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -47,6 +47,8 @@ function TravelForm() {
   const [tourGuides, setTourGuides] = useState([]);
   const [roomTypes, setRoomTypes] = useState([]);
   const [resorts, setResorts] = useState([]);
+
+  const [endDateError, setEndDateError] = useState(false);
 
   const VisuallyHiddenInput = styled("input")({
     clip: "rect(0 0 0 0)",
@@ -65,27 +67,9 @@ function TravelForm() {
     width: "100%",
   });
 
-  function getBase64(file) {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-
-      reader.readAsDataURL(file);
-
-      reader.onload = () => {
-        resolve(reader.result);
-      };
-
-      reader.onerror = (error) => {
-        reject(error);
-      };
-    });
-  }
-
   const handleImageChange = async (e) => {
     const file = e.target.files[0];
     setFormData({ ...formData, travelImage: file });
-    // const base64Image = await getBase64(file);
-    // setFormData({ ...formData, travelImage: base64Image.substring(22) });
   };
 
   useEffect(() => {
@@ -126,6 +110,26 @@ function TravelForm() {
       [stateKey]: e.target.checked,
       [customValueKey]: e.target.checked ? "" : formData[customValueKey],
     });
+  };
+
+  function getCurrentDate() {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, "0");
+    const day = String(now.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  }
+
+  const handleEndDateChange = (e) => {
+    const endDate = e.target.value;
+    const startDate = formData.tripStartDate;
+
+    if (endDate < startDate) {
+      setEndDateError(true);
+    } else {
+      setEndDateError(false);
+      setFormData({ ...formData, tripEndDate: endDate });
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -185,27 +189,15 @@ function TravelForm() {
             isCustomizable: false,
           };
         }),
-        // packageMediaRequests: [
-        //   {
-        //     image: formData.travelImage,
-        //     description: "new package image",
-        //   },
-        // ],
       };
 
       const finalPostData = new FormData();
-      // const blob = await fetch(
-      //   `data:image/jpeg;base64,${formData.travelImage}`
-      // ).then((res) => res.blob());
       finalPostData.append(
         "request",
         new Blob([JSON.stringify(postData)], { type: "application/json" })
       );
 
-      // finalPostData.append("request", JSON.stringify(postData));
       finalPostData.append("images", formData.travelImage);
-
-      console.log(formData);
 
       const authToken = localStorage.getItem("authToken");
 
@@ -300,11 +292,16 @@ function TravelForm() {
               </label>
               <div className="mt-2.5">
                 <TextField
-                  type="date"
-                  name="trip-start-date"
-                  id="trip-start-date"
-                  variant="outlined"
                   fullWidth
+                  variant="outlined"
+                  id="trip-start-date"
+                  InputLabelProps={{ shrink: true }}
+                  InputProps={{
+                    inputProps: {
+                      min: getCurrentDate(),
+                    },
+                  }}
+                  type="date"
                   value={formData.tripStartDate}
                   onChange={(e) =>
                     setFormData({ ...formData, tripStartDate: e.target.value })
@@ -327,8 +324,10 @@ function TravelForm() {
                   variant="outlined"
                   fullWidth
                   value={formData.tripEndDate}
-                  onChange={(e) =>
-                    setFormData({ ...formData, tripEndDate: e.target.value })
+                  onChange={handleEndDateChange}
+                  error={endDateError}
+                  helperText={
+                    endDateError ? "End date must be after start date" : ""
                   }
                 />
               </div>
