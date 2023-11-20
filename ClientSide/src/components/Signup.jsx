@@ -6,6 +6,8 @@ import TextField from "@mui/material/TextField";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
@@ -24,6 +26,10 @@ import Copyright from "./commons/Copyright";
 
 const defaultTheme = createTheme();
 
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
 export default function SignUp() {
   const [data, setData] = useState({
     userType: "customer",
@@ -32,12 +38,71 @@ export default function SignUp() {
   });
 
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [loginStatus, setLoginStatus] = useState(null);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState("success");
+
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setSnackbarOpen(false);
+  };
+
+  const showSnackbar = (message, severity) => {
+    setSnackbarMessage(message);
+    setSnackbarSeverity(severity);
+    setSnackbarOpen(true);
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
 
+    const requiredFields = ["email", "password", "mobile-number"];
+    if (data.userType === "customer") {
+      requiredFields.push("firstName", "lastName", "country");
+    } else if (data.userType === "agent") {
+      requiredFields.push(
+        "company-name",
+        "number-of-employees",
+        "verification-id"
+      );
+    }
+
+    const isEmptyField = requiredFields.some(
+      (field) => formData.get(field) === ""
+    );
+
+    if (isEmptyField) {
+      showSnackbar("Fill all required fields", "error");
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.get("email"))) {
+      showSnackbar("Invalid email format", "error");
+      return;
+    }
+
+    const password = formData.get("password");
+    if (password.length < 8) {
+      showSnackbar("Password must be at least 8 characters long", "error");
+      return;
+    }
+
+    const mobileNumberRegex = /^[0-9]{10}$/;
+    if (!mobileNumberRegex.test(formData.get("mobile-number"))) {
+      showSnackbar("Invalid mobile number format", "error");
+      return;
+    }
+
     try {
+      setLoading(true);
+
       const userData = {
         firstName:
           data.userType === "customer" ? formData.get("firstName") : null,
@@ -71,12 +136,23 @@ export default function SignUp() {
       console.log(userData);
 
       if (response.status === 200) {
-        alert("Signup Successful!");
-        navigate("/login");
+        showSnackbar("Signup Successful.", "success");
+        setTimeout(() => {
+          navigate("/login");
+        }, 2000);
       } else {
-        alert("Sign-up failed");
+        showSnackbar("Invalid Details. Try Again!!", "error");
+        setTimeout(() => {
+          setLoginStatus(null);
+          setLoading(false);
+        }, 2000);
       }
     } catch (error) {
+      showSnackbar("Backend Down. Try Again later!!", "error");
+      setTimeout(() => {
+        setLoginStatus(null);
+        setLoading(false);
+      }, 2000);
       console.error("An error occurred:", error);
     }
   };
@@ -236,6 +312,7 @@ export default function SignUp() {
                               dob: new Date(date).toISOString(),
                             })
                           }
+                          disableFuture={true}
                           sx={{ width: "100%" }}
                         />
                       </LocalizationProvider>
@@ -266,9 +343,18 @@ export default function SignUp() {
                   type="submit"
                   fullWidth
                   variant="contained"
-                  sx={{ mt: 3, mb: 2 }}
+                  sx={{
+                    mt: 3,
+                    mb: 2,
+                    backgroundColor: loading ? "gray" : undefined,
+                  }}
+                  disabled={loading}
                 >
-                  Sign Up
+                  {loading
+                    ? "Signing In..."
+                    : loginStatus === "success"
+                    ? "Success!"
+                    : "Sign In"}
                 </Button>
                 <Grid container justifyContent="flex-end">
                   <Grid item>
@@ -285,6 +371,16 @@ export default function SignUp() {
           </Grid>
         </Grid>
       </div>
+      {/* Place Snackbar component outside the Box component */}
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+      >
+        <Alert onClose={handleSnackbarClose} severity={snackbarSeverity}>
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </ThemeProvider>
   );
 }
