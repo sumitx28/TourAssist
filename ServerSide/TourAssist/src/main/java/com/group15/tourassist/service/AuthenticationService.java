@@ -61,22 +61,10 @@ public class AuthenticationService implements IAuthenticationService {
                     .build();
         }
 
-        AppUser appUser = AppUser.builder()
-                            .email(request.getEmail())
-                            .password(passwordEncoder.encode(request.getPassword()))
-                            .role(Role.CUSTOMER)
-                            .build();
+        AppUser appUser = AppUser.getAppUserForRegister(request.getEmail(), passwordEncoder.encode(request.getPassword()), Role.CUSTOMER);
         appUser = appUserRepository.save(appUser);
 
-        Customer customer = Customer.builder()
-                .appUser(appUser)
-                .firstName(request.getFirstName())
-                .lastName(request.getLastName())
-                .dateOfBirth(request.getDateOfBirth())
-                .country(request.getCountry())
-                .mobile(request.getMobile())
-                .build();
-
+        Customer customer = Customer.getCustomerForRegister(request, appUser);
         ICustomerRepository.save(customer);
 
         var jwtToken = jwtService.generateToken(appUser);
