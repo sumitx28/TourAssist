@@ -24,5 +24,6 @@ public class SearchTravelPackagesDTO {
     private Boolean isPackageCustomizable;
     private AgentDetailsDTO agentDetails;
     private List<PackageReview> packageReview;
+    private Double averagePackageRatings = 0.0;  //default value set
 
 }

@@ -12,10 +12,11 @@ import {
   DialogContentText,
   DialogActions,
 } from "@mui/material";
+import { styled } from "@mui/material/styles";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import fetchData from "../../utility/request";
 import axios from "axios";
 import API_URL from "../../../config/config";
-import NavBar from "../commons/NavBar";
 
 function TravelForm() {
   const [formData, setFormData] = useState({
@@ -35,10 +36,11 @@ function TravelForm() {
     customTourGuidePrice: "",
     isRoomTypeCustomizable: false,
     customRoomTypePrice: "",
+    travelImage: null,
   });
 
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [sources, setSources] = useState([]); // Use state to store sources and destinations
+  const [sources, setSources] = useState([]);
   const [destinations, setDestinations] = useState([]);
   const [activities, setActivities] = useState([]);
   const [transportModes, setTransportModes] = useState([]);
@@ -46,13 +48,53 @@ function TravelForm() {
   const [roomTypes, setRoomTypes] = useState([]);
   const [resorts, setResorts] = useState([]);
 
+  const VisuallyHiddenInput = styled("input")({
+    clip: "rect(0 0 0 0)",
+    clipPath: "inset(50%)",
+    height: 1,
+    overflow: "hidden",
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    whiteSpace: "nowrap",
+    width: 1,
+  });
+
+  const StyledUploadButton = styled(Button)({
+    marginTop: "1rem",
+    width: "100%",
+  });
+
+  function getBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+
+      reader.readAsDataURL(file);
+
+      reader.onload = () => {
+        resolve(reader.result);
+      };
+
+      reader.onerror = (error) => {
+        reject(error);
+      };
+    });
+  }
+
+  const handleImageChange = async (e) => {
+    const file = e.target.files[0];
+    setFormData({ ...formData, travelImage: file });
+    // const base64Image = await getBase64(file);
+    // setFormData({ ...formData, travelImage: base64Image.substring(22) });
+  };
+
   useEffect(() => {
     const getData = async () => {
-      const sourcesData = await fetchData("/api/v1/auth/locations");
-      const destinationsData = await fetchData("/api/v1/auth/locations");
-      const activitiesData = await fetchData("/api/v1/auth/activities");
-      const transportModeData = await fetchData("/api/v1/auth/travel-modes");
-      const roomTypesData = await fetchData("/api/v1/auth/suites");
+      const sourcesData = await fetchData("/api/v1/locations");
+      const destinationsData = await fetchData("/api/v1/locations");
+      const activitiesData = await fetchData("/api/v1/activities");
+      const transportModeData = await fetchData("/api/v1/travel-modes");
+      const roomTypesData = await fetchData("/api/v1/suites");
 
       setSources(sourcesData);
       setDestinations(destinationsData);
@@ -65,16 +107,12 @@ function TravelForm() {
   }, []);
 
   const fetchTourGuides = async (destinationId) => {
-    const tourGuideData = await fetchData(
-      `/api/v1/auth/guides/${destinationId}`
-    );
+    const tourGuideData = await fetchData(`/api/v1/guides/${destinationId}`);
     setTourGuides(tourGuideData);
   };
 
   const fetchResorts = async (destinationId) => {
-    const resortsData = await fetchData(
-      `/api/v1/auth/resorts/${destinationId}`
-    );
+    const resortsData = await fetchData(`/api/v1/resorts/${destinationId}`);
     setResorts(resortsData);
   };
 
@@ -114,9 +152,9 @@ function TravelForm() {
       const postData = {
         packageName: formData.packageName,
         agentId: 1,
-        tripStartDate: formData.tripStartDate,
-        tripEndDate: formData.tripEndDate + "T10:00:00Z",
-        sourceId: formData.tripSource + "T10:00:00Z",
+        tripStartDate: new Date(formData.tripStartDate).toISOString(),
+        tripEndDate: new Date(formData.tripEndDate).toISOString(),
+        sourceId: formData.tripSource,
         destinationId: formData.tripDestination,
         isCustomizable:
           formData.isResortCustomizable ||
@@ -141,31 +179,51 @@ function TravelForm() {
         },
         activities: formData.selectedActivities.map((value) => {
           return {
-            activityId: value,
-            activityDate: new Date().toJSON().slice(0, 10),
+            activityMasterId: value,
+            activityDate: new Date(formData.tripEndDate).toISOString(),
             price: 0,
             isCustomizable: false,
           };
         }),
+        // packageMediaRequests: [
+        //   {
+        //     image: formData.travelImage,
+        //     description: "new package image",
+        //   },
+        // ],
       };
 
-      console.log(postData);
+      const finalPostData = new FormData();
+      // const blob = await fetch(
+      //   `data:image/jpeg;base64,${formData.travelImage}`
+      // ).then((res) => res.blob());
+      finalPostData.append(
+        "request",
+        new Blob([JSON.stringify(postData)], { type: "application/json" })
+      );
+
+      // finalPostData.append("request", JSON.stringify(postData));
+      finalPostData.append("images", formData.travelImage);
+
+      console.log(formData);
 
       const authToken = localStorage.getItem("authToken");
 
       try {
         const response = await axios.post(
-          `${API_URL}/api/v1/auth/create-package`,
-          postData,
+          `${API_URL}/api/v1/create-package`,
+          finalPostData,
           {
             headers: {
               Authorization: `Bearer ${authToken}`,
-              "Content-Type": "application/json",
+              "Content-Type": "multipart/form-data",
             },
           }
         );
-      } catch (e) {
+
         alert("Package Successfully Created");
+      } catch (e) {
+        alert("Error creating a package");
       }
     }
   };
@@ -479,6 +537,28 @@ function TravelForm() {
                     </MenuItem>
                   ))}
                 </Select>
+              </div>
+              <div className="mt-2.5">
+                <label
+                  htmlFor="travel-package-image"
+                  className="block text-sm font-semibold text-gray-900"
+                >
+                  Travel Package Image
+                </label>
+                <div className="mt-1">
+                  <StyledUploadButton
+                    component="label"
+                    variant="outlined"
+                    startIcon={<CloudUploadIcon />}
+                  >
+                    Upload file
+                    <VisuallyHiddenInput
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageChange}
+                    />
+                  </StyledUploadButton>
+                </div>
               </div>
             </div>
             <div>

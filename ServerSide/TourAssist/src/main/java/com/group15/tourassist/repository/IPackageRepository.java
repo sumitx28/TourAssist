@@ -13,5 +13,9 @@ public interface IPackageRepository extends JpaRepository<Package, Long> {
 
     @Query("SELECT p FROM Package p INNER JOIN DestinationMaster source ON p.sourceId = source.id INNER JOIN DestinationMaster destination ON p.destinationId = destination.id WHERE source.city = :sourceCity AND destination.city = :destinationCity AND p.tripStartDate >= :startDate AND p.tripEndDate <= :endDate")
     List<Package> getPackagesForDateRange(String sourceCity, String destinationCity, Instant startDate, Instant endDate);
+
+    @Query("SELECT p FROM Package p INNER JOIN DestinationMaster source ON p.sourceId = source.id INNER JOIN DestinationMaster destination ON p.destinationId = destination.id WHERE source.city = :sourceCity AND destination.city = :destinationCity AND p.tripStartDate >= :startDate AND p.tripEndDate <= :endDate ORDER BY p.packageName")
+    List<Package> getSortedPackagesForDateRange(String sourceCity, String destinationCity, Instant startDate, Instant endDate);
+
 }
 

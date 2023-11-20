@@ -21,3 +21,9 @@ application:
       expiration: 86400000 # a day
       refresh-token:
         expiration: 604800000 # 7 days
+
+storage:
+  cloud-name: dnm5uzsbl
+  access-key: 854872313461948
+  secret-key: e2gLOFlmFp_S9OVkzkL6nzNoWrQ
+

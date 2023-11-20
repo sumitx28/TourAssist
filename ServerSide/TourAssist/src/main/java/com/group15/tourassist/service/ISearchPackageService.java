@@ -12,15 +12,13 @@ public interface ISearchPackageService {
      * @param customerSearchPackageRequest
      * @return the list of packages as per user criteria specified.
      */
-    List<Package> getPackagesDetails(CustomerSearchPackageRequest customerSearchPackageRequest);
+    List<Package> getPackagesDetails(CustomerSearchPackageRequest customerSearchPackageRequest, String sortBy, String filterBy);
 
     /**
-     *
      * @param customerSearchPackageRequest request criteria of the user
      * @return search travel packages for the specified request
      */
-    SearchPackagesWebResponse getSearchTravelPackages(CustomerSearchPackageRequest customerSearchPackageRequest);
-
+    SearchPackagesWebResponse getSearchTravelPackages(CustomerSearchPackageRequest customerSearchPackageRequest, String sortBy, String filterBy);
 }
 
 
