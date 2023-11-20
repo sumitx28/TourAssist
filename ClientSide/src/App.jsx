@@ -1,4 +1,3 @@
-import AgentDashboard from "./components/agent/AgentDashboard";
 import AgentLogin from "./components/AgentLogin";
 import Dashboard from "./components/Dashboard";
 import AgentDash from "./components/dashboard/Dashboard";
@@ -13,25 +12,17 @@ import UserProfile from "./components/UserProfile";
 import SearchResults from "./components/SearchResults";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import SearchBar from "./components/SearchBar";
+import Search from "./components/Search";
 function App() {
   return (
     <Router>
       <div>
         <Routes>
           <Route exact path="/" element={<Home />}></Route>
-          <Route exact path="/search" element={<SearchBar/>}></Route>
+          <Route exact path="/search" element={<Search/>}></Route>
           <Route exact path="/login" element={<Login />}></Route>
           <Route exact path="/signup" element={<SignUp />}></Route>
           <Route path="/agent-login" element={<AgentLogin />} />
-          <Route path="/agent-dashboard1" element={<AgentDashboard />} />
-          {/* <Route
-            path="/agent-dashboard"
-            element={
-              <AuthGuard>
-                <AgentDashboard />
-              </AuthGuard>
-            }
-          /> */}
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password/:token" element={<ResetPassword />} />
           <Route
