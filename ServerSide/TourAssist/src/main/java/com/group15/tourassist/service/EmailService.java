@@ -10,6 +10,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.time.format.DateTimeFormatter;
 
 @Service
@@ -38,13 +39,18 @@ public class EmailService {
      * @param paymentTransaction payment transaction details
      */
     public String frameBookingEmail(Booking booking, Package bookedPackage, PaymentTransaction paymentTransaction) {
-        // DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        String bookingStatus = paymentTransaction.getTransactionStatus().equals(TransactionStatus.SUCCESS) ? "CONFIRMED" : "FAILED";
+        String bookingStatus = "FAILED";
+        if(paymentTransaction.getTransactionStatus().equals(TransactionStatus.SUCCESS)) {
+            bookingStatus = "CONFIRMED";
+        }
 
         // parse BOOKING_EMAIL_TEMPLATE and create appropriate content
-        String emailContent = String.format(ConstantUtils.BOOKING_EMAIL_TEMPLATE, bookedPackage.getPackageName(), bookingStatus,
-                booking.getId(), paymentTransaction.getTransactionId(),
-                bookedPackage.getTripStartDate(), bookedPackage.getTripEndDate());
+        String packageName = bookedPackage.getPackageName();
+        String tranxId = paymentTransaction.getTransactionId();
+        Instant tripStart =  bookedPackage.getTripStartDate();
+        Instant tripEnd =  bookedPackage.getTripEndDate();
+
+        String emailContent = String.format(ConstantUtils.BOOKING_EMAIL_TEMPLATE, packageName, bookingStatus, booking.getId(), tranxId, tripStart, tripEnd);
 
         return emailContent;
     }
