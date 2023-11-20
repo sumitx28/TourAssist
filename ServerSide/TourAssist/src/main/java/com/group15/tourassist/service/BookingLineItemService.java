@@ -5,10 +5,16 @@ import com.group15.tourassist.entity.Booking;
 import com.group15.tourassist.entity.BookingLineItem;
 import com.group15.tourassist.repository.*;
 import com.group15.tourassist.request.BookingItemRequest;
+import com.group15.tourassist.web.controller.PackageController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class BookingLineItemService implements IBookingLineItemService {
@@ -28,6 +34,8 @@ public class BookingLineItemService implements IBookingLineItemService {
     @Autowired
     private ITransportationRepository transportationRepository;
 
+
+    Logger log = LoggerFactory.getLogger(PackageController.class);
 
     /**
      * @param bookingItemRequests items included in this booking request
@@ -78,5 +86,34 @@ public class BookingLineItemService implements IBookingLineItemService {
     @Override
     public List<BookingLineItem> getBookingLineItemsByBookingId(Long bookingId) {
         return bookingLineItemRepository.getLineItemsByBookingId(bookingId);
+    }
+
+    @Override
+    public Double totalBookingPriceByType(Long agentId, String type) {
+        Double total = (double) 0;
+        log.info(type);
+        if(type.equals("last_month")){
+            Date toDate= Date.valueOf(LocalDate.now());
+            Date fromDate=Date.valueOf(LocalDate.now().minusMonths(1));
+            List<Double> prices= bookingLineItemRepository.getBookingPliForADuration(fromDate, toDate, agentId);
+            log.info(prices.size()+"price");
+            for(Double price: prices){
+                total=total+price;
+                log.info("price"+price);
+            }
+            return total;
+        }
+        else if(Objects.equals(type, "last_year")){
+            Date toDate= Date.valueOf(LocalDate.now());
+            Date fromDate=Date.valueOf(LocalDate.now().minusYears(1));
+            List<Double> prices= bookingLineItemRepository.getBookingPliForADuration(fromDate, toDate, agentId);
+            for(Double price: prices){
+                total=total+price;
+            }
+            return total;
+        }
+        else{
+            return total;
+        }
     }
 }
