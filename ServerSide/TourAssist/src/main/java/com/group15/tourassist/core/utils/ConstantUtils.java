@@ -1,5 +1,8 @@
 package com.group15.tourassist.core.utils;
 
+/**
+ * This class exposes all the named constants.
+ */
 public class ConstantUtils {
 
     public static final String appUserId = "appUserId";
