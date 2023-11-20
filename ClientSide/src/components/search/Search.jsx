@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import Search2 from "./Search2";
 
 const Search = () => {
   const [results, setResults] = useState([]);
@@ -62,11 +63,18 @@ const Search = () => {
       {loading && <p>Loading...</p>}
       {error && <p>{error}</p>}
       {results.length > 0 && (
-        <ul>
-          {results.map((packageItem, index) => (
-            <li key={index}>{packageItem.packageName}</li>
+        <div>
+          {results.travelPackages.map((packageItem, index) => (
+            <div key={index} style={{ margin: '20px', padding: '20px', border: '1px solid #ddd' }}>
+              <h2>{packageItem.packageName}</h2>
+              <p>Price: ${packageItem.totalPackagePrice}</p>
+              <p>Start Date: {new Date(packageItem.tripStartDate).toLocaleDateString()}</p>
+              <p>End Date: {new Date(packageItem.tripEndDate).toLocaleDateString()}</p>
+              <p>Is Customizable: {packageItem.isPackageCustomizable ? 'Yes' : 'No'}</p>
+              <p>Agency: {packageItem.agentDetails.companyName}</p>
+            </div>
           ))}
-        </ul>
+        </div>
       )}
     </div>
   );

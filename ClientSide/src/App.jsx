@@ -12,7 +12,8 @@ import UserProfile from "./components/UserProfile";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import PackageDetail from "./components/travel-package/PackageDetail";
 import Search from "./components/search/Search";
-import SearchResults from "./components/search/SearchResults";
+import Search2 from "./components/search/Search2";
+// import SearchResults from "./components/search/SearchResults";
 
 function App() {
   return (
@@ -39,19 +40,17 @@ function App() {
           <Route
             path="/search"
             element={
-              <AuthGuard>
-                <Search />
-              </AuthGuard>
+                <Search2 />
             }
           />
-          <Route
+          {/* <Route
             path="/searchresults"
             element={
               <AuthGuard>
                 <SearchResults />
               </AuthGuard>
             }
-          />
+          /> */}
           <Route
             path="/userprofile"
             element={
