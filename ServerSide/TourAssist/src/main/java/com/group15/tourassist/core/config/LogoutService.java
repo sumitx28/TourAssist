@@ -22,9 +22,8 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class LogoutService implements LogoutHandler {
 
-    Logger log = LoggerFactory.getLogger(LogoutService.class);
-
     private final TokenRepository tokenRepository;
+    Logger log = LoggerFactory.getLogger(LogoutService.class);
 
     @Transactional
     @Override
@@ -38,11 +37,11 @@ public class LogoutService implements LogoutHandler {
         if (authHeader == null || !authHeader.startsWith(ConstantUtils.BEARER)) {
             return;
         }
-        jwt = authHeader.substring(7);
+        jwt = authHeader.substring(ConstantUtils.BEARER_PREFIX_LENGTH);
         var existingToken = tokenRepository.findByToken(jwt)
                 .orElse(null);
-        log.info("jwt token found: {}", existingToken.getToken().toString() );
         if (existingToken != null) {
+            log.info("jwt token found: {}", existingToken.getToken());
             existingToken.setExpired(true);
             existingToken.setRevoked(true);
             tokenRepository.save(existingToken);
