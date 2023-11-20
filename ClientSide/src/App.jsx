@@ -9,9 +9,10 @@ import SignUp from "./components/Signup";
 import AuthGuard from "./guards/AuthGuard";
 import CreatePackage from "./components/agent/CreatePackage";
 import UserProfile from "./components/UserProfile";
-
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import PackageDetail from "./components/travel-package/PackageDetail";
+import Search from "./components/search/Search";
+import SearchResults from "./components/search/SearchResults";
 
 function App() {
   return (
@@ -19,7 +20,6 @@ function App() {
       <div>
         <Routes>
           <Route exact path="/" element={<Home />}></Route>
-          <Route exact path="/search" element={<Search/>}></Route>
           <Route exact path="/login" element={<Login />}></Route>
           <Route exact path="/signup" element={<SignUp />}></Route>
           <Route path="/agent-login" element={<AgentLogin />} />
@@ -28,23 +28,38 @@ function App() {
           <Route
             path="/create-package"
             element={
-              // <AuthGuard>
+              <AuthGuard>
                 <AgentDash
                   title="New Travel Package"
                   Component={<CreatePackage />}
                 />
-              // </AuthGuard>
+              </AuthGuard>
             }
           />
-          {/*           <Route */}
-          {/*             path="/user-profile" */}
-          {/*             element={ */}
-          {/*                 <AuthGuard> */}
-          {/*                     <UserProfile /> */}
-          {/*                 </AuthGuard> */}
-          {/*             } */}
-          {/*           /> */}
-          <Route path="/user-profile" element={<UserProfile />} />
+          <Route
+            path="/search"
+            element={
+              <AuthGuard>
+                <Search />
+              </AuthGuard>
+            }
+          />
+          <Route
+            path="/searchresults"
+            element={
+              <AuthGuard>
+                <SearchResults />
+              </AuthGuard>
+            }
+          />
+          <Route
+            path="/userprofile"
+            element={
+              <AuthGuard>
+                <UserProfile />
+              </AuthGuard>
+            }
+          />
           <Route
             path="/dashboard"
             element={
