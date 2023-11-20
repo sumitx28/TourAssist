@@ -1,6 +1,6 @@
 import AgentDashboard from "./components/agent/AgentDashboard";
 import AgentLogin from "./components/AgentLogin";
-import Dashboard from "./components/Dashboard";
+import Dashboard from "./components/dashboard/Dashboard";
 import AgentDash from "./components/dashboard/Dashboard";
 import ForgotPassword from "./components/ForgotPassword";
 import Home from "./components/Home";
@@ -10,6 +10,8 @@ import SignUp from "./components/Signup";
 import AuthGuard from "./guards/AuthGuard";
 import CreatePackage from "./components/agent/CreatePackage";
 import UserProfile from "./components/UserProfile";
+import UserProfileDashboard from "./components/UserProfileDashboard";
+import UpcomingBookings from "./components/agent/Upcomingbookings";
 
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import PackageDetail from "./components/travel-package/PackageDetail";
@@ -52,7 +54,8 @@ function App() {
           {/*                 </AuthGuard> */}
           {/*             } */}
           {/*           /> */}
-          <Route path="/user-profile" element={<UserProfile />} />
+          <Route path="/user-profile" element={<UserProfileDashboard />} />
+          <Route path="/upcomingbookings" element={<UpcomingBookings />} />
           <Route
             path="/dashboard"
             element={

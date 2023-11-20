@@ -10,6 +10,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import PeopleIcon from "@mui/icons-material/People"; 
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn"; 
 import { Link } from "react-router-dom";
+import UpcomingBookings from "../agent/Upcomingbookings";
 
 export const mainListItems = (
   <React.Fragment>
@@ -39,7 +40,7 @@ export const mainListItems = (
         <ListItemText primary="Create Package" />
       </Link>
     </ListItemButton>
-    <ListItemButton component={Link} to="/upcoming-bookings">
+    <ListItemButton component={Link} to="/upcomingbookings">
       <ListItemIcon>
         <UpcomingIcon />
       </ListItemIcon>
