@@ -229,7 +229,7 @@ function TravelForm() {
           return {
             activityMasterId: value,
             activityDate: new Date(formData.tripEndDate).toISOString(),
-            price: 0,
+            price: 100,
             isCustomizable: false,
           };
         }),
