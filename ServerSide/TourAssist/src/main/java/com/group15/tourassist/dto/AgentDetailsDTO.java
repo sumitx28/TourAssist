@@ -7,6 +7,6 @@ public class AgentDetailsDTO {
 
     private Long agentId;
     private String companyName;
-
+    private String mobile;
 
 }

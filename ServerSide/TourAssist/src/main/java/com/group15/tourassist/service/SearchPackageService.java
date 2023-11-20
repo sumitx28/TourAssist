@@ -1,16 +1,18 @@
 package com.group15.tourassist.service;
 
+import com.group15.tourassist.core.utils.ConstantUtils;
 import com.group15.tourassist.dto.AgentDetailsDTO;
 import com.group15.tourassist.dto.SearchTravelPackagesDTO;
 import com.group15.tourassist.entity.Agent;
 import com.group15.tourassist.entity.Package;
+import com.group15.tourassist.entity.PackageReview;
 import com.group15.tourassist.repository.IPackageRepository;
 import com.group15.tourassist.repository.IPackageReviewRepository;
 import com.group15.tourassist.request.CustomerSearchPackageRequest;
 import com.group15.tourassist.response.SearchPackagesWebResponse;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -18,24 +20,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class SearchPackageService implements ISearchPackageService {
 
     private final IPackageRepository packageRepository;
     private final IAgentService agentService;
     private final IPackageReviewRepository packageReviewRepository;
     private final ITotalPackagePriceCalculatorService totalPackagePriceCalculatorService;
+    private final IPackageFilterSortService packageFilterSortService;
+    private final IPackageReviewService packageReviewService;
     Logger log = LoggerFactory.getLogger(SearchPackageService.class);
 
-    @Autowired
-    public SearchPackageService(IPackageRepository packageRepository, IAgentService agentService, IPackageReviewRepository packageReviewRepository, ITotalPackagePriceCalculatorService totalPackagePriceCalculatorService) {
-        this.packageRepository = packageRepository;
-        this.agentService = agentService;
-        this.packageReviewRepository = packageReviewRepository;
-        this.totalPackagePriceCalculatorService = totalPackagePriceCalculatorService;
-    }
 
     @Override
-    public List<Package> getPackagesDetails(CustomerSearchPackageRequest customerSearchPackageRequest) {
+    public List<Package> getPackagesDetails(CustomerSearchPackageRequest customerSearchPackageRequest, String sortBy, String filterBy) {
+        List<Package> packageList;
         String sourceCity = customerSearchPackageRequest.getSourceCity();
         String destinationCity = customerSearchPackageRequest.getDestinationCity();
         Instant startDate = customerSearchPackageRequest.getPackageStartDate();
@@ -45,26 +44,40 @@ public class SearchPackageService implements ISearchPackageService {
         log.info("destinationCity: " + destinationCity);
         log.info("startDate: " + startDate);
         log.info("endDate: " + endDate);
-
-        return packageRepository.getPackagesForDateRange(sourceCity, destinationCity, startDate, endDate);
+        log.info("sortBy: {}", sortBy);
+        log.info("filerBy: {}", filterBy);
+        if (sortBy != null && sortBy.equals(ConstantUtils.PACKAGE_NAME)) {
+            packageList = packageRepository.getSortedPackagesForDateRange(sourceCity, destinationCity, startDate, endDate);
+        } else {
+            packageList = packageRepository.getPackagesForDateRange(sourceCity, destinationCity, startDate, endDate);
+        }
+        if (filterBy != null) {
+            // filters based on package column names
+            packageList = packageFilterSortService.filterSearchPackages(packageList, filterBy);
+        }
+        return packageList;
     }
 
-    /**
-     * @param customerSearchPackageRequest
-     * @return the list of packages as per user criteria specified.
-     */
+
     @Override
-    public SearchPackagesWebResponse getSearchTravelPackages(CustomerSearchPackageRequest customerSearchPackageRequest) {
+    public SearchPackagesWebResponse getSearchTravelPackages(CustomerSearchPackageRequest customerSearchPackageRequest, String sortBy, String filterBy) {
         SearchPackagesWebResponse searchPackagesWebResponse = new SearchPackagesWebResponse();
         List<SearchTravelPackagesDTO> searchTravelPackages = new ArrayList<>();
         // get travel packages
-        List<Package> packageList = getPackagesDetails(customerSearchPackageRequest);
+        List<Package> packageList = getPackagesDetails(customerSearchPackageRequest, sortBy, filterBy);
         for (Package travelPackage : packageList) {
             populateSearchTravelPackageResponse(searchTravelPackages, travelPackage);
-
         }
         // now add the packages to the web response
         log.info("searchTravelPackages list: {}", searchTravelPackages);
+
+        if (filterBy != null) {
+            packageFilterSortService.filterFinalSearchTravelPackages(searchTravelPackages, filterBy);
+        }
+        if (sortBy != null && !sortBy.equalsIgnoreCase(ConstantUtils.PACKAGE_NAME)) {
+            packageFilterSortService.sortFinalSearchTravelPackages(searchTravelPackages, sortBy);
+
+        }
         searchPackagesWebResponse.setTravelPackages(searchTravelPackages);
         return searchPackagesWebResponse;
     }
@@ -77,14 +90,17 @@ public class SearchPackageService implements ISearchPackageService {
         SearchTravelPackagesDTO searchTravelPackagesDTO = new SearchTravelPackagesDTO();
         Long agentId = travelPackage.getAgentId();
         Agent agent = agentService.getAgentById(agentId);
-        AgentDetailsDTO agentDetailsDTO = agentService. populateAgentDetails(agent);
+        AgentDetailsDTO agentDetailsDTO = agentService.populateAgentDetails(agent);
 
         searchTravelPackagesDTO.setPackageId(travelPackage.getId());
         searchTravelPackagesDTO.setPackageName(travelPackage.getPackageName());
         searchTravelPackagesDTO.setPackageCreatedDate(travelPackage.getPackageCreatedDate());
 
         searchTravelPackagesDTO.setTotalPackagePrice(totalPackagePriceCalculatorService.getTotalPackagePrice(travelPackage.getId()));
-        searchTravelPackagesDTO.setPackageReview(packageReviewRepository.getPackageReviewByPackageId(travelPackage.getId()));
+        List<PackageReview> packageReviewList = packageReviewRepository.getPackageReviewByPackageId(travelPackage.getId());
+
+        searchTravelPackagesDTO.setPackageReview(packageReviewList);
+        searchTravelPackagesDTO.setAveragePackageRatings(packageReviewService.calculateAveragePackageRatings(packageReviewList));
 
         searchTravelPackagesDTO.setAgentDetails(agentDetailsDTO);
         searchTravelPackagesDTO.setIsPackageCustomizable(travelPackage.getIsCustomizable());

@@ -17,4 +17,6 @@ public interface IAgentService {
      */
     AgentDetailsDTO populateAgentDetails(Agent agent);
 
+    Agent getAgentByAppUserId(Long appUserId);
+
 }

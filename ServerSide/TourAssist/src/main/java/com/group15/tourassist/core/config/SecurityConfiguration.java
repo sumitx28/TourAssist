@@ -31,6 +31,7 @@ public class SecurityConfiguration {
      * TODO add the WL urls for the app on ad-hoc basis
      */
     private static final String[] WHITE_LIST_URL = {"/api/v1/auth/**",
+            "/api/v1/**",
             "/configuration/ui",
             "/configuration/security"};
     private final JwtAuthenticationFilter jwtAuthFilter;

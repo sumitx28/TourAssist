@@ -188,6 +188,55 @@ CREATE TABLE package_media (
 	PRIMARY KEY (`id`)
 );
 
+CREATE TABLE booking (
+    id BIGINT(20) NOT NULL AUTO_INCREMENT,
+    package_id BIGINT(20) NOT NULL,
+    customer_id BIGINT(20) NOT NULL,
+    agent_id BIGINT(20) NOT NULL,
+    booking_date datetime not null,
+	total_price double not null,
+	booking_status varchar(255) not null CHECK (booking_status IN ('CONFIRM', 'PENDING')),
+	FOREIGN KEY (package_id) REFERENCES package(id),
+	FOREIGN KEY (customer_id) REFERENCES customer(id),
+    FOREIGN KEY (agent_id) REFERENCES agent(id),
+	PRIMARY KEY (`id`)
+);
+
+CREATE TABLE booking_line_item (
+    id BIGINT(20) NOT NULL AUTO_INCREMENT,
+    booking_id BIGINT(20) NOT NULL,
+    booked_item varchar(255) NOT NULL CHECK (item_name IN ('ACTIVITY', 'GUIDE', 'RESORT', 'TRANSPORTATION')),
+    booked_item_id BIGINT(20) NOT NULL,
+    price double not null,
+	FOREIGN KEY (booking_id) REFERENCES booking(id),
+	PRIMARY KEY (`id`)
+);
+
+CREATE TABLE payment_transaction (
+    id BIGINT(20) NOT NULL AUTO_INCREMENT,
+    transaction_id varchar(255) NOT NULL,
+    booking_id BIGINT(20) NOT NULL,
+    payment_type varchar(255) not null,
+    transaction_status varchar(255) not null CHECK (transaction_status IN ('SUCCESS', 'FAILED')),
+    price double not null,
+    transaction_date datetime not null,
+	FOREIGN KEY (booking_id) REFERENCES booking(id),
+	PRIMARY KEY (`id`)
+);
+
+
+CREATE TABLE guest (
+    id BIGINT(20) NOT NULL AUTO_INCREMENT,
+    first_name varchar(255)  NOT NULL,
+    last_name varchar(255) not null,
+	date_of_birth datetime not null,
+	booking_id bigint(20) NOT NULL,
+    FOREIGN KEY (booking_id) REFERENCES booking(id),
+	PRIMARY KEY (`id`)
+);
+
+
+
 --- Inserts:
 
 -- destination_master

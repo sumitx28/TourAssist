@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import {jwtDecode} from 'jwt-decode'
-import NavBar from '../components/commons/NavBar';
 
 export default function UserProfile() {
   const [editFields, setEditFields] = useState({
