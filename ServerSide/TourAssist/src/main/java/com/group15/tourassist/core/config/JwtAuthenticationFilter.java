@@ -1,6 +1,7 @@
 package com.group15.tourassist.core.config;
 
 import com.group15.tourassist.core.config.service.IJwtService;
+import com.group15.tourassist.core.utils.ConstantUtils;
 import com.group15.tourassist.repository.TokenRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -53,7 +54,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
-        jwt = authHeader.substring(7);
+        jwt = authHeader.substring(ConstantUtils.BEARER_PREFIX_LENGTH);
         try {
             userEmail = jwtService.extractUsername(jwt);
         } catch (Exception e) {
