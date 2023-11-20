@@ -1,6 +1,7 @@
 package com.group15.tourassist.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.group15.tourassist.request.AgentRegistrationRequest;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -41,4 +42,15 @@ public class Agent implements Serializable {
     @Column(name = "verification_doc_link")
     private String verificationDocLink;
 
+    public static Agent getAgentForRegister(AgentRegistrationRequest request, AppUser appUser) {
+        Agent agent = new Agent();
+        agent.setCompanyName(request.getCompanyName());
+        agent.setEmployeeCount(request.getEmployeeCount());
+        agent.setMobile(request.getMobile());
+        agent.setVerificationId(request.getVerificationId());
+        agent.setVerificationDocLink(request.getVerificationDocLink());
+        agent.setAppUser(appUser);
+
+        return agent;
+    }
 }
