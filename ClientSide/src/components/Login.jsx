@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -12,20 +12,46 @@ import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import axios from "axios";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
 import API_URL from "../../config/config";
 import TravelLogo from "./commons/TravelLogo";
 import Copyright from "./commons/Copyright";
 
 const defaultTheme = createTheme();
 
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
 export default function Login() {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [loginStatus, setLoginStatus] = useState(null);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState("success");
+
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setSnackbarOpen(false);
+  };
+
+  const showSnackbar = (message, severity) => {
+    setSnackbarMessage(message);
+    setSnackbarSeverity(severity);
+    setSnackbarOpen(true);
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
 
     try {
+      setLoading(true);
       const response = await axios.post(
         `${API_URL}/api/v1/auth/authenticate`,
         {
@@ -44,12 +70,23 @@ export default function Login() {
 
         localStorage.setItem("authToken", access_token);
 
-        navigate("/dashboard");
+        showSnackbar("Welcome to Tour Assist", "success");
+        setTimeout(() => {
+          navigate("/dashboard");
+        }, 2000);
       } else {
-        alert("Login failed");
+        showSnackbar("Invalid credentials. Try Again", "error");
+        setTimeout(() => {
+          setLoginStatus(null);
+          setLoading(false);
+        }, 2000);
       }
     } catch (error) {
-      alert("Login failed");
+      showSnackbar("Invalid credentials. Try Again", "error");
+      setTimeout(() => {
+        setLoginStatus(null);
+        setLoading(false);
+      }, 2000);
       console.error("An error occurred:", error);
     }
   };
@@ -105,9 +142,18 @@ export default function Login() {
                 type="submit"
                 fullWidth
                 variant="contained"
-                sx={{ mt: 3, mb: 2 }}
+                sx={{
+                  mt: 3,
+                  mb: 2,
+                  backgroundColor: loading ? "gray" : undefined,
+                }}
+                disabled={loading}
               >
-                Sign In
+                {loading
+                  ? "Signing In..."
+                  : loginStatus === "success"
+                  ? "Success!"
+                  : "Sign In"}
               </Button>
               <Grid container>
                 <Grid item xs>
@@ -130,6 +176,15 @@ export default function Login() {
           </Box>
         </Grid>
       </Grid>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+      >
+        <Alert onClose={handleSnackbarClose} severity={snackbarSeverity}>
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </ThemeProvider>
   );
 }
