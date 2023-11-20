@@ -2,7 +2,6 @@ package com.group15.tourassist.service;
 
 import com.group15.tourassist.core.enums.Role;
 import com.group15.tourassist.core.utils.ConstantUtils;
-import com.group15.tourassist.core.utils.Utils;
 import com.group15.tourassist.core.config.service.JwtService;
 import com.group15.tourassist.dto.ValidateDto;
 import com.group15.tourassist.entity.Agent;
@@ -24,12 +23,10 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 
