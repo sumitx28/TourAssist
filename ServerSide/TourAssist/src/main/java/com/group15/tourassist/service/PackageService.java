@@ -41,7 +41,13 @@ public class PackageService implements IPackageService {
     private final AgentEntityToDto agentEntityToDto;
     private final StayEntityToDto stayEntityToDto;
     private final TourGuideEntityToDto tourGuideEntityToDto;
-    // Transaction method to save all or nothing.
+
+    /**
+     * @param request request to create a new package in DB
+     * @param images List of package images
+     * @return ID of package created
+     * @throws IOException exception from Cloudinary service if any.
+     */
     @Override
     public Long createNewPackage(PackageCreateRequest request, List<MultipartFile> images) throws IOException {
         Package newPackage = createPackage(request);
@@ -105,80 +111,33 @@ public class PackageService implements IPackageService {
 
     // Create a Stay entity from request.
     private Package createPackage(PackageCreateRequest request) {
-        Package newPackage = Package.builder()
-                .sourceId(request.getSourceId())
-                .destinationId(request.getDestinationId())
-                .agentId(request.getAgentId())
-                .packageName(request.getPackageName())
-                .packageCreatedDate(Instant.now())
-                .tripStartDate(request.getTripStartDate())
-                .tripEndDate(request.getTripEndDate())
-                .isCustomizable(request.getIsCustomizable())
-                .build();
-
+        Package newPackage = Package.createPackageFromRequest(request);
         return packageRepository.save(newPackage);
     }
 
 
     // Create a Stay entity from request.
     private void createStay(StayRequest request, Long packageId) {
-        Stay stay = Stay.builder()
-                .priceStartDate(Instant.now())
-                .priceExpiryDate(Utils.getEndOfTime(Instant.now()))
-                .price(request.getPrice())
-                .resortMasterId(request.getResortId())
-                .suiteMasterId(request.getSuiteId())
-                .isCustomizable(request.getIsCustomizable())
-                .packageId(packageId)
-                .build();
-
+        Stay stay = Stay.createStayFromRequest(request, packageId);
         stayRepository.save(stay);
     }
 
     // Create a tour guide entity from request.
     private void createTourGuide(TourGuideRequest request, Long packageId) {
-        TourGuide tourGuide = TourGuide.builder()
-                .guideMasterId(request.getGuideId())
-                .priceStartDate(Instant.now())
-                .priceExpiryDate(Utils.getEndOfTime(Instant.now()))
-                .price(request.getPrice())
-                .isCustomizable(request.getIsCustomizable())
-                .packageId(packageId)
-                .build();
-
+        TourGuide tourGuide = TourGuide.createTourGuide(request, packageId);
         tourGuideRepository.save(tourGuide);
     }
 
     // Create a transportation entity from request.
     private void createTransportation(TransportationRequest request, Long packageId) {
-        Transportation transportation = Transportation.builder()
-                .modeMasterId(request.getModeId())
-                .priceStartDate(Instant.now())
-                .priceExpiryDate(Utils.getEndOfTime(Instant.now()))
-                .price(request.getPrice())
-                .isCustomizable(request.getIsCustomizable())
-                .packageId(packageId)
-                .build();
-
+        Transportation transportation = Transportation.createTransportation(request, packageId);
         transportationRepository.save(transportation);
     }
 
     // Create activities from request.
     private void createActivities(List<ActivityRequest> activityRequests, Long packageId) {
-
-        for (ActivityRequest activityRequest : activityRequests) {
-            Activity activity = Activity.builder()
-                    .activityMasterId(activityRequest.getActivityMasterId())
-                    .activityDate(activityRequest.getActivityDate())
-                    .isCustomizable(activityRequest.getIsCustomizable())
-                    .priceStartDate(Instant.now())
-                    .priceExpiryDate(Utils.getEndOfTime(Instant.now()))
-                    .price(activityRequest.getPrice())
-                    .packageId(packageId)
-                    .build();
-
-            activityRepository.save(activity);
-        }
+        List<Activity> activities = Activity.getActivities(activityRequests, packageId);
+        activityRepository.saveAll(activities);
     }
 }
 

@@ -42,11 +42,12 @@ public class BookingLineItem {
      * SRP is followed and moved this method here in BookingLineItem class instead of keeping it in service class.
      */
     public static BookingLineItem getBookingLineItem(BookingItemRequest request, Booking booking, Double price) {
-        return BookingLineItem.builder()
-                .booking(booking)
-                .bookedItem(request.getItemName())
-                .bookedItemId(request.getItemId())
-                .price(price)
-                .build();
+        BookingLineItem bookingLineItem = new BookingLineItem();
+        bookingLineItem.setBooking(booking);
+        bookingLineItem.setBookedItem(request.getItemName());
+        bookingLineItem.setBookedItemId(request.getItemId());
+        bookingLineItem.setPrice(price);
+
+        return bookingLineItem;
     }
 }
