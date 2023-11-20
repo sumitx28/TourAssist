@@ -1,14 +1,12 @@
 package com.group15.tourassist.service;
 
 import com.group15.tourassist.core.config.service.JwtService;
-import com.group15.tourassist.core.enums.BookedItem;
 import com.group15.tourassist.dto.ValidateDto;
-import com.group15.tourassist.entity.Activity;
 import com.group15.tourassist.repository.IAgentRepository;
 import com.group15.tourassist.repository.IAppUserRepository;
 import com.group15.tourassist.repository.ICustomerRepository;
 import com.group15.tourassist.repository.TokenRepository;
-import com.group15.tourassist.request.BookingItemRequest;
+import com.group15.tourassist.request.AgentRegistrationRequest;
 import com.group15.tourassist.request.CustomerRegistrationRequest;
 import com.group15.tourassist.response.AuthenticationResponse;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,7 +19,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.Instant;
-import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -51,14 +48,19 @@ class AuthenticationServiceTest {
     @Mock
     private TokenRepository tokenRepository;
 
+    @Mock
+    private IAgentRepository agentRepository;
 
     private CustomerRegistrationRequest customerRegistrationRequest;
+
+    private AgentRegistrationRequest agentRegistrationRequest;
 
     private ValidateDto validateDto;
 
     @BeforeEach
     public void setup() {
         customerRegistrationRequest = new CustomerRegistrationRequest("r.patel@dal.ca", "abcd", "Raj", "Patel", "7826645647", Instant.parse("2023-08-01T00:00:00Z"), "India");
+        agentRegistrationRequest = new AgentRegistrationRequest("agent@dal.ca", "abcd", "Temple Travels", "8343454547", 20, "ahdf-dfggs-asdfs-sds", "");
         validateDto = new ValidateDto(HttpStatus.OK, "SUCCESS", "");
     }
     @Test
@@ -76,5 +78,14 @@ class AuthenticationServiceTest {
 
     @Test
     void registerAgent() {
+        // Arrange
+        when(validatorService.validateAgentRegistration(agentRegistrationRequest)).thenReturn(validateDto);
+        when(jwtService.generateToken(any())).thenReturn("token");
+
+        // Act
+        AuthenticationResponse authenticationResponse = authenticationService.registerAgent(agentRegistrationRequest);
+
+        // Assert
+        assertNotNull(authenticationResponse.getAccessToken());
     }
 }
