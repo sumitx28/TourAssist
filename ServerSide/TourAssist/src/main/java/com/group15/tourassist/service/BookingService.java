@@ -118,7 +118,10 @@ public class BookingService implements IBookingService {
      */
     @Override
     public void updateBookingStatus(Long bookingId, TransactionStatus transactionStatus) {
-        BookingStatus bookingStatus = transactionStatus.equals(TransactionStatus.SUCCESS) ? BookingStatus.CONFIRM : BookingStatus.PENDING;
+        BookingStatus bookingStatus = BookingStatus.PENDING;
+        if(transactionStatus.equals(TransactionStatus.SUCCESS)) {
+            bookingStatus = BookingStatus.CONFIRM;
+        }
         bookingRepository.updateBookingStatus(bookingId, bookingStatus.toString());
     }
 

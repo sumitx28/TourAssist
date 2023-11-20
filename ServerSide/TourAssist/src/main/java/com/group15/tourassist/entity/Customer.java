@@ -1,6 +1,7 @@
 package com.group15.tourassist.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.group15.tourassist.request.CustomerRegistrationRequest;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -41,5 +42,16 @@ public class Customer implements Serializable {
     @Column(name = "country")
     private String country;
 
+
+    public static Customer getCustomerForRegister(CustomerRegistrationRequest request, AppUser appUser) {
+        Customer customer = new Customer();
+        customer.setAppUser(appUser);
+        customer.setFirstName(request.getFirstName());
+        customer.setLastName(request.getLastName());
+        customer.setDateOfBirth(request.getDateOfBirth());
+        customer.setCountry(request.getCountry());
+        customer.setMobile(request.getMobile());
+        return customer;
+    }
 }
 

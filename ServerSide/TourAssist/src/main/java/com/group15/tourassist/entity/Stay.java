@@ -1,5 +1,7 @@
 package com.group15.tourassist.entity;
 
+import com.group15.tourassist.core.utils.Utils;
+import com.group15.tourassist.request.StayRequest;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -40,4 +42,17 @@ public class Stay implements Serializable {
 
     @Column(name = "is_customizable")
     private Boolean isCustomizable;
+
+    public static Stay createStayFromRequest(StayRequest request, Long packageId) {
+        Stay stay = new Stay();
+        stay.setPriceStartDate(Instant.now());
+        stay.setPriceExpiryDate(Utils.getEndOfTime(Instant.now()));
+        stay.setPrice(request.getPrice());
+        stay.setResortMasterId(request.getResortId());
+        stay.setSuiteMasterId(request.getSuiteId());
+        stay.setIsCustomizable(request.getIsCustomizable());
+        stay.setPackageId(packageId);
+
+        return stay;
+    }
 }

@@ -1,5 +1,8 @@
 package com.group15.tourassist.core.utils;
 
+/**
+ * This class exposes all the named constants.
+ */
 public class ConstantUtils {
 
     public static final String appUserId = "appUserId";
@@ -9,6 +12,8 @@ public class ConstantUtils {
     public static final String AUTHORIZATION = "Authorization";
 
     public static final String BEARER = "BEARER ";
+
+    public static final Integer BEARER_PREFIX_LENGTH = 7;
 
     public static final String SUCCESS = "SUCCESS";
 
@@ -29,20 +34,14 @@ public class ConstantUtils {
     public static final String CUSTOMIZABLE = "isCustomizable";
     public static final String CUSTOMIZABLE_TRUE = "1";
     public static final String filterSortDelimiter = ":";
-    public static String priceRangeDelimiter = "\\#";
-
     public static final String BOOKING_EMAIL_TEMPLATE = "Thank you for booking %s. Your booking is %s. Below are the details:\n" +
             "Booking Id: %s\nPayment Id: %s\nTrip duration: %s - %s";
-
     public static final String CLOUD_NAME = "cloud_name";
-
     public static final String CLOUD_API_KEY = "api_key";
-
     public static final String CLOUD_API_SECRET = "api_secret";
-
     public static final String CLOUD_SECURE = "secure";
-
     public static final String KEY_URL = "url";
+    public static String priceRangeDelimiter = "\\#";
 
 
 }
