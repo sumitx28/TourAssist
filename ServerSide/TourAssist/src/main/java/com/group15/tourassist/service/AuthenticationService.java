@@ -51,10 +51,15 @@ public class AuthenticationService implements IAuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final ICustomerRepository ICustomerRepository;
     private final IAgentRepository IAgentRepository;
+    private final IValidatorService validatorService;
 
+    /**
+     * @param request Customer registration request
+     * @return Auth response.
+     */
     @Transactional
     public AuthenticationResponse registerCustomer(CustomerRegistrationRequest request) {
-        ValidateDto validateDto = validateCustomerRegistration(request);
+        ValidateDto validateDto = validatorService.validateCustomerRegistration(request);
         if (ConstantUtils.FAILED.equals(validateDto.getStatus())) {
             return AuthenticationResponse.builder()
                     .accessToken(null)
@@ -75,81 +80,23 @@ public class AuthenticationService implements IAuthenticationService {
                 .build();
     }
 
-    private ValidateDto validateCustomerRegistration(CustomerRegistrationRequest request) {
-        ValidateDto validateDto = ValidateDto.builder()
-                .status(ConstantUtils.SUCCESS)
-                .httpStatus(HttpStatus.OK)
-                .build();
-
-        if (!Utils.validateEmail(request.getEmail())) {
-            validateDto.setStatus(ConstantUtils.FAILED);
-            validateDto.setHttpStatus(HttpStatus.INTERNAL_SERVER_ERROR);
-            validateDto.setMessage("Invalid Email");
-            return validateDto;
-        }
-
-        if(!Utils.validatePassword(request.getPassword())) {
-            validateDto.setStatus(ConstantUtils.FAILED);
-            validateDto.setHttpStatus(HttpStatus.INTERNAL_SERVER_ERROR);
-            validateDto.setMessage("Invalid Password");
-            return validateDto;
-        }
-
-        if(!Utils.validateMobile(request.getMobile())) {
-            validateDto.setStatus(ConstantUtils.FAILED);
-            validateDto.setHttpStatus(HttpStatus.INTERNAL_SERVER_ERROR);
-            validateDto.setMessage("Invalid Mobile");
-            return validateDto;
-        }
-
-        if(!Utils.validateName(request.getFirstName())) {
-            validateDto.setStatus(ConstantUtils.FAILED);
-            validateDto.setHttpStatus(HttpStatus.INTERNAL_SERVER_ERROR);
-            validateDto.setMessage("Invalid First Name");
-            return validateDto;
-        }
-
-        if(!Utils.validateName(request.getLastName())) {
-            validateDto.setStatus(ConstantUtils.FAILED);
-            validateDto.setHttpStatus(HttpStatus.INTERNAL_SERVER_ERROR);
-            validateDto.setMessage("Invalid Last Name");
-            return validateDto;
-        }
-
-        if(appUserRepository.findByEmail(request.getEmail()).isPresent()) {
-            validateDto.setStatus(ConstantUtils.FAILED);
-            validateDto.setHttpStatus(HttpStatus.GONE);
-            validateDto.setMessage("User already exists");
-            return validateDto;
-        }
-
-        return validateDto;
-    }
-
+    /**
+     * @param request Agent registration request object
+     * @return Auth response
+     */
     @Transactional
     public AuthenticationResponse registerAgent(AgentRegistrationRequest request) {
-        ValidateDto validateDto = validateAgentRegistration(request);
+        ValidateDto validateDto = validatorService.validateAgentRegistration(request);
         if (ConstantUtils.FAILED.equals(validateDto.getStatus())) {
             return AuthenticationResponse.builder()
                     .accessToken(null)
                     .build();
         }
 
-        AppUser appUser = AppUser.builder()
-                .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .role(Role.AGENT)
-                .build();
+        AppUser appUser = AppUser.getAppUserForRegister(request.getEmail(), passwordEncoder.encode(request.getPassword()), Role.AGENT);
         appUser = appUserRepository.save(appUser);
 
-        Agent agent = Agent.builder()
-                .companyName(request.getCompanyName())
-                .employeeCount(request.getEmployeeCount())
-                .mobile(request.getMobile())
-                .verificationId(request.getVerificationId())
-                .verificationDocLink(request.getVerificationDocLink())
-                .appUser(appUser)
-                .build();
+        Agent agent = Agent.getAgentForRegister(request, appUser);
         IAgentRepository.save(agent);
 
         var jwtToken = jwtService.generateToken(appUser);
@@ -158,57 +105,6 @@ public class AuthenticationService implements IAuthenticationService {
         return AuthenticationResponse.builder()
                 .accessToken(jwtToken)
                 .build();
-    }
-
-    private ValidateDto validateAgentRegistration(AgentRegistrationRequest request) {
-        ValidateDto validateDto = ValidateDto.builder()
-                .status(ConstantUtils.SUCCESS)
-                .httpStatus(HttpStatus.OK)
-                .build();
-
-        if (!Utils.validateEmail(request.getEmail())) {
-            validateDto.setStatus(ConstantUtils.FAILED);
-            validateDto.setHttpStatus(HttpStatus.INTERNAL_SERVER_ERROR);
-            validateDto.setMessage("Invalid Email");
-            return validateDto;
-        }
-
-        if(!Utils.validatePassword(request.getPassword())) {
-            validateDto.setStatus(ConstantUtils.FAILED);
-            validateDto.setHttpStatus(HttpStatus.INTERNAL_SERVER_ERROR);
-            validateDto.setMessage("Invalid Password");
-            return validateDto;
-        }
-
-        if(StringUtils.isEmpty(request.getCompanyName())) {
-            validateDto.setStatus(ConstantUtils.FAILED);
-            validateDto.setHttpStatus(HttpStatus.INTERNAL_SERVER_ERROR);
-            validateDto.setMessage("Invalid Company Name");
-            return validateDto;
-        }
-
-        if(StringUtils.isEmpty(request.getVerificationId())) {
-            validateDto.setStatus(ConstantUtils.FAILED);
-            validateDto.setHttpStatus(HttpStatus.INTERNAL_SERVER_ERROR);
-            validateDto.setMessage("Invalid verification id");
-            return validateDto;
-        }
-
-        if(!Utils.validateMobile(request.getMobile())) {
-            validateDto.setStatus(ConstantUtils.FAILED);
-            validateDto.setHttpStatus(HttpStatus.INTERNAL_SERVER_ERROR);
-            validateDto.setMessage("Invalid Mobile");
-            return validateDto;
-        }
-
-        if(appUserRepository.findByEmail(request.getEmail()).isPresent()) {
-            validateDto.setStatus(ConstantUtils.FAILED);
-            validateDto.setHttpStatus(HttpStatus.GONE);
-            validateDto.setMessage("User already exists");
-            return validateDto;
-        }
-
-        return validateDto;
     }
 
 
@@ -253,9 +149,6 @@ public class AuthenticationService implements IAuthenticationService {
                 .build();
         tokenRepository.save(token);
     }
-
-
-
 
     @Override
     public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
