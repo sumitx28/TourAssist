@@ -261,25 +261,13 @@ public class BookingService implements IBookingService {
             BookingResponse bookingResponse= new BookingResponse();
             bookingResponse.setId(booking.getId());
             bookingResponse.setPackageD(packageEntityToDto.packageEntityToDto(packageRepository.findById(booking.getPackageId()).get()));
-            log.info("completed package");
-            log.info(packageRepository.findById(booking.getPackageId()).get().toString());
             bookingResponse.setCustomer(customerEntityToDto.customerEntityToDto(customerRepository.findById(booking.getCustomerId()).get()));
-            log.info("completed customer");
-
             bookingResponse.setAgent(agentEntityToDto.agentEntityToDto(agentRepository.findById(booking.getAgentId()).get()));
-            log.info("3");
-
             bookingResponse.setBookingDate(booking.getBookingDate());
-            log.info("4");
-
             bookingResponse.setTotalPrice(booking.getTotalPrice());
-            log.info("5");
-
             bookingResponse.setBookingStatus(booking.getBookingStatus());
-            log.info("6");
             response.add(bookingResponse);
         }
-        log.info(response.toString());
         return response;
     }
 
