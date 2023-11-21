@@ -1,28 +1,31 @@
 package com.group15.tourassist.service;
 
-import com.group15.tourassist.core.enums.BookedItem;
-import com.group15.tourassist.core.enums.BookingStatus;
-import com.group15.tourassist.core.enums.TransactionStatus;
-import com.group15.tourassist.entity.Booking;
-import com.group15.tourassist.entity.Customer;
-import com.group15.tourassist.entity.Guest;
-import com.group15.tourassist.repository.IBookingRepository;
-import com.group15.tourassist.repository.ICustomerRepository;
-import com.group15.tourassist.repository.IGuestRepository;
-import com.group15.tourassist.repository.IPackageRepository;
+import com.group15.tourassist.core.enums.*;
+import com.group15.tourassist.dto.*;
+import com.group15.tourassist.entity.*;
+import com.group15.tourassist.entity.Package;
+import com.group15.tourassist.entityToDto.AgentEntityToDto;
+import com.group15.tourassist.entityToDto.CustomerEntityToDto;
+import com.group15.tourassist.entityToDto.PackageEntityToDto;
+import com.group15.tourassist.repository.*;
 import com.group15.tourassist.request.BookingItemRequest;
 import com.group15.tourassist.request.BookingRequest;
 import com.group15.tourassist.response.BookingDetailsWebResponse;
+import com.group15.tourassist.response.BookingResponse;
+import com.group15.tourassist.response.CustomerDetailsBookedByAgentIDResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 
+import java.sql.Date;
 import java.time.Instant;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -52,6 +55,18 @@ class BookingServiceTest {
 
     @Mock
     private IPackageRepository packageRepository;
+
+    @Mock
+    private IAgentRepository agentRepository;
+
+    @Mock
+    private AgentEntityToDto agentEntityToDto;
+
+    @Mock
+    private PackageEntityToDto packageEntityToDto;
+
+    @Mock
+    private CustomerEntityToDto customerEntityToDto;
 
     private Booking confirmBooking;
 
@@ -148,4 +163,90 @@ class BookingServiceTest {
         verify(customerRepository, times(1)).getCustomerByAppUserId(appUserId);
         verify(bookingRepository, times(1)).getBookingsByCustomerId(customer.getId());
     }
+
+    @Test
+    void testGetCustomersBookedByAgentID() {
+        Long agentId = 1L;
+        Booking booking1 = Booking.builder()
+                .packageId(1L)
+                .customerId(2L)
+                .agentId(3L)
+                .bookingDate(Instant.now())
+                .totalPrice(150.0)
+                .bookingStatus(BookingStatus.CONFIRM)
+                .build();
+
+        Booking booking2 = Booking.builder()
+                .packageId(1L)
+                .customerId(2L)
+                .agentId(3L)
+                .bookingDate(Instant.now())
+                .totalPrice(250.0)
+                .bookingStatus(BookingStatus.CONFIRM)
+                .build();
+
+        Token token1 = Token.builder()
+                .token("exampleToken123")
+                .tokenType(TokenType.BEARER)
+                .isRevoked(false)
+                .isExpired(false)
+                .build();
+
+        Token token2 = Token.builder()
+                .token("exampleToken1234")
+                .tokenType(TokenType.BEARER)
+                .isRevoked(false)
+                .isExpired(false)
+                .build();
+        AppUser appUser1 = AppUser.builder()
+                .email("user@example.com")
+                .role(Role.CUSTOMER)
+                .password("password123")
+                .tokens(List.of(token1))
+                .build();
+
+        AppUser appUser2 = AppUser.builder()
+                .email("user1@example.com")
+                .role(Role.CUSTOMER)
+                .password("password1234")
+                .tokens(List.of(token1))
+                .build();
+
+        Agent agent1 = Agent.builder()
+                .appUser(appUser1)
+                .companyName("ABC Company")
+                .mobile("1234567890")
+                .employeeCount(10)
+                .verificationId("ABC123")
+                .verificationDocLink("https://example.com/doc.pdf")
+                .build();
+
+        Customer customer1 = Customer.builder()
+                .appUser(appUser2)
+                .firstName("John")
+                .lastName("Doe")
+                .dateOfBirth(Instant.parse("1990-01-01T00:00:00Z"))
+                .country("USA")
+                .mobile("1234567890")
+                .build();
+
+        AgentDetailsDTO agentDetailsDTO1 = AgentDetailsDTO.builder()
+                .agentId(1L) // Replace with a valid agent ID
+                .companyName("ABC Company") // Replace with a valid company name
+                .mobile("1234567890") // Replace with a valid mobile number
+                .build();
+
+
+        List<Booking> bookings = List.of(booking1, booking2);
+
+        Mockito.when(bookingRepository.getCustomersBookedByAgentID(anyLong())).thenReturn(bookings);
+        Mockito.when(agentRepository.findById(anyLong())).thenReturn(Optional.of(agent1));
+        Mockito.when(customerRepository.findById(anyLong())).thenReturn(Optional.of(customer1));
+        Mockito.when(agentEntityToDto.agentEntityToDto(Mockito.any())).thenReturn(agentDetailsDTO1);
+
+        List<CustomerDetailsBookedByAgentIDResponse> result = bookingService.getCustomersBookedByAgentID(agentId);
+
+        assertEquals(2, result.size());
+    }
+
 }
