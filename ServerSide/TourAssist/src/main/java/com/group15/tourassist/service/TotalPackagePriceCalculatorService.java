@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class TotalPackagePriceCalculatorService implements ITotalPackagePriceCalculatorService {
+public class TotalPackagePriceCalculatorService implements IPackagePriceCalculatorService {
 
     private final ITransportationRepository transportationRepository;
     private final IStayRepository stayRepository;
