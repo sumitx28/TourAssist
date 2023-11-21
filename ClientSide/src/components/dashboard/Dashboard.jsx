@@ -23,6 +23,8 @@ import Tooltip from '@mui/material/Tooltip';
 import Avatar from '@mui/material/Avatar';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import { Button } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const drawerWidth = 240;
 
@@ -70,7 +72,16 @@ const Drawer = styled(MuiDrawer, {
   },
 }));
 
-const defaultTheme = createTheme();
+const defaultTheme = createTheme({
+  palette: {
+    primary: {
+      main: "#000000", // Black
+    },
+    secondary: {
+      main: "#808080", // Grey
+    },
+  },
+});
 
 export default function Dashboard({ title, Component }) {
   const [open, setOpen] = React.useState(true);
@@ -91,8 +102,15 @@ export default function Dashboard({ title, Component }) {
     navigate("/");
   };
   
+  const navigate = useNavigate();
+
   const toggleDrawer = () => {
     setOpen(!open);
+  };
+
+  const logoutUser = () => {
+    localStorage.removeItem("authToken");
+    navigate("/");
   };
 
   return (
@@ -127,8 +145,10 @@ export default function Dashboard({ title, Component }) {
               {title}
             </Typography>
             <IconButton color="inherit">
-              <Badge badgeContent={4} color="secondary">
-                <NotificationsIcon />
+              <Badge color="secondary">
+                <Typography textAlign="center" onClick={logoutUser}>
+                  Logout
+                </Typography>
               </Badge>
             </IconButton>
           <Box sx={{ flexGrow: 0 }}>

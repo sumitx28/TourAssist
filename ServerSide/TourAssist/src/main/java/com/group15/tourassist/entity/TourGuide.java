@@ -1,5 +1,7 @@
 package com.group15.tourassist.entity;
 
+import com.group15.tourassist.core.utils.Utils;
+import com.group15.tourassist.request.TourGuideRequest;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -39,4 +41,16 @@ public class TourGuide implements Serializable {
     @Column(name = "is_customizable")
     private Boolean isCustomizable;
 
+    public static TourGuide createTourGuide(TourGuideRequest request, Long packageId) {
+        TourGuide tourGuide = new TourGuide();
+        tourGuide.setGuideMasterId(request.getGuideId());
+        tourGuide.setPriceStartDate(Instant.now());
+        tourGuide.setPriceExpiryDate(Utils.getEndOfTime(Instant.now()));
+        tourGuide.setPrice(request.getPrice());
+        tourGuide.setIsCustomizable(request.getIsCustomizable());
+        tourGuide.setPackageId(packageId);
+
+
+        return tourGuide;
+    }
 }

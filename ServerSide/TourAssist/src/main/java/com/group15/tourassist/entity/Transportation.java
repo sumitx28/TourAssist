@@ -1,5 +1,7 @@
 package com.group15.tourassist.entity;
 
+import com.group15.tourassist.core.utils.Utils;
+import com.group15.tourassist.request.TransportationRequest;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -38,5 +40,17 @@ public class Transportation implements Serializable {
 
     @Column(name = "is_customizable")
     private Boolean isCustomizable;
+
+    public static Transportation createTransportation(TransportationRequest request, Long packageId) {
+        Transportation transportation = new Transportation();
+        transportation.setModeMasterId(request.getModeId());
+        transportation.setPriceStartDate(Instant.now());
+        transportation.setPriceExpiryDate(Utils.getEndOfTime(Instant.now()));
+        transportation.setPrice(request.getPrice());
+        transportation.setIsCustomizable(request.getIsCustomizable());
+        transportation.setPackageId(packageId);
+
+        return transportation;
+    }
 
 }

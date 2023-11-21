@@ -1,6 +1,5 @@
 package com.group15.tourassist.entity;
 
-import com.group15.tourassist.core.enums.BookedItem;
 import com.group15.tourassist.core.enums.TransactionStatus;
 import com.group15.tourassist.request.PaymentRequest;
 import jakarta.persistence.*;
@@ -49,13 +48,14 @@ public class PaymentTransaction {
      * @return PaymentTransaction entity
      */
     public static PaymentTransaction getPaymentByRequest(PaymentRequest request, Booking booking) {
-        return PaymentTransaction.builder()
-                .booking(booking)
-                .paymentType(request.getPaymentType())
-                .transactionId(request.getTransactionId())
-                .price(request.getPrice())
-                .transactionDate(Instant.now())
-                .transactionStatus(request.getTransactionStatus())
-                .build();
+        PaymentTransaction paymentTransaction = new PaymentTransaction();
+        paymentTransaction.setBooking(booking);
+        paymentTransaction.setPaymentType(request.getPaymentType());
+        paymentTransaction.setTransactionId(request.getTransactionId());
+        paymentTransaction.setPrice(request.getPrice());
+        paymentTransaction.setTransactionDate(Instant.now());
+        paymentTransaction.setTransactionStatus(request.getTransactionStatus());
+
+        return paymentTransaction;
     }
 }
