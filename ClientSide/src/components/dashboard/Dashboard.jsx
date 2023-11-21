@@ -24,7 +24,6 @@ import Avatar from '@mui/material/Avatar';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { Button } from "@mui/material";
-import { useNavigate } from "react-router-dom";
 
 const drawerWidth = 240;
 
@@ -101,16 +100,9 @@ export default function Dashboard({ title, Component }) {
     localStorage.removeItem("authToken");
     navigate("/");
   };
-  
-  const navigate = useNavigate();
 
   const toggleDrawer = () => {
     setOpen(!open);
-  };
-
-  const logoutUser = () => {
-    localStorage.removeItem("authToken");
-    navigate("/");
   };
 
   return (
