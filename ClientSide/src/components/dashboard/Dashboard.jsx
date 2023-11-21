@@ -18,13 +18,12 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import { mainListItems } from "./listItems";
 import Copyright from "../commons/Copyright";
-import { useNavigate } from 'react-router-dom';
-import Tooltip from '@mui/material/Tooltip';
-import Avatar from '@mui/material/Avatar';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import Tooltip from "@mui/material/Tooltip";
+import Avatar from "@mui/material/Avatar";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import { Button } from "@mui/material";
 
 const drawerWidth = 240;
 
@@ -101,16 +100,9 @@ export default function Dashboard({ title, Component }) {
     localStorage.removeItem("authToken");
     navigate("/");
   };
-  
-  const navigate = useNavigate();
 
   const toggleDrawer = () => {
     setOpen(!open);
-  };
-
-  const logoutUser = () => {
-    localStorage.removeItem("authToken");
-    navigate("/");
   };
 
   return (
@@ -151,46 +143,46 @@ export default function Dashboard({ title, Component }) {
                 </Typography>
               </Badge>
             </IconButton>
-          <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Account settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="User Avatar" src="/static/images/avatar/2.jpg" />
-              </IconButton>
-            </Tooltip>
-            <Menu
-              sx={{ mt: "45px" }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              <MenuItem
-                onClick={() => {
-                  navigate('/userprofile');
-                  handleCloseUserMenu();
+            <Box sx={{ flexGrow: 0 }}>
+              <Tooltip title="Account settings">
+                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                  <Avatar alt="User Avatar" src="/static/images/avatar/2.jpg" />
+                </IconButton>
+              </Tooltip>
+              <Menu
+                sx={{ mt: "45px" }}
+                id="menu-appbar"
+                anchorEl={anchorElUser}
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
                 }}
-              >
-                <Typography textAlign="center">Profile</Typography>
-              </MenuItem>
-              <MenuItem
-                onClick={() => {
-                  logoutUser();
-                  handleCloseUserMenu();
+                keepMounted
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
                 }}
+                open={Boolean(anchorElUser)}
+                onClose={handleCloseUserMenu}
               >
-                <Typography textAlign="center">Logout</Typography>
-              </MenuItem>
-            </Menu>
-          </Box>
+                <MenuItem
+                  onClick={() => {
+                    navigate("/userprofile");
+                    handleCloseUserMenu();
+                  }}
+                >
+                  <Typography textAlign="center">Profile</Typography>
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    logoutUser();
+                    handleCloseUserMenu();
+                  }}
+                >
+                  <Typography textAlign="center">Logout</Typography>
+                </MenuItem>
+              </Menu>
+            </Box>
           </Toolbar>
         </AppBar>
         <Drawer variant="permanent" open={open}>

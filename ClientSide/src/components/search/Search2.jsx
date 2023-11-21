@@ -1,31 +1,31 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useState } from "react";
+import axios from "axios";
 
 const Search = () => {
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [sourceCity, setSourceCity] = useState('');
-  const [destinationCity, setDestinationCity] = useState('');
-  const [packageStartDate, setPackageStartDate] = useState('');
-  const [packageEndDate, setPackageEndDate] = useState('');
-  const [numberOfGuest, setNumberOfGuest] = useState('');
-  const [priceRange, setPriceRange] = useState('');
-  const [isCustomizable, setIsCustomizable] = useState('');
-  const [packageName, setPackageName] = useState('');
-  const [packageRating, setPackageRating] = useState('');
-  const [sortBy, setSortBy] = useState('');
+  const [error, setError] = useState("");
+  const [sourceCity, setSourceCity] = useState("");
+  const [destinationCity, setDestinationCity] = useState("");
+  const [packageStartDate, setPackageStartDate] = useState("");
+  const [packageEndDate, setPackageEndDate] = useState("");
+  const [numberOfGuest, setNumberOfGuest] = useState("");
+  const [priceRange, setPriceRange] = useState("");
+  const [isCustomizable, setIsCustomizable] = useState("");
+  const [packageName, setPackageName] = useState("");
+  const [packageRating, setPackageRating] = useState("");
+  const [sortBy, setSortBy] = useState("");
 
   const authToken = localStorage.getItem("authToken");
   const headers = {
-    'Content-Type': 'application/json',
-    'Authorization': `Bearer ${authToken}`,
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${authToken}`,
   };
 
   const fetchTravelPackages = async () => {
     setLoading(true);
-    setError('');
-  
+    setError("");
+
     const dataPayload = {
       sourceCity,
       destinationCity,
@@ -33,34 +33,41 @@ const Search = () => {
       packageEndDate,
       numberOfGuest,
     };
-  
+
     const queryParams = new URLSearchParams();
-    if (sortBy) queryParams.append('sortBy', sortBy);
-    if (priceRange) queryParams.append('filterBy', `price:${priceRange}`);
-    if (isCustomizable) queryParams.append('filterBy', `isCustomizable:${isCustomizable}`);
-    if (packageName) queryParams.append('filterBy', `packageName:${packageName}`);
-    if (packageRating) queryParams.append('filterBy', `packageRating:${packageRating}`);
-  
+    if (sortBy) queryParams.append("sortBy", sortBy);
+    if (priceRange) queryParams.append("filterBy", `price:${priceRange}`);
+    if (isCustomizable)
+      queryParams.append("filterBy", `isCustomizable:${isCustomizable}`);
+    if (packageName)
+      queryParams.append("filterBy", `packageName:${packageName}`);
+    if (packageRating)
+      queryParams.append("filterBy", `packageRating:${packageRating}`);
+
     const url = `http://localhost:8080/api/v1/search/travel-packages?${queryParams.toString()}`;
-  
+
     try {
       const response = await axios.post(url, dataPayload, { headers });
       if (response.data && response.data.travelPackages) {
         setResults(response.data.travelPackages);
       } else {
-        setError('The response from the API does not have the expected structure.');
+        setError(
+          "The response from the API does not have the expected structure."
+        );
       }
     } catch (e) {
       setError(`Error: ${e.response ? e.response.data.message : e.message}`);
     } finally {
       setLoading(false);
-    }    
+    }
   };
 
   const handleSourceCityChange = (e) => setSourceCity(e.target.value);
   const handleDestinationCityChange = (e) => setDestinationCity(e.target.value);
-  const handlePackageStartDateChange = (e) => setPackageStartDate(e.target.value);
-  const handlePackageEndDateChange = (e) => setPackageEndDate(e.target.value);
+  const handlePackageStartDateChange = (e) =>
+    setPackageStartDate(new Date(e.target.value).toISOString());
+  const handlePackageEndDateChange = (e) =>
+    setPackageEndDate(new Date(e.target.value).toISOString());
   const handleNumberOfGuestChange = (e) => setNumberOfGuest(e.target.value);
   const handlePriceRangeChange = (e) => setPriceRange(e.target.value);
   const handleIsCustomizableChange = (e) => setIsCustomizable(e.target.value);
@@ -121,16 +128,20 @@ const Search = () => {
             className="border p-2 rounded-md"
           />
         </div>
-  
+
         <div className="flex justify-between items-center mt-4">
-          <select value={sortBy} onChange={handleSortByChange} className="border p-2 rounded-md">
+          <select
+            value={sortBy}
+            onChange={handleSortByChange}
+            className="border p-2 rounded-md"
+          >
             <option value="">Sort By</option>
             <option value="priceSort:ASC">Price - Low to High</option>
             <option value="priceSort:DESC">Price - High to Low</option>
             <option value="packageRating:ASC">Rating - Low to High</option>
             <option value="packageRating:DESC">Rating - High to Low</option>
           </select>
-  
+
           <button
             onClick={fetchTravelPackages}
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
@@ -138,26 +149,45 @@ const Search = () => {
             Search Packages
           </button>
         </div>
-        
+
         {/* Results section */}
         {loading && <p>Loading...</p>}
         {error && <p className="text-red-500">{error}</p>}
         <div className="mt-4">
           {console.log(results)}
-          {results.length > 0 && results.map((packageItem, index) => (
-            <div key={index} className="bg-gray-50 p-4 rounded-lg shadow-sm mb-4">
-              <h2 className="text-xl font-semibold">{packageItem.packageName}</h2>
-              <p className="text-gray-700">Price: ${packageItem.totalPackagePrice}</p>
-              <p className="text-gray-700">Start Date: {new Date(packageItem.tripStartDate).toLocaleDateString()}</p>
-              <p className="text-gray-700">End Date: {new Date(packageItem.tripEndDate).toLocaleDateString()}</p>
-              <p className="text-gray-700">Is Customizable: {packageItem.isPackageCustomizable ? 'Yes' : 'No'}</p>
-              <p className="text-gray-700">Agency: {packageItem.agentDetails.companyName}</p>
-            </div>
-          ))}
+          {results.length > 0 &&
+            results.map((packageItem, index) => (
+              <div
+                key={index}
+                className="bg-gray-50 p-4 rounded-lg shadow-sm mb-4"
+              >
+                <h2 className="text-xl font-semibold">
+                  {packageItem.packageName}
+                </h2>
+                <p className="text-gray-700">
+                  Price: ${packageItem.totalPackagePrice}
+                </p>
+                <p className="text-gray-700">
+                  Start Date:{" "}
+                  {new Date(packageItem.tripStartDate).toLocaleDateString()}
+                </p>
+                <p className="text-gray-700">
+                  End Date:{" "}
+                  {new Date(packageItem.tripEndDate).toLocaleDateString()}
+                </p>
+                <p className="text-gray-700">
+                  Is Customizable:{" "}
+                  {packageItem.isPackageCustomizable ? "Yes" : "No"}
+                </p>
+                <p className="text-gray-700">
+                  Agency: {packageItem.agentDetails.companyName}
+                </p>
+              </div>
+            ))}
         </div>
       </div>
     </div>
   );
-}
+};
 
 export default Search;
