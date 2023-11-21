@@ -16,14 +16,14 @@ import Paper from "@mui/material/Paper";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import NotificationsIcon from "@mui/icons-material/Notifications";
-import { mainListItems } from "../dashboard/listItems";
-import Copyright from "../commons/Copyright";
+import { mainListItems } from "./dashboard/listItems";
+import Copyright from "./commons/Copyright";
 import { useNavigate } from 'react-router-dom';
 import Tooltip from '@mui/material/Tooltip';
 import Avatar from '@mui/material/Avatar';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import Search from "./Search2";
+import UserProfile from "../components/UserProfile";
 
 const drawerWidth = 240;
 
@@ -72,15 +72,15 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 const defaultTheme = createTheme({
-  palette: {
-    primary: {
-      main: "#000000", // Black
+    palette: {
+      primary: {
+        main: "#000000", // Black
+      },
+      secondary: {
+        main: "#808080", // Grey
+      },
     },
-    secondary: {
-      main: "#808080", // Grey
-    },
-  },
-});
+  });
 
 export default function Dashboard({ title, Component }) {
   const [open, setOpen] = React.useState(true);
@@ -219,7 +219,7 @@ export default function Dashboard({ title, Component }) {
             <Grid container spacing={3}>
               <Grid item xs={12}>
                 <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
-                  <Search/>
+                  <UserProfile/>
                 </Paper>
               </Grid>
             </Grid>
