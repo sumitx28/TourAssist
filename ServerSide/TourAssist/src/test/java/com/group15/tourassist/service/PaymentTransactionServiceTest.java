@@ -64,7 +64,6 @@ class PaymentTransactionServiceTest {
         // Arrange
         when(bookingService.getBookingById(1L)).thenReturn(booking);
         when(packageRepository.findById(1L)).thenReturn(Optional.ofNullable(package1));
-        when(emailService.frameBookingEmail(any(), any(), any())).thenReturn(new String());
         when(paymentTransactionRepository.save(any())).thenReturn(paymentTransaction);
 
         // Act
