@@ -33,11 +33,20 @@ class EmailServiceTest {
     @BeforeEach
     public void setup() {
         booking = new Booking(1L, 1L, 2L, 3L, Instant.parse("2023-08-20T00:00:00Z"), 100D, BookingStatus.CONFIRM);
-        paymentTransaction = new PaymentTransaction(1L, "d8b349b0-80b3-11ee-b962-0242ac120002", booking, TransactionStatus.SUCCESS, 100D, "Credit Card", Instant.now());
         confirmPackage = new Package();
         confirmPackage.setPackageName("Test package");
         confirmPackage.setTripStartDate(Instant.parse("2023-08-25T00:00:00Z"));
         confirmPackage.setTripEndDate(Instant.parse("2023-08-30T00:00:00Z"));
+
+        paymentTransaction = PaymentTransaction.builder()
+                .id(1L)
+                .transactionId("d8b349b0-80b3-11ee-b962-0242ac120002")
+                .booking(booking)
+                .transactionStatus(TransactionStatus.SUCCESS)
+                .price(100D)
+                .paymentType("Credit Card")
+                .transactionDate(Instant.now())
+                .build();
     }
 
     @Test
