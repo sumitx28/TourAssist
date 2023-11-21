@@ -26,7 +26,7 @@ public class SearchPackageService implements ISearchPackageService {
     private final IPackageRepository packageRepository;
     private final IAgentService agentService;
     private final IPackageReviewRepository packageReviewRepository;
-    private final ITotalPackagePriceCalculatorService totalPackagePriceCalculatorService;
+    private final IPackagePriceCalculatorService packagePriceCalculatorService;
     private final IPackageFilterSortService packageFilterSortService;
     private final IPackageReviewService packageReviewService;
     Logger log = LoggerFactory.getLogger(SearchPackageService.class);
@@ -59,6 +59,14 @@ public class SearchPackageService implements ISearchPackageService {
     }
 
 
+    /**
+     * Retrieves and processes search results for travel packages based on customer search criteria.
+     *
+     * @param customerSearchPackageRequest The customer's search criteria.
+     * @param sortBy                       The sorting parameter for the search results.
+     * @param filterBy                     The filtering parameter for the search results.
+     * @return The web response containing the search results.
+     */
     @Override
     public SearchPackagesWebResponse getSearchTravelPackages(CustomerSearchPackageRequest customerSearchPackageRequest, String sortBy, String filterBy) {
         SearchPackagesWebResponse searchPackagesWebResponse = new SearchPackagesWebResponse();
@@ -96,11 +104,13 @@ public class SearchPackageService implements ISearchPackageService {
         searchTravelPackagesDTO.setPackageName(travelPackage.getPackageName());
         searchTravelPackagesDTO.setPackageCreatedDate(travelPackage.getPackageCreatedDate());
 
-        searchTravelPackagesDTO.setTotalPackagePrice(totalPackagePriceCalculatorService.getTotalPackagePrice(travelPackage.getId()));
+        Double totalPackagePrice = packagePriceCalculatorService.getTotalPackagePrice(travelPackage.getId());
+        searchTravelPackagesDTO.setTotalPackagePrice(totalPackagePrice);
         List<PackageReview> packageReviewList = packageReviewRepository.getPackageReviewByPackageId(travelPackage.getId());
 
         searchTravelPackagesDTO.setPackageReview(packageReviewList);
-        searchTravelPackagesDTO.setAveragePackageRatings(packageReviewService.calculateAveragePackageRatings(packageReviewList));
+        Double averagePackageRatings = packageReviewService.calculateAveragePackageRatings(packageReviewList);
+        searchTravelPackagesDTO.setAveragePackageRatings(averagePackageRatings);
 
         searchTravelPackagesDTO.setAgentDetails(agentDetailsDTO);
         searchTravelPackagesDTO.setIsPackageCustomizable(travelPackage.getIsCustomizable());
