@@ -173,7 +173,7 @@ class BookingServiceTest {
                 .agentId(3L)
                 .bookingDate(Instant.now())
                 .totalPrice(150.0)
-                .bookingStatus(BookingStatus.CONFIRMED)
+                .bookingStatus(BookingStatus.CONFIRM)
                 .build();
 
         Booking booking2 = Booking.builder()
@@ -182,7 +182,7 @@ class BookingServiceTest {
                 .agentId(3L)
                 .bookingDate(Instant.now())
                 .totalPrice(250.0)
-                .bookingStatus(BookingStatus.CONFIRMED)
+                .bookingStatus(BookingStatus.CONFIRM)
                 .build();
 
         Token token1 = Token.builder()
