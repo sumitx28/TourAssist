@@ -10,7 +10,8 @@ import AuthGuard from "./guards/AuthGuard";
 import CreatePackage from "./components/agent/CreatePackage";
 import UserProfile from "./components/UserProfile";
 import UserProfileDashboard from "./components/UserProfileDashboard";
-
+import AgentDashboard from "./components/agentdashboard/AgentDashboard";
+import AgentDashboard2 from "./components/agentdashboard/AgentDashboard2";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import PackageDetail from "./components/travel-package/PackageDetail";
 import Search from "./components/search/Search";
@@ -43,6 +44,7 @@ function App() {
                 <Search />
             }
           />
+          <Route path="/userprofile" element={<UserProfileDashboard />} />
           <Route
             path="/dashboard"
             element={
@@ -51,6 +53,8 @@ function App() {
               </AuthGuard>
             }
           />
+          <Route path="/agentbookings" element={<AgentDashboard />} />
+          <Route path="/customerdetails" element={<AgentDashboard2 />} />
           <Route
             path="/package/:id"
             element={

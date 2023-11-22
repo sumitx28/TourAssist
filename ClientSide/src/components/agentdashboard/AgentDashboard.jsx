@@ -16,15 +16,17 @@ import Paper from "@mui/material/Paper";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import NotificationsIcon from "@mui/icons-material/Notifications";
-import { mainListItems } from "./dashboard/listItems";
-import Copyright from "./commons/Copyright";
+import { mainListItems } from "../dashboard/listItems";
+import Copyright from "../commons/Copyright";
 import { useNavigate } from 'react-router-dom';
 import Tooltip from '@mui/material/Tooltip';
 import Avatar from '@mui/material/Avatar';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import UserProfile from "../components/UserProfile";
-import BookingDetails from "./BookingDetails";
+import CustomerDetails from "./CustomerDetails";
+import AmountEarned from "./AmountEarned";
+import PastBookings from "./PastBookings";
+import UpcomingAgentBookings from "./UpcomingBookings";
 
 const drawerWidth = 240;
 
@@ -220,8 +222,8 @@ export default function Dashboard({ title, Component }) {
             <Grid container spacing={3}>
               <Grid item xs={12}>
                 <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
-                  <UserProfile/>
-                  <BookingDetails/>
+                  <PastBookings/>
+                  <UpcomingAgentBookings/>
                 </Paper>
               </Grid>
             </Grid>
