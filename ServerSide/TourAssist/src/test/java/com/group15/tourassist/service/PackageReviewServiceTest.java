@@ -3,7 +3,9 @@ package com.group15.tourassist.service;
 import com.group15.tourassist.entity.PackageReview;
 import org.junit.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
@@ -12,14 +14,14 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@ExtendWith(MockitoExtension.class)
-class PackageReviewTest {
+@RunWith(MockitoJUnitRunner.class)
+public class PackageReviewServiceTest {
 
     @InjectMocks
     private PackageReviewServiceService reviewService;
 
     @Test
-    void testCalculateAveragePackageRatings() {
+    public void testCalculateAveragePackageRatings() {
         // Arrange
         List<PackageReview> packageReviewList = Arrays.asList(
                 createPackageReview(4),
@@ -38,7 +40,7 @@ class PackageReviewTest {
     }
 
     @Test
-    void testCalculateAveragePackageRatingsEmptyList() {
+    public void testCalculateAveragePackageRatingsEmptyList() {
         // Arrange
         List<PackageReview> packageReviewList = Collections.emptyList();
 
