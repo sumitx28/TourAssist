@@ -18,20 +18,12 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import { mainListItems } from "./listItems";
 import Copyright from "../commons/Copyright";
-<<<<<<< HEAD
-import { useNavigate } from 'react-router-dom';
-import Tooltip from '@mui/material/Tooltip';
-import Avatar from '@mui/material/Avatar';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-=======
 import { useNavigate } from "react-router-dom";
 import Tooltip from "@mui/material/Tooltip";
 import Avatar from "@mui/material/Avatar";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { Button } from "@mui/material";
->>>>>>> 17649ad56ce3462672473c460f7098b722bcdbce
 
 const drawerWidth = 240;
 
@@ -108,11 +100,6 @@ export default function Dashboard({ title, Component }) {
     localStorage.removeItem("authToken");
     navigate("/");
   };
-<<<<<<< HEAD
-  
-=======
-
->>>>>>> 17649ad56ce3462672473c460f7098b722bcdbce
   const toggleDrawer = () => {
     setOpen(!open);
   };
@@ -155,48 +142,6 @@ export default function Dashboard({ title, Component }) {
                 </Typography>
               </Badge>
             </IconButton>
-<<<<<<< HEAD
-          <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Account settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="User Avatar" src="/static/images/avatar/2.jpg" />
-              </IconButton>
-            </Tooltip>
-            <Menu
-              sx={{ mt: "45px" }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              <MenuItem
-                onClick={() => {
-                  navigate('/userprofile');
-                  handleCloseUserMenu();
-                }}
-              >
-                <Typography textAlign="center">Profile</Typography>
-              </MenuItem>
-              <MenuItem
-                onClick={() => {
-                  logoutUser();
-                  handleCloseUserMenu();
-                }}
-              >
-                <Typography textAlign="center">Logout</Typography>
-              </MenuItem>
-            </Menu>
-          </Box>
-=======
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Account settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
@@ -237,7 +182,6 @@ export default function Dashboard({ title, Component }) {
                 </MenuItem>
               </Menu>
             </Box>
->>>>>>> 17649ad56ce3462672473c460f7098b722bcdbce
           </Toolbar>
         </AppBar>
         <Drawer variant="permanent" open={open}>

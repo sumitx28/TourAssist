@@ -10,14 +10,10 @@ import AuthGuard from "./guards/AuthGuard";
 import CreatePackage from "./components/agent/CreatePackage";
 import UserProfile from "./components/UserProfile";
 import UserProfileDashboard from "./components/UserProfileDashboard";
-import UpcomingBookings from "./components/agent/Upcomingbookings";
 
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import PackageDetail from "./components/travel-package/PackageDetail";
 import Search from "./components/search/Search";
-import Search2 from "./components/search/Search2";
-import UserProfileDashboard from "./components/UserProfileDashboard";
-// import SearchResults from "./components/search/SearchResults";
 
 function App() {
   return (
@@ -45,23 +41,6 @@ function App() {
             path="/search"
             element={
                 <Search />
-            }
-          />
-          {/* <Route
-            path="/searchresults"
-            element={
-              <AuthGuard>
-                <SearchResults />
-              </AuthGuard>
-            }
-          /> */}
-          <Route
-            path="/userprofile"
-            element={
-              <AuthGuard>
-                <UserProfileDashboard />} />
-          <Route path="/upcomingbookings" element={<UpcomingBookingsDashboard />
-              </AuthGuard>
             }
           />
           <Route
