@@ -1,0 +1,73 @@
+/* Search container */
+.search-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 100vh;
+  background-color: #f0f0f0;
+  padding: 20px;
+}
+
+/* Search box */
+.search-box {
+  width: 100%;
+  max-width: 600px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+/* Search fields */
+.search-fields {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.search-input {
+  width: calc(25% - 10px);
+  margin-bottom: 10px;
+}
+
+.price-slider {
+  width: calc(100% - 20px);
+  margin-bottom: 10px;
+}
+
+.search-button {
+  width: calc(25% - 10px);
+}
+
+/* Results section */
+.search-results {
+  max-height: 400px;
+  overflow-y: auto;
+  width: 100%;
+  margin-top: 20px; /* Add margin-top to create space */
+}
+
+/* Result card */
+.result-card {
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.result-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.result-info {
+  margin-bottom: 5px;
+  color: #555;
+}
+
