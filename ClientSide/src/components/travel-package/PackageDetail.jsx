@@ -3,7 +3,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Container, Grid, Dialog } from "@mui/material";
 import PaymentDialog from "./PaymentDialog";
 import axios from "axios";
-import API_URL from "../../../config/config";
 import NavBar from "../commons/NavBar";
 import { jwtDecode } from "jwt-decode";
 import UserDetailsForm from "./UserDetailsForm";
@@ -13,6 +12,7 @@ import ErrorDialog from "./ErrorDialog";
 const PackageDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const API_URL = process.env.API_URL;
 
   const [finalPackage, setFinalPackage] = useState({
     pricePerPerson: 0,

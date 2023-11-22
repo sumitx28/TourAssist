@@ -1,8 +1,8 @@
 import axios from "axios";
-import API_URL from "../../config/config";
 
 const fetchData = async (path) => {
     const authToken = localStorage.getItem("authToken");
+    const API_URL = process.env.API_URL;
     const apiUrl = `${API_URL}${path}`;
       try {
         const headers = {
