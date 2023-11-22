@@ -18,19 +18,11 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import { mainListItems } from "./listItems";
 import Copyright from "../commons/Copyright";
-<<<<<<< HEAD
-import { useNavigate } from 'react-router-dom';
-import Tooltip from '@mui/material/Tooltip';
-import Avatar from '@mui/material/Avatar';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-=======
 import { useNavigate } from "react-router-dom";
 import Tooltip from "@mui/material/Tooltip";
 import Avatar from "@mui/material/Avatar";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
->>>>>>> 620612474d97c9fb663b677aff3a780f6ab2bd57
 import { Button } from "@mui/material";
 
 const drawerWidth = 240;
