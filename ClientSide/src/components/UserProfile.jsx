@@ -4,7 +4,7 @@ import {jwtDecode} from 'jwt-decode'
 
 export default function UserProfile() {
   const [editFields, setEditFields] = useState({
-    email: 'jane.doe@example.com',
+    email: 'abcd@dal.ca',
     mobileNumber: '123-456-7890'
   });
 
@@ -50,7 +50,6 @@ export default function UserProfile() {
   return (
     <div className="container mx-auto p-4">
       <div className="flex flex-wrap justify-center">
-        {/* ... existing avatar & name section ... */}
         <div className="w-full sm:w-1/2 md:w-3/4 p-2">
           <div className="bg-white shadow rounded-lg p-4">
             <h3 className="text-lg font-semibold mb-4">Personal Information</h3>
