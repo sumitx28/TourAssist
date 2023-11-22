@@ -24,6 +24,7 @@ import Tooltip from '@mui/material/Tooltip';
 import Avatar from '@mui/material/Avatar';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import BookingDetails from "./BookingDetails";
 
 const drawerWidth = 240;
 
@@ -71,7 +72,18 @@ const Drawer = styled(MuiDrawer, {
   },
 }));
 
-const defaultTheme = createTheme();
+const defaultTheme = createTheme(
+  {
+    palette: {
+      primary: {
+        main: "#000000", // Black
+      },
+      secondary: {
+        main: "#808080", // Grey
+      },
+    },
+  }
+);
 
 export default function Dashboard({ title, Component }) {
   const [open, setOpen] = React.useState(true);
@@ -209,6 +221,7 @@ export default function Dashboard({ title, Component }) {
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
           <Grid container spacing={3}>
                     <UserProfile />
+                    <BookingDetails />
           </Grid>
           <Copyright sx={{ pt: 4 }} />
           </Container>
