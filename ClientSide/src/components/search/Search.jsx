@@ -10,9 +10,31 @@ import {
   InputLabel,
   Slider,
   Typography,
+  CircularProgress,
+  Snackbar,
+  SnackbarContent,
 } from "@mui/material";
+import { styled } from "@mui/material/styles";
+import { green, red } from "@mui/material/colors";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import ErrorIcon from "@mui/icons-material/Error";
+
 import SearchResults from "./SearchResults";
 import "./Search.css";
+
+const StyledSnackbar = styled(Snackbar)({
+  bottom: "20px",
+  left: "20px",
+});
+
+const StyledSnackbarContent = styled(SnackbarContent)(({ theme, variant }) => ({
+  backgroundColor: variant === "success" ? green[600] : red[600],
+  color: theme.palette.getContrastText(
+    variant === "success" ? green[600] : red[600]
+  ),
+  display: "flex",
+  alignItems: "center",
+}));
 
 const Search = () => {
   const [results, setResults] = useState([]);
@@ -28,10 +50,25 @@ const Search = () => {
   const [packageName, setPackageName] = useState("");
   const [packageRating, setPackageRating] = useState("");
   const [sortBy, setSortBy] = useState("priceSort:ASC");
+  const [showSpinner, setShowSpinner] = useState(false);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarVariant, setSnackbarVariant] = useState("success");
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+
+  const showSnackbar = (variant, message) => {
+    setSnackbarVariant(variant);
+    setSnackbarMessage(message);
+    setSnackbarOpen(true);
+
+    setTimeout(() => {
+      setSnackbarOpen(false);
+    }, 2000);
+  };
 
   const fetchTravelPackages = async () => {
     setLoading(true);
     setError("");
+    setShowSpinner(true);
 
     const dataPayload = {
       sourceCity,
@@ -67,14 +104,22 @@ const Search = () => {
     try {
       const response = await axios.post(url, dataPayload, { headers });
       if (response.data && response.data.travelPackages) {
-        setResults(response.data.travelPackages);
+        setTimeout(() => {
+          setShowSpinner(false);
+          setResults(response.data.travelPackages);
+          if (response.data.travelPackages.length == 0) {
+            showSnackbar("error", "No Packages Found");
+          }
+        }, 2000);
       } else {
         setError(
           "The response from the API does not have the expected structure."
         );
+        setShowSpinner(false);
       }
     } catch (e) {
       setError(`Error: ${e.response ? e.response.data.message : e.message}`);
+      setShowSpinner(false);
     } finally {
       setLoading(false);
     }
@@ -85,10 +130,7 @@ const Search = () => {
   const handlePackageStartDateChange = (e) =>
     setPackageStartDate(e.target.value);
   const handlePackageEndDateChange = (e) => setPackageEndDate(e.target.value);
-  const handleNumberOfGuestChange = (e) => setNumberOfGuest(e.target.value);
   const handlePriceRangeChange = (e, newValue) => setPriceRange(newValue);
-  const handleIsCustomizableChange = (e) => setIsCustomizable(e.target.value);
-  const handlePackageRatingChange = (e) => setPackageRating(e.target.value);
   const handleSortByChange = (e) => setSortBy(e.target.value);
 
   return (
@@ -166,7 +208,27 @@ const Search = () => {
         </div>
       </div>
       {/* Results section */}
-      <SearchResults results={results} />
+      {showSpinner && <CircularProgress size={24} style={{ marginLeft: 10 }} />}
+      {!showSpinner && <SearchResults results={results} />}
+      <StyledSnackbar
+        open={snackbarOpen}
+        autoHideDuration={2000}
+        onClose={() => setSnackbarOpen(false)}
+      >
+        <StyledSnackbarContent
+          variant={snackbarVariant}
+          message={
+            <span>
+              {snackbarVariant === "success" ? (
+                <CheckCircleIcon style={{ marginRight: "8px" }} />
+              ) : (
+                <ErrorIcon style={{ marginRight: "8px" }} />
+              )}
+              {snackbarMessage}
+            </span>
+          }
+        />
+      </StyledSnackbar>
     </div>
   );
 };

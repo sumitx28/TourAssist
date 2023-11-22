@@ -5,29 +5,59 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
+import { Link } from "react-router-dom";
 
-export default function ImgMediaCard({ data }) {
+const ImgMediaCard = ({ data, id }) => {
+  const [imageURL, setImageURL] = React.useState(
+    "https://media.istockphoto.com/id/155439315/photo/passenger-airplane-flying-above-clouds-during-sunset.jpg?s=612x612&w=0&k=20&c=LJWadbs3B-jSGJBVy9s0f8gZMHi2NvWFXa3VJ2lFcL0="
+  );
+  const {
+    packageName,
+    totalPackagePrice,
+    tripStartDate,
+    tripEndDate,
+    isPackageCustomizable,
+    agentDetails,
+  } = data;
+
+  const formattedStartDate = new Date(tripStartDate).toLocaleDateString();
+  const formattedEndDate = new Date(tripEndDate).toLocaleDateString();
+
   return (
     <Card sx={{ maxWidth: 345 }}>
       <CardMedia
         component="img"
-        alt="green iguana"
+        alt={packageName}
         height="140"
-        image="https://media.istockphoto.com/id/155439315/photo/passenger-airplane-flying-above-clouds-during-sunset.jpg?s=612x612&w=0&k=20&c=LJWadbs3B-jSGJBVy9s0f8gZMHi2NvWFXa3VJ2lFcL0="
+        image={imageURL}
       />
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">
-          Lizard
+          {packageName}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          Lizards are a widespread group of squamate reptiles, with over 6,000
-          species, ranging across all continents except Antarctica
+          Price: ${totalPackagePrice}
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          Start Date: {formattedStartDate}
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          End Date: {formattedEndDate}
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          Customizable: {isPackageCustomizable ? "Yes" : "No"}
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          Agency: {agentDetails.companyName}
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small">Share</Button>
-        <Button size="small">Learn More</Button>
+        <Button size="small">
+          <Link to={`/package/${data.packageId}`}>Explore</Link>
+        </Button>
       </CardActions>
     </Card>
   );
-}
+};
+
+export default ImgMediaCard;

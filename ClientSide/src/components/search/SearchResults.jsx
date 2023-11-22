@@ -7,7 +7,12 @@ const SearchResults = ({ results }) => {
     <div className="search-results">
       {results.length > 0 &&
         results.map((packageItem, index) => (
-          <ResultCard data={packageItem} className="result-card" />
+          <ResultCard
+            data={packageItem}
+            className="result-card"
+            key={packageItem.packageId}
+            id={packageItem.packageId}
+          />
         ))}
     </div>
   );
