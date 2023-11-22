@@ -9,13 +9,11 @@ import List from "@mui/material/List";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
-import Badge from "@mui/material/Badge";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import NotificationsIcon from "@mui/icons-material/Notifications";
 import { mainListItems } from "./listItems";
 import Copyright from "../commons/Copyright";
 import { useNavigate } from "react-router-dom";
@@ -23,7 +21,6 @@ import Tooltip from "@mui/material/Tooltip";
 import Avatar from "@mui/material/Avatar";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import { Button } from "@mui/material";
 
 const drawerWidth = 240;
 
@@ -74,10 +71,10 @@ const Drawer = styled(MuiDrawer, {
 const defaultTheme = createTheme({
   palette: {
     primary: {
-      main: "#000000", // Black
+      main: "#000000",
     },
     secondary: {
-      main: "#808080", // Grey
+      main: "#808080",
     },
   },
 });
@@ -136,13 +133,7 @@ export default function Dashboard({ title, Component }) {
             >
               {title}
             </Typography>
-            <IconButton color="inherit">
-              <Badge color="secondary">
-                <Typography textAlign="center" onClick={logoutUser}>
-                  Logout
-                </Typography>
-              </Badge>
-            </IconButton>
+
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Account settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
