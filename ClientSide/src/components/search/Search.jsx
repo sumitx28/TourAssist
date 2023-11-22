@@ -43,7 +43,9 @@ const Search = () => {
   const [error, setError] = useState("");
   const [sourceCity, setSourceCity] = useState("");
   const [destinationCity, setDestinationCity] = useState("");
-  const [packageStartDate, setPackageStartDate] = useState("");
+  const [packageStartDate, setPackageStartDate] = useState(
+    new Date().toISOString().split("T")[0]
+  );
   const [packageEndDate, setPackageEndDate] = useState("");
   const [numberOfGuest, setNumberOfGuest] = useState("");
   const [priceRange, setPriceRange] = useState([0, 1000]);
@@ -68,6 +70,14 @@ const Search = () => {
   };
 
   const fetchTravelPackages = async () => {
+    if (
+      packageEndDate &&
+      new Date(packageEndDate) < new Date(packageStartDate)
+    ) {
+      showSnackbar("error", "End Date cannot be before Start Date");
+      return;
+    }
+
     setLoading(true);
     setError("");
     setShowSpinner(true);
@@ -190,6 +200,9 @@ const Search = () => {
             onChange={handlePackageStartDateChange}
             InputLabelProps={{
               shrink: true,
+            }}
+            inputProps={{
+              min: new Date().toISOString().split("T")[0],
             }}
             className="search-input"
           />
