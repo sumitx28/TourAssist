@@ -120,6 +120,13 @@ const Search = () => {
             placeholder="Minimum Package Rating (e.g., 4.5)"
             className="border p-2 rounded-md"
           />
+          <input
+            type="text"
+            value={isCustomizable}
+            onChange={handleIsCustomizableChange}
+            placeholder="Customizable (e.g., Yes or No)"
+            className="border p-2 rounded-md"
+          />
         </div>
   
         <div className="flex justify-between items-center mt-4">
