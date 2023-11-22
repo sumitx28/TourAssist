@@ -53,10 +53,37 @@ class PaymentTransactionServiceTest {
 
     @BeforeEach
     public void setup() {
-        booking = new Booking(1L, 1L, 2L, 3L, Instant.parse("2023-08-20T00:00:00Z"), 100D, BookingStatus.CONFIRM);
-        paymentTransaction = new PaymentTransaction(1L, "d8b349b0-80b3-11ee-b962-0242ac120002", booking, TransactionStatus.SUCCESS, 100D, "Credit Card", Instant.now());
-        paymentRequest = new PaymentRequest("r.patel@dal.ca", "d8b349b0-80b3-11ee-b962-0242ac120002", 1L, "Credit Card", TransactionStatus.SUCCESS, 100D);
         package1 = new Package();
+
+        booking = Booking.builder()
+                .id(1L)
+                .packageId(1L)
+                .customerId(2L)
+                .agentId(3L)
+                .bookingDate(Instant.parse("2023-08-20T00:00:00Z"))
+                .totalPrice(100D)
+                .bookingStatus(BookingStatus.CONFIRM)
+                .build();
+
+        paymentTransaction =  PaymentTransaction.builder()
+                .id(1L)
+                .transactionId("d8b349b0-80b3-11ee-b962-0242ac120002")
+                .booking(booking)
+                .transactionStatus(TransactionStatus.SUCCESS)
+                .price(100D)
+                .paymentType("Credit Card")
+                .transactionDate(Instant.now())
+                .build();
+
+        paymentRequest = PaymentRequest.builder()
+                .customerEmail("r.patel@dal.ca")
+                .transactionId("d8b349b0-80b3-11ee-b962-0242ac120002")
+                .bookingId(1L)
+                .paymentType("Credit Card")
+                .transactionStatus(TransactionStatus.SUCCESS)
+                .price(100D)
+                .build();
+
     }
 
     @Test
@@ -64,7 +91,6 @@ class PaymentTransactionServiceTest {
         // Arrange
         when(bookingService.getBookingById(1L)).thenReturn(booking);
         when(packageRepository.findById(1L)).thenReturn(Optional.ofNullable(package1));
-        when(emailService.frameBookingEmail(any(), any(), any())).thenReturn(new String());
         when(paymentTransactionRepository.save(any())).thenReturn(paymentTransaction);
 
         // Act

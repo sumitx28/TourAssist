@@ -59,7 +59,6 @@ public class PaymentTransactionService implements IPaymentTransactionService{
      * @param paymentTransaction transaction details
      */
     private void sendBookingEmail(String customerEmail, Booking booking, Package bookedPackage, PaymentTransaction paymentTransaction) {
-        String emailBody = emailService.frameBookingEmail(booking, bookedPackage, paymentTransaction);
-        emailService.sendEmail(customerEmail, "Booking #" + booking.getId() , emailBody);
+        emailService.sendBookingEmail(customerEmail, booking, bookedPackage, paymentTransaction);
     }
 }

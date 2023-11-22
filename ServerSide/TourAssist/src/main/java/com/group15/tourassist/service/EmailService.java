@@ -38,7 +38,7 @@ public class EmailService {
      * @param bookedPackage package details
      * @param paymentTransaction payment transaction details
      */
-    public String frameBookingEmail(Booking booking, Package bookedPackage, PaymentTransaction paymentTransaction) {
+    private String frameBookingEmail(Booking booking, Package bookedPackage, PaymentTransaction paymentTransaction) {
         String bookingStatus = "FAILED";
         if(paymentTransaction.getTransactionStatus().equals(TransactionStatus.SUCCESS)) {
             bookingStatus = "CONFIRMED";
@@ -55,4 +55,15 @@ public class EmailService {
         return emailContent;
     }
 
+
+    /**
+     * @param customerEmail customer emailId
+     * @param booking booking object for confirmation
+     * @param bookedPackage package details
+     * @param paymentTransaction transaction details
+     */
+    public void sendBookingEmail(String customerEmail, Booking booking, Package bookedPackage, PaymentTransaction paymentTransaction) {
+        String emailBody = frameBookingEmail(booking, bookedPackage, paymentTransaction);
+        sendEmail(customerEmail, "Booking #" + booking.getId() , emailBody);
+    }
 }
