@@ -1,4 +1,3 @@
-import UserProfile from "./UserProfile";
 import * as React from "react";
 import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -17,14 +16,14 @@ import Paper from "@mui/material/Paper";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import NotificationsIcon from "@mui/icons-material/Notifications";
-import { mainListItems } from "../components/dashboard/listItems";
-import Copyright from "../components/commons/Copyright";
+import { mainListItems } from "./dashboard/listItems";
+import Copyright from "./commons/Copyright";
 import { useNavigate } from 'react-router-dom';
 import Tooltip from '@mui/material/Tooltip';
 import Avatar from '@mui/material/Avatar';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import BookingDetails from "./BookingDetails";
+import UserProfile from "../components/UserProfile";
 
 const drawerWidth = 240;
 
@@ -72,8 +71,7 @@ const Drawer = styled(MuiDrawer, {
   },
 }));
 
-const defaultTheme = createTheme(
-  {
+const defaultTheme = createTheme({
     palette: {
       primary: {
         main: "#000000", // Black
@@ -82,8 +80,7 @@ const defaultTheme = createTheme(
         main: "#808080", // Grey
       },
     },
-  }
-);
+  });
 
 export default function Dashboard({ title, Component }) {
   const [open, setOpen] = React.useState(true);
@@ -219,11 +216,14 @@ export default function Dashboard({ title, Component }) {
         >
           <Toolbar />
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-          <Grid container spacing={3}>
-                    <UserProfile />
-                    <BookingDetails />
-          </Grid>
-          <Copyright sx={{ pt: 4 }} />
+            <Grid container spacing={3}>
+              <Grid item xs={12}>
+                <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
+                  <UserProfile/>
+                </Paper>
+              </Grid>
+            </Grid>
+            <Copyright sx={{ pt: 4 }} />
           </Container>
         </Box>
       </Box>

@@ -13,4 +13,6 @@ public interface IBookingLineItemService {
     void createBookingLineItems(List<BookingItemRequest> bookingItemRequests, Booking booking);
 
     List<BookingLineItem> getBookingLineItemsByBookingId(Long bookingId);
+
+    Double totalBookingPriceByType(Long agentId, String type);
 }

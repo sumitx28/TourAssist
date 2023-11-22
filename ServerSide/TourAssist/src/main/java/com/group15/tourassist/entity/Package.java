@@ -1,5 +1,6 @@
 package com.group15.tourassist.entity;
 
+import com.group15.tourassist.request.PackageCreateRequest;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -46,4 +47,17 @@ public class Package implements Serializable {
     @Column(name = "is_customizable")
     private Boolean isCustomizable;
 
+    public static Package createPackageFromRequest(PackageCreateRequest request) {
+        Package newPackage = new Package();
+        newPackage.setSourceId(request.getSourceId());
+        newPackage.setDestinationId(request.getDestinationId());
+        newPackage.setAgentId(request.getAgentId());
+        newPackage.setPackageName(request.getPackageName());
+        newPackage.setPackageCreatedDate(Instant.now());
+        newPackage.setTripStartDate(request.getTripStartDate());
+        newPackage.setTripEndDate(request.getTripEndDate());
+        newPackage.setIsCustomizable(request.getIsCustomizable());
+
+        return newPackage;
+    }
 }
