@@ -5,7 +5,10 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import API_URL from "../../../config/config";
 
 const ImgMediaCard = ({ data, id }) => {
   const [imageURL, setImageURL] = React.useState(
@@ -22,6 +25,19 @@ const ImgMediaCard = ({ data, id }) => {
 
   const formattedStartDate = new Date(tripStartDate).toLocaleDateString();
   const formattedEndDate = new Date(tripEndDate).toLocaleDateString();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`${API_URL}/api/v1/package/${id}`);
+        setImageURL(response.data.mediaPath[0].media);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <Card sx={{ maxWidth: 345 }}>
