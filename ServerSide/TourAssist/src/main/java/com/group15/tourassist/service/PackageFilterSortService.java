@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import java.util.function.Predicate;
 
 @Service
 public class PackageFilterSortService implements IPackageFilterSortService {
@@ -107,8 +108,9 @@ public class PackageFilterSortService implements IPackageFilterSortService {
             double minPrice = Double.parseDouble(minMaxPriceRange[0]);
             double maxPrice = Double.parseDouble(minMaxPriceRange[1]);
 
-            searchTravelPackages.removeIf(searchTravelPackagesDTO -> searchTravelPackagesDTO.getTotalPackagePrice() < minPrice ||
-                    searchTravelPackagesDTO.getTotalPackagePrice() > maxPrice);
+            Predicate<SearchTravelPackagesDTO> searchTravelPackagesDTOPredicate = searchTravelPackagesDTO -> searchTravelPackagesDTO.getTotalPackagePrice() < minPrice ||
+                    searchTravelPackagesDTO.getTotalPackagePrice() > maxPrice;
+            searchTravelPackages.removeIf(searchTravelPackagesDTOPredicate);
 
         }
 

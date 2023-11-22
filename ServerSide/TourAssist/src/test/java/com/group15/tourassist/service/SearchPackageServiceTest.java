@@ -27,7 +27,7 @@ public class SearchPackageServiceTest {
     @Mock
     private IAgentService agentService;
     @Mock
-    private ITotalPackagePriceCalculatorService totalPackagePriceCalculatorService;
+    private IPackagePriceCalculatorService totalPackagePriceCalculatorService;
     @Mock
     private IPackageReviewRepository packageReviewRepository;
     @Mock
