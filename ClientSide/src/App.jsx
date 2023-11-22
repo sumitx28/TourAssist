@@ -1,4 +1,3 @@
-import AgentDashboard from "./components/agent/AgentDashboard";
 import AgentLogin from "./components/AgentLogin";
 import Dashboard from "./components/Dashboard";
 import AgentDash from "./components/dashboard/Dashboard";
@@ -10,9 +9,12 @@ import SignUp from "./components/Signup";
 import AuthGuard from "./guards/AuthGuard";
 import CreatePackage from "./components/agent/CreatePackage";
 import UserProfile from "./components/UserProfile";
-
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import PackageDetail from "./components/travel-package/PackageDetail";
+import Search from "./components/search/Search";
+import Search2 from "./components/search/Search2";
+import UserProfileDashboard from "./components/UserProfileDashboard";
+// import SearchResults from "./components/search/SearchResults";
 
 function App() {
   return (
@@ -23,14 +25,6 @@ function App() {
           <Route exact path="/login" element={<Login />}></Route>
           <Route exact path="/signup" element={<SignUp />}></Route>
           <Route path="/agent-login" element={<AgentLogin />} />
-          <Route
-            path="/agent-dashboard"
-            element={
-              <AuthGuard>
-                <AgentDashboard />
-              </AuthGuard>
-            }
-          />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password/:token" element={<ResetPassword />} />
           <Route
@@ -44,15 +38,28 @@ function App() {
               </AuthGuard>
             }
           />
-          {/*           <Route */}
-          {/*             path="/user-profile" */}
-          {/*             element={ */}
-          {/*                 <AuthGuard> */}
-          {/*                     <UserProfile /> */}
-          {/*                 </AuthGuard> */}
-          {/*             } */}
-          {/*           /> */}
-          <Route path="/user-profile" element={<UserProfile />} />
+          <Route
+            path="/search"
+            element={
+                <Search />
+            }
+          />
+          {/* <Route
+            path="/searchresults"
+            element={
+              <AuthGuard>
+                <SearchResults />
+              </AuthGuard>
+            }
+          /> */}
+          <Route
+            path="/userprofile"
+            element={
+              <AuthGuard>
+                <UserProfileDashboard />
+              </AuthGuard>
+            }
+          />
           <Route
             path="/dashboard"
             element={

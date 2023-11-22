@@ -16,22 +16,14 @@ import Paper from "@mui/material/Paper";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import NotificationsIcon from "@mui/icons-material/Notifications";
-import { mainListItems } from "./listItems";
+import { mainListItems } from "../dashboard/listItems";
 import Copyright from "../commons/Copyright";
-<<<<<<< HEAD
 import { useNavigate } from 'react-router-dom';
 import Tooltip from '@mui/material/Tooltip';
 import Avatar from '@mui/material/Avatar';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-=======
-import { useNavigate } from "react-router-dom";
-import Tooltip from "@mui/material/Tooltip";
-import Avatar from "@mui/material/Avatar";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
->>>>>>> 620612474d97c9fb663b677aff3a780f6ab2bd57
-import { Button } from "@mui/material";
+import Search from "./Search2";
 
 const drawerWidth = 240;
 
@@ -108,7 +100,7 @@ export default function Dashboard({ title, Component }) {
     localStorage.removeItem("authToken");
     navigate("/");
   };
-
+  
   const toggleDrawer = () => {
     setOpen(!open);
   };
@@ -145,52 +137,50 @@ export default function Dashboard({ title, Component }) {
               {title}
             </Typography>
             <IconButton color="inherit">
-              <Badge color="secondary">
-                <Typography textAlign="center" onClick={logoutUser}>
-                  Logout
-                </Typography>
+              <Badge badgeContent={4} color="secondary">
+                <NotificationsIcon />
               </Badge>
             </IconButton>
-            <Box sx={{ flexGrow: 0 }}>
-              <Tooltip title="Account settings">
-                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar alt="User Avatar" src="/static/images/avatar/2.jpg" />
-                </IconButton>
-              </Tooltip>
-              <Menu
-                sx={{ mt: "45px" }}
-                id="menu-appbar"
-                anchorEl={anchorElUser}
-                anchorOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
+          <Box sx={{ flexGrow: 0 }}>
+            <Tooltip title="Account settings">
+              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                <Avatar alt="User Avatar" src="/static/images/avatar/2.jpg" />
+              </IconButton>
+            </Tooltip>
+            <Menu
+              sx={{ mt: "45px" }}
+              id="menu-appbar"
+              anchorEl={anchorElUser}
+              anchorOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              open={Boolean(anchorElUser)}
+              onClose={handleCloseUserMenu}
+            >
+              <MenuItem
+                onClick={() => {
+                  navigate('/userprofile');
+                  handleCloseUserMenu();
                 }}
-                keepMounted
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                open={Boolean(anchorElUser)}
-                onClose={handleCloseUserMenu}
               >
-                <MenuItem
-                  onClick={() => {
-                    navigate("/userprofile");
-                    handleCloseUserMenu();
-                  }}
-                >
-                  <Typography textAlign="center">Profile</Typography>
-                </MenuItem>
-                <MenuItem
-                  onClick={() => {
-                    logoutUser();
-                    handleCloseUserMenu();
-                  }}
-                >
-                  <Typography textAlign="center">Logout</Typography>
-                </MenuItem>
-              </Menu>
-            </Box>
+                <Typography textAlign="center">Profile</Typography>
+              </MenuItem>
+              <MenuItem
+                onClick={() => {
+                  logoutUser();
+                  handleCloseUserMenu();
+                }}
+              >
+                <Typography textAlign="center">Logout</Typography>
+              </MenuItem>
+            </Menu>
+          </Box>
           </Toolbar>
         </AppBar>
         <Drawer variant="permanent" open={open}>
@@ -229,7 +219,7 @@ export default function Dashboard({ title, Component }) {
             <Grid container spacing={3}>
               <Grid item xs={12}>
                 <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
-                  {Component}
+                  <Search/>
                 </Paper>
               </Grid>
             </Grid>
