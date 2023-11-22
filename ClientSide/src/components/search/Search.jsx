@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import API_URL from "../../../config/config";
 import {
@@ -18,6 +18,7 @@ import { styled } from "@mui/material/styles";
 import { green, red } from "@mui/material/colors";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ErrorIcon from "@mui/icons-material/Error";
+import fetchData from "../../utility/request";
 
 import SearchResults from "./SearchResults";
 import "./Search.css";
@@ -54,6 +55,7 @@ const Search = () => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarVariant, setSnackbarVariant] = useState("success");
   const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [locations, setLocations] = useState([]);
 
   const showSnackbar = (variant, message) => {
     setSnackbarVariant(variant);
@@ -133,25 +135,53 @@ const Search = () => {
   const handlePriceRangeChange = (e, newValue) => setPriceRange(newValue);
   const handleSortByChange = (e) => setSortBy(e.target.value);
 
+  useEffect(() => {
+    const getData = async () => {
+      const locationsData = await fetchData("/api/v1/locations");
+      setLocations(locationsData);
+    };
+
+    getData();
+
+    console.log(locations);
+  }, []);
+
   return (
     <div className="search-container">
       <div className="search-box">
         {/* Search section */}
         <div className="search-fields">
-          <TextField
-            label="Source City"
-            variant="outlined"
-            value={sourceCity}
-            onChange={handleSourceCityChange}
-            className="search-input"
-          />
-          <TextField
-            label="Destination City"
-            variant="outlined"
-            value={destinationCity}
-            onChange={handleDestinationCityChange}
-            className="search-input"
-          />
+          {/* Source City */}
+          <FormControl variant="outlined" className="search-input">
+            <InputLabel>Source City</InputLabel>
+            <Select
+              value={sourceCity}
+              onChange={handleSourceCityChange}
+              label="Source City"
+            >
+              {locations.map((location) => (
+                <MenuItem key={location.id} value={location.city}>
+                  {location.city}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+
+          {/* Destination City */}
+          <FormControl variant="outlined" className="search-input">
+            <InputLabel>Destination City</InputLabel>
+            <Select
+              value={destinationCity}
+              onChange={handleDestinationCityChange}
+              label="Destination City"
+            >
+              {locations.map((location) => (
+                <MenuItem key={location.id} value={location.city}>
+                  {location.city}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
           <TextField
             label="Start Date"
             type="date"
