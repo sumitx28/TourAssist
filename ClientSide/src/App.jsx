@@ -8,13 +8,10 @@ import ResetPassword from "./components/ResetPassword";
 import SignUp from "./components/Signup";
 import AuthGuard from "./guards/AuthGuard";
 import CreatePackage from "./components/agent/CreatePackage";
-import UserProfile from "./components/UserProfile";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import PackageDetail from "./components/travel-package/PackageDetail";
 import Search from "./components/search/Search";
-import Search2 from "./components/search/Search2";
 import UserProfileDashboard from "./components/UserProfileDashboard";
-// import SearchResults from "./components/search/SearchResults";
 
 function App() {
   return (
@@ -41,17 +38,11 @@ function App() {
           <Route
             path="/search"
             element={
-                <Search />
-            }
-          />
-          {/* <Route
-            path="/searchresults"
-            element={
               <AuthGuard>
-                <SearchResults />
+                <AgentDash title="Search" Component={<Search />} />
               </AuthGuard>
             }
-          /> */}
+          />
           <Route
             path="/userprofile"
             element={

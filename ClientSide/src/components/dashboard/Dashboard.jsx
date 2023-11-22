@@ -74,10 +74,10 @@ const Drawer = styled(MuiDrawer, {
 const defaultTheme = createTheme({
   palette: {
     primary: {
-      main: "#000000", // Black
+      main: "#000000",
     },
     secondary: {
-      main: "#808080", // Grey
+      main: "#808080",
     },
   },
 });
