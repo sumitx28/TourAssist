@@ -73,7 +73,6 @@ function TravelForm() {
 
   const API_URL = process.env.API_URL;
 
-  const [dialogOpen, setDialogOpen] = useState(false);
   const [sources, setSources] = useState([]);
   const [destinations, setDestinations] = useState([]);
   const [activities, setActivities] = useState([]);
@@ -195,7 +194,7 @@ function TravelForm() {
     const hasEmptyFields = requiredFields.some((field) => !formData[field]);
 
     if (hasEmptyFields) {
-      setDialogOpen(true);
+      showSnackbar("error", "Please fill all the required feilds.");
     } else {
       const agentDetails = await fetchUserDetails("agent");
 
@@ -264,10 +263,6 @@ function TravelForm() {
         showSnackbar("error", "Error creating a package");
       }
     }
-  };
-
-  const handleCloseDialog = () => {
-    setDialogOpen(false);
   };
 
   return (
@@ -700,27 +695,6 @@ function TravelForm() {
               </Button>
             </div>
           </form>
-          <Dialog
-            open={dialogOpen}
-            onClose={handleCloseDialog}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
-          >
-            <DialogTitle id="alert-dialog-title">
-              {"Fill All Required Fields"}
-            </DialogTitle>
-            <DialogContent>
-              <DialogContentText id="alert-dialog-description">
-                Please fill in all the required fields before submitting the
-                form.
-              </DialogContentText>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={handleCloseDialog} autoFocus>
-                OK
-              </Button>
-            </DialogActions>
-          </Dialog>
         </div>
       </React.Fragment>
     </ThemeProvider>
