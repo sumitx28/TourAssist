@@ -49,7 +49,12 @@ const PastBookings = () => {
             },
           }
         );
-        setBookingDetails(response.data);
+
+        const filteredData = response.data.filter(
+          (data) => data.bookingStatus == "CONFIRM"
+        );
+
+        setBookingDetails(filteredData);
       } catch (error) {
         setError(error.message);
       } finally {
