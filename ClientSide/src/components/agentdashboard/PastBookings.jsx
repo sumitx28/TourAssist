@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import {jwtDecode} from 'jwt-decode';
+import { Card, CardContent, Typography, CardActions, Button } from '@mui/material';
 
 const PastBookings = () => {
   const [bookingDetails, setBookingDetails] = useState([]);
@@ -18,7 +19,7 @@ const PastBookings = () => {
     user = jwtDecode(authToken);
   } catch (e) {
     setError("Authentication token is invalid.");
-    return; // Stop execution if the token is invalid
+    return;
   }
 
   const hasBookings = bookingDetails && Array.isArray(bookingDetails) && bookingDetails.length > 0;
@@ -43,34 +44,39 @@ const PastBookings = () => {
     fetchBookingDetails();
   }, []);
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error}</p>;
+  if (loading) return <Typography>Loading...</Typography>;
+  if (error) return <Typography>Error: {error}</Typography>;
 
   return (
     <div className="container mx-auto p-4">
       <div className="flex flex-wrap justify-center">
-        <div className="w-full sm:w-1/2 md:w-3/4 p-2">
-          <div className="bg-white shadow rounded-lg p-4">
-            <h3 className="text-lg font-semibold mb-4">Past Booking Details</h3>
-            <div className="space-y-3"> 
-              {hasBookings ? (
-                <ul>
-                  {bookingDetails.map((booking) => (
-                    <li key={booking.id}>
-                      <p>Booking ID: {booking.id}</p>
-                      <p>User: {booking.customer.firstName} {booking.customer.lastName}</p>
-                      <p>Package Name: {booking.packageD.packageName}</p>
-                      <p>Booking Date: {new Date(booking.bookingDate).toLocaleDateString()}</p>
-                      <p>Total Price: {booking.totalPrice}</p>
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p>No past booking details found.</p>
-              )}
-            </div>
-          </div>
-        </div>
+        {hasBookings ? (
+          bookingDetails.map((booking) => (
+            <Card key={booking.id} sx={{ maxWidth: 345, m: 2 }}>
+              <CardContent>
+                <Typography gutterBottom variant="h5" component="div">
+                  Booking ID: {booking.id}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  User: {booking.customer.firstName} {booking.customer.lastName}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Package Name: {booking.packageD.packageName}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Booking Date: {new Date(booking.bookingDate).toLocaleDateString()}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Total Price: {booking.totalPrice}
+                </Typography>
+              </CardContent>
+              <CardActions>
+              </CardActions>
+            </Card>
+          ))
+        ) : (
+          <Typography>No past booking details found.</Typography>
+        )}
       </div>
     </div>
   );

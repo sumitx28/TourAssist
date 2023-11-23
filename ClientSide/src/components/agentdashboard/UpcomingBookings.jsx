@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import {jwtDecode} from 'jwt-decode';
+import { Card, CardContent, Typography } from '@mui/material';
 
 const UpcomingAgentBookings = () => {
   const [upcomingBookings, setUpcomingBookings] = useState([]);
@@ -8,22 +9,20 @@ const UpcomingAgentBookings = () => {
   const [error, setError] = useState(null);
 
   const authToken = localStorage.getItem("authToken");
-  if (!authToken) {
-    setError("Authentication token is missing.");
-    return; 
-  }
-
-  let user;
-  try {
-    user = jwtDecode(authToken);
-  } catch (e) {
-    setError("Authentication token is invalid.");
-    return; 
-  }
-
-  const hasUpcomingBookings = upcomingBookings && Array.isArray(upcomingBookings) && upcomingBookings.length > 0;
 
   useEffect(() => {
+    if (!authToken) {
+      setError("Authentication token is missing.");
+      return;
+    }
+    let user;
+    try {
+      user = jwtDecode(authToken);
+    } catch (e) {
+      setError("Authentication token is invalid.");
+      return; 
+    }
+
     const fetchUpcomingBookings = async () => {
       setLoading(true);
       try {
@@ -41,37 +40,45 @@ const UpcomingAgentBookings = () => {
     };
 
     fetchUpcomingBookings();
-  }, []);
+  }, [authToken]);
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error}</p>;
+  if (loading) return <Typography>Loading...</Typography>;
+  if (error) return <Typography>Error: {error}</Typography>;
+
+  const hasUpcomingBookings = upcomingBookings && Array.isArray(upcomingBookings) && upcomingBookings.length > 0;
 
   return (
     <div className="container mx-auto p-4">
       <div className="flex flex-wrap justify-center">
-        <div className="w-full sm:w-1/2 md:w-3/4 p-2">
-          <div className="bg-white shadow rounded-lg p-4">
-            <h3 className="text-lg font-semibold mb-4">Upcoming Booking Details</h3>
-            <div className="space-y-3"> 
-              {hasUpcomingBookings ? (
-                <ul>
-                  {upcomingBookings.map((booking) => (
-                    <li key={booking.id}>
-                      <p>Booking ID: {booking.id}</p>
-                      <p>User: {booking.customer.firstName} {booking.customer.lastName}</p>
-                      <p>Package Name: {booking.packageD.packageName}</p>
-                      <p>Start Date: {new Date(booking.packageD.tripStartDate).toLocaleDateString()}</p>
-                      <p>End Date: {new Date(booking.packageD.tripEndDate).toLocaleDateString()}</p>
-                      <p>Total Price: {booking.totalPrice}</p>
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p>No upcoming bookings found.</p>
-              )}
-            </div>
-          </div>
-        </div>
+        {hasUpcomingBookings ? (
+          upcomingBookings.map((booking) => (
+            <Card key={booking.id} sx={{ maxWidth: 345, m: 2 }}>
+              <CardContent>
+                <Typography gutterBottom variant="h5" component="div">
+                  Booking ID: {booking.id}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  User: {booking.customer.firstName} {booking.customer.lastName}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Package Name: {booking.packageD.packageName}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Start Date: {new Date(booking.packageD.tripStartDate).toLocaleDateString()}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  End Date: {new Date(booking.packageD.tripEndDate).toLocaleDateString()}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Total Price: {booking.totalPrice}
+                </Typography>
+              </CardContent>
+              {/* Add CardActions if needed */}
+            </Card>
+          ))
+        ) : (
+          <Typography>No upcoming bookings found.</Typography>
+        )}
       </div>
     </div>
   );

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import {jwtDecode} from 'jwt-decode';
+import { Card, CardContent, Typography, List, ListItem, ListItemText } from '@mui/material';
 
 const CustomerDetails = () => {
   const [customerDetails, setCustomerDetails] = useState([]);
@@ -8,22 +9,20 @@ const CustomerDetails = () => {
   const [error, setError] = useState(null);
 
   const authToken = localStorage.getItem("authToken");
-  if (!authToken) {
-    setError("Authentication token is missing.");
-    return;
-  }
-
-  let user;
-  try {
-    user = jwtDecode(authToken);
-  } catch (e) {
-    setError("Authentication token is invalid.");
-    return; 
-  }
-
-  const hasCustomerDetails = customerDetails && Array.isArray(customerDetails) && customerDetails.length > 0;
 
   useEffect(() => {
+    if (!authToken) {
+      setError("Authentication token is missing.");
+      return;
+    }
+    let user;
+    try {
+      user = jwtDecode(authToken);
+    } catch (e) {
+      setError("Authentication token is invalid.");
+      return;
+    }
+
     const fetchCustomerDetails = async () => {
       setLoading(true);
       try {
@@ -41,36 +40,55 @@ const CustomerDetails = () => {
     };
 
     fetchCustomerDetails();
-  }, []);
+  }, [authToken]);
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error}</p>;
+  if (loading) return <Typography>Loading...</Typography>;
+  if (error) return <Typography>Error: {error}</Typography>;
+
+  const hasCustomerDetails = customerDetails && Array.isArray(customerDetails) && customerDetails.length > 0;
 
   return (
     <div className="container mx-auto p-4">
       <div className="flex flex-wrap justify-center">
-        <div className="w-full sm:w-1/2 md:w-3/4 p-2">
-          <div className="bg-white shadow rounded-lg p-4">
-            <h3 className="text-lg font-semibold mb-4">Customer Details</h3>
-            <div className="space-y-3">
-              {hasCustomerDetails ? (
-                <ul>
-                  {customerDetails.map((detail, index) => (
-                    <li key={index}>
-                      <p>Customer ID: {detail.customer.id}</p>
-                      <p>Name: {detail.customer.firstName} {detail.customer.lastName}</p>
-                      <p>Mobile: {detail.customer.mobile}</p>
-                      <p>Date of Birth: {new Date(detail.customer.dateOfBirth).toLocaleDateString()}</p>
-                      <p>Country: {detail.customer.country}</p>
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p>No customer details found.</p>
-              )}
-            </div>
-          </div>
-        </div>
+        {hasCustomerDetails ? (
+          customerDetails.map((detail, index) => (
+            <Card key={index} sx={{ maxWidth: 345, m: 2 }}>
+              <CardContent>
+                <Typography gutterBottom variant="h5" component="div">
+                  Customer ID: {detail.customer.id}
+                </Typography>
+                <List dense={true}>
+                  <ListItem>
+                    <ListItemText
+                      primary="Name"
+                      secondary={`${detail.customer.firstName} ${detail.customer.lastName}`}
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemText
+                      primary="Mobile"
+                      secondary={detail.customer.mobile}
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemText
+                      primary="Date of Birth"
+                      secondary={new Date(detail.customer.dateOfBirth).toLocaleDateString()}
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemText
+                      primary="Country"
+                      secondary={detail.customer.country}
+                    />
+                  </ListItem>
+                </List>
+              </CardContent>
+            </Card>
+          ))
+        ) : (
+          <Typography>No customer details found.</Typography>
+        )}
       </div>
     </div>
   );
