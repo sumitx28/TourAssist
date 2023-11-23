@@ -10,7 +10,6 @@ import SearchIcon from "@mui/icons-material/Search";
 import PeopleIcon from "@mui/icons-material/People";
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import { Link } from "react-router-dom";
-import UpcomingBookings from "../agent/Upcomingbookings";
 
 export const mainListItems = (
   <React.Fragment>
