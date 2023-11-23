@@ -7,7 +7,7 @@ const CustomerDetails = () => {
   const [customerDetails, setCustomerDetails] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-
+  const API_URL = process.env.API_URL;
   const authToken = localStorage.getItem("authToken");
 
   useEffect(() => {
@@ -26,7 +26,7 @@ const CustomerDetails = () => {
     const fetchCustomerDetails = async () => {
       setLoading(true);
       try {
-        const response = await axios.get('http://localhost:8080/api/v1/booking/customer-details/1', {
+        const response = await axios.get(`${API_URL}/api/v1/booking/customer-details/1`, {
           headers: {
             'Authorization': `Bearer ${authToken}`
           }

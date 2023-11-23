@@ -7,7 +7,7 @@ const PastBookings = () => {
   const [bookingDetails, setBookingDetails] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-
+  const API_URL = process.env.API_URL;
   const authToken = localStorage.getItem("authToken");
   if (!authToken) {
     setError("Authentication token is missing.");

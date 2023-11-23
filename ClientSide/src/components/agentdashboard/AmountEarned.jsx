@@ -6,7 +6,7 @@ const LastYearRevenue = () => {
   const [revenue, setRevenue] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-
+  const API_URL = process.env.API_URL;
   const authToken = localStorage.getItem("authToken");
   if (!authToken) {
     setError("Authentication token is missing.");
@@ -25,7 +25,7 @@ const LastYearRevenue = () => {
     const fetchRevenue = async () => {
       setLoading(true);
       try {
-        const response = await axios.get('http://localhost:8080/api/v1/revenue/last_year/1', {
+        const response = await axios.get(`${API_URL}/api/v1/revenue/last_year/1`, {
           headers: {
             'Authorization': `Bearer ${authToken}`
           }
