@@ -123,7 +123,7 @@ public class AuthenticationService implements IAuthenticationService {
     }
 
     @Transactional
-    private void revokeAllUserTokens(AppUser appUser) {
+    protected void revokeAllUserTokens(AppUser appUser) {
         var validUserTokens = tokenRepository.findAllValidTokenByUser(appUser.getId());
         if (validUserTokens.isEmpty())
             return;
@@ -136,7 +136,7 @@ public class AuthenticationService implements IAuthenticationService {
     }
 
     @Transactional
-    private void saveUserToken(AppUser appUser, String jwtToken) {
+    protected void saveUserToken(AppUser appUser, String jwtToken) {
         var token = Token.builder()
                 .appUser(appUser)
                 .token(jwtToken)

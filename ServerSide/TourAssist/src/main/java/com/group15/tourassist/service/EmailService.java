@@ -38,7 +38,7 @@ public class EmailService {
      * @param bookedPackage package details
      * @param paymentTransaction payment transaction details
      */
-    private String frameBookingEmail(Booking booking, Package bookedPackage, PaymentTransaction paymentTransaction) {
+    protected String frameBookingEmail(Booking booking, Package bookedPackage, PaymentTransaction paymentTransaction) {
         String bookingStatus = "FAILED";
         if(paymentTransaction.getTransactionStatus().equals(TransactionStatus.SUCCESS)) {
             bookingStatus = "CONFIRMED";
