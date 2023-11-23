@@ -1,10 +1,8 @@
 package com.group15.tourassist.service;
 
 import com.group15.tourassist.core.enums.BookedItem;
-import com.group15.tourassist.entity.Activity;
-import com.group15.tourassist.entity.BookingLineItem;
-import com.group15.tourassist.repository.IActivityRepository;
-import com.group15.tourassist.repository.IBookingLineItemRepository;
+import com.group15.tourassist.entity.*;
+import com.group15.tourassist.repository.*;
 import com.group15.tourassist.request.BookingItemRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,12 +34,33 @@ class BookingLineItemServiceTest {
     @Mock
     private IActivityRepository activityRepository;
 
+    @Mock
+    private ITourGuideRepository tourGuideRepository;
+
+    @Mock
+    private IStayRepository stayRepository;
+
+    @Mock
+    private ITransportationRepository transportationRepository;
+
+
     private List<BookingItemRequest> bookingItems;
 
 
     private Activity activity1;
     private Activity activity2;
 
+    private TourGuide tourGuide;
+
+    private Stay stay;
+
+    private Transportation transportation;
+
+    private List<BookingItemRequest> bookingItemRequests;
+
+    private Booking booking;
+
+    private BookingLineItem bookingLineItem;
 
     @BeforeEach
     public void setup() {
@@ -50,6 +69,43 @@ class BookingLineItemServiceTest {
         bookingItems = new ArrayList<>();
         bookingItems.add(new BookingItemRequest(BookedItem.ACTIVITY, 1L));
         bookingItems.add(new BookingItemRequest(BookedItem.ACTIVITY, 2L));
+        bookingItems.add(new BookingItemRequest(BookedItem.GUIDE, 1L));
+        bookingItems.add(new BookingItemRequest(BookedItem.RESORT, 1L));
+        bookingItems.add(new BookingItemRequest(BookedItem.TRANSPORTATION, 1L));
+
+        tourGuide = TourGuide.builder()
+                .id(1L)
+                .packageId(100L)
+                .guideMasterId(200L)
+                .priceStartDate(Instant.now())
+                .priceExpiryDate(Instant.now())
+                .price(150.0)
+                .isCustomizable(true)
+                .build();
+
+        stay = Stay.builder()
+                .id(1L)
+                .packageId(200L)
+                .resortMasterId(300L)
+                .suiteMasterId(400L)
+                .priceStartDate(Instant.now())
+                .priceExpiryDate(Instant.now())
+                .price(200.0)
+                .isCustomizable(true)
+                .build();
+
+        transportation = Transportation.builder()
+                .id(1L)
+                .packageId(300L)
+                .modeMasterId(500L)
+                .priceStartDate(Instant.now())
+                .priceExpiryDate(Instant.now())
+                .price(50.0)
+                .isCustomizable(true)
+                .build();
+
+        booking = new Booking();
+        bookingLineItem = BookingLineItem.getBookingLineItem(bookingItems.get(0), booking, 100D);
     }
 
     @Test
@@ -57,12 +113,15 @@ class BookingLineItemServiceTest {
         // Arrange
         when(activityRepository.findById(1L)).thenReturn(Optional.ofNullable(activity1));
         when(activityRepository.findById(2L)).thenReturn(Optional.ofNullable(activity2));
+        when(tourGuideRepository.findById(1L)).thenReturn(Optional.ofNullable(tourGuide));
+        when(stayRepository.findById(1L)).thenReturn(Optional.ofNullable(stay));
+        when(transportationRepository.findById(1L)).thenReturn(Optional.ofNullable(transportation));
 
         // Act
         Double totalPrice = bookingLineItemService.computeTotalPrice(bookingItems);
 
         // Assert
-        assertEquals(400D, totalPrice);
+        assertEquals(800D, totalPrice);
     }
 
     @Test
@@ -117,4 +176,19 @@ class BookingLineItemServiceTest {
         verifyZeroInteractions(bookingLineItemRepository);
     }
 
+    @Test
+    void testCreateBookingLineItems() {
+        // Arrange
+        when(activityRepository.findById(1L)).thenReturn(Optional.ofNullable(activity1));
+        when(activityRepository.findById(2L)).thenReturn(Optional.ofNullable(activity2));
+        when(tourGuideRepository.findById(1L)).thenReturn(Optional.ofNullable(tourGuide));
+        when(stayRepository.findById(1L)).thenReturn(Optional.ofNullable(stay));
+        when(transportationRepository.findById(1L)).thenReturn(Optional.ofNullable(transportation));
+
+        // Act
+        bookingLineItemService.createBookingLineItems(bookingItems, booking);
+
+        // Assert
+        verify(bookingLineItemRepository, times(1)).save(bookingLineItem);
+    }
 }
