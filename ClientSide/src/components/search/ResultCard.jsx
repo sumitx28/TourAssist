@@ -8,7 +8,6 @@ import Typography from "@mui/material/Typography";
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import API_URL from "../../../config/config";
 
 const ImgMediaCard = ({ data, id }) => {
   const [imageURL, setImageURL] = React.useState(
@@ -22,6 +21,7 @@ const ImgMediaCard = ({ data, id }) => {
     isPackageCustomizable,
     agentDetails,
   } = data;
+  const API_URL = process.env.API_URL;
 
   const formattedStartDate = new Date(tripStartDate).toLocaleDateString();
   const formattedEndDate = new Date(tripEndDate).toLocaleDateString();

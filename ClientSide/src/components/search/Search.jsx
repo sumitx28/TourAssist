@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import API_URL from "../../../config/config";
 import {
   TextField,
   Button,
@@ -58,6 +57,8 @@ const Search = () => {
   const [snackbarVariant, setSnackbarVariant] = useState("success");
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [locations, setLocations] = useState([]);
+
+  const API_URL = process.env.API_URL;
 
   const showSnackbar = (variant, message) => {
     setSnackbarVariant(variant);
