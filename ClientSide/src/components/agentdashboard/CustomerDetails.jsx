@@ -1,7 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import {jwtDecode} from 'jwt-decode';
-import { Card, CardContent, Typography, List, ListItem, ListItemText } from '@mui/material';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { jwtDecode } from "jwt-decode";
+import {
+  Card,
+  CardContent,
+  Typography,
+  List,
+  ListItem,
+  ListItemText,
+} from "@mui/material";
+import fetchUserDetails from "../../utility/requestUserDetails";
 
 const CustomerDetails = () => {
   const [customerDetails, setCustomerDetails] = useState([]);
@@ -26,11 +34,16 @@ const CustomerDetails = () => {
     const fetchCustomerDetails = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(`${API_URL}/api/v1/booking/customer-details/1`, {
-          headers: {
-            'Authorization': `Bearer ${authToken}`
+        const userDetails = await fetchUserDetails("agent");
+
+        const response = await axios.get(
+          `${API_URL}/api/v1/booking/customer-details/${userDetails.id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${authToken}`,
+            },
           }
-        });
+        );
         setCustomerDetails(response.data);
       } catch (error) {
         setError(error.message);
@@ -45,7 +58,10 @@ const CustomerDetails = () => {
   if (loading) return <Typography>Loading...</Typography>;
   if (error) return <Typography>Error: {error}</Typography>;
 
-  const hasCustomerDetails = customerDetails && Array.isArray(customerDetails) && customerDetails.length > 0;
+  const hasCustomerDetails =
+    customerDetails &&
+    Array.isArray(customerDetails) &&
+    customerDetails.length > 0;
 
   return (
     <div className="container mx-auto p-4">
@@ -73,7 +89,9 @@ const CustomerDetails = () => {
                   <ListItem>
                     <ListItemText
                       primary="Date of Birth"
-                      secondary={new Date(detail.customer.dateOfBirth).toLocaleDateString()}
+                      secondary={new Date(
+                        detail.customer.dateOfBirth
+                      ).toLocaleDateString()}
                     />
                   </ListItem>
                   <ListItem>
@@ -92,6 +110,6 @@ const CustomerDetails = () => {
       </div>
     </div>
   );
-}
+};
 
 export default CustomerDetails;

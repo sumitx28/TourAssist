@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import { Card, CardContent, Typography } from "@mui/material";
+import fetchUserDetails from "../../utility/requestUserDetails";
 
 const UpcomingAgentBookings = () => {
   const [upcomingBookings, setUpcomingBookings] = useState([]);
@@ -26,8 +27,10 @@ const UpcomingAgentBookings = () => {
     const fetchUpcomingBookings = async () => {
       setLoading(true);
       try {
+        const userDetails = await fetchUserDetails("agent");
+
         const response = await axios.get(
-          `${API_URL}/api/v1/booking/upcoming-booking/1`,
+          `${API_URL}/api/v1/booking/upcoming-booking/${userDetails.id}`,
           {
             headers: {
               Authorization: `Bearer ${authToken}`,
