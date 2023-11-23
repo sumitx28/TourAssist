@@ -24,6 +24,7 @@ import Avatar from "@mui/material/Avatar";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import UserProfile from "../components/UserProfile";
+import BookingDetails from "./BookingDetails";
 
 const drawerWidth = 240;
 
@@ -136,11 +137,6 @@ export default function Dashboard({ title, Component }) {
             >
               {title}
             </Typography>
-            <IconButton color="inherit">
-              <Badge badgeContent={4} color="secondary">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Account settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
@@ -219,7 +215,8 @@ export default function Dashboard({ title, Component }) {
             <Grid container spacing={3}>
               <Grid item xs={12}>
                 <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
-                  <UserProfile />
+                  <UserProfile/>
+                  <BookingDetails/>
                 </Paper>
               </Grid>
             </Grid>
