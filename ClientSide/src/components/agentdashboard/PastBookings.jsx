@@ -1,7 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import {jwtDecode} from 'jwt-decode';
-import { Card, CardContent, Typography, CardActions, Button } from '@mui/material';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { jwtDecode } from "jwt-decode";
+import {
+  Card,
+  CardContent,
+  Typography,
+  CardActions,
+  Button,
+} from "@mui/material";
+import requestUserDetails from "../../utility/requestUserDetails";
+import fetchUserDetails from "../../utility/requestUserDetails";
 
 const PastBookings = () => {
   const [bookingDetails, setBookingDetails] = useState([]);
@@ -11,7 +19,7 @@ const PastBookings = () => {
   const authToken = localStorage.getItem("authToken");
   if (!authToken) {
     setError("Authentication token is missing.");
-    return; 
+    return;
   }
 
   let user;
@@ -22,17 +30,25 @@ const PastBookings = () => {
     return;
   }
 
-  const hasBookings = bookingDetails && Array.isArray(bookingDetails) && bookingDetails.length > 0;
+  const hasBookings =
+    bookingDetails &&
+    Array.isArray(bookingDetails) &&
+    bookingDetails.length > 0;
 
   useEffect(() => {
     const fetchBookingDetails = async () => {
       setLoading(true);
       try {
-        const response = await axios.get('http://localhost:8080/api/v1/booking/past-booking/1', {
-          headers: {
-            'Authorization': `Bearer ${authToken}`
+        const userDetails = await fetchUserDetails("agent");
+
+        const response = await axios.get(
+          `${API_URL}/api/v1/booking/past-booking/${userDetails.id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${authToken}`,
+            },
           }
-        });
+        );
         setBookingDetails(response.data);
       } catch (error) {
         setError(error.message);
@@ -64,14 +80,14 @@ const PastBookings = () => {
                   Package Name: {booking.packageD.packageName}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  Booking Date: {new Date(booking.bookingDate).toLocaleDateString()}
+                  Booking Date:{" "}
+                  {new Date(booking.bookingDate).toLocaleDateString()}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
                   Total Price: {booking.totalPrice}
                 </Typography>
               </CardContent>
-              <CardActions>
-              </CardActions>
+              <CardActions></CardActions>
             </Card>
           ))
         ) : (
@@ -80,6 +96,6 @@ const PastBookings = () => {
       </div>
     </div>
   );
-}
+};
 
 export default PastBookings;

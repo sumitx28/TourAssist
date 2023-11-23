@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import {jwtDecode} from 'jwt-decode';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { jwtDecode } from "jwt-decode";
+import fetchUserDetails from "../../utility/requestUserDetails";
 
 const LastYearRevenue = () => {
   const [revenue, setRevenue] = useState(null);
@@ -18,18 +19,23 @@ const LastYearRevenue = () => {
     user = jwtDecode(authToken);
   } catch (e) {
     setError("Authentication token is invalid.");
-    return; 
+    return;
   }
 
   useEffect(() => {
     const fetchRevenue = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(`${API_URL}/api/v1/revenue/last_year/1`, {
-          headers: {
-            'Authorization': `Bearer ${authToken}`
+        const userDetails = await fetchUserDetails("agent");
+        // API ALSO HAS OPTION TO RAISE LAST_MONTH
+        const response = await axios.get(
+          `${API_URL}/api/v1/revenue/last_year/${userDetails.id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${authToken}`,
+            },
           }
-        });
+        );
         setRevenue(response.data);
       } catch (error) {
         setError(error.message);
@@ -57,6 +63,6 @@ const LastYearRevenue = () => {
       </div>
     </div>
   );
-}
+};
 
 export default LastYearRevenue;
