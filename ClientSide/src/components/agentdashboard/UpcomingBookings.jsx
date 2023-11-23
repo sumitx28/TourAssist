@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import {jwtDecode} from 'jwt-decode';
-import { Card, CardContent, Typography } from '@mui/material';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { jwtDecode } from "jwt-decode";
+import { Card, CardContent, Typography } from "@mui/material";
 
 const UpcomingAgentBookings = () => {
   const [upcomingBookings, setUpcomingBookings] = useState([]);
@@ -20,17 +20,20 @@ const UpcomingAgentBookings = () => {
       user = jwtDecode(authToken);
     } catch (e) {
       setError("Authentication token is invalid.");
-      return; 
+      return;
     }
 
     const fetchUpcomingBookings = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(`${API_URL}/api/v1/booking/upcoming-booking/1', {
-          headers: {
-            'Authorization': `Bearer ${authToken}`
+        const response = await axios.get(
+          `${API_URL}/api/v1/booking/upcoming-booking/1`,
+          {
+            headers: {
+              Authorization: `Bearer ${authToken}`,
+            },
           }
-        });
+        );
         setUpcomingBookings(response.data);
       } catch (error) {
         setError(error.message);
@@ -45,7 +48,10 @@ const UpcomingAgentBookings = () => {
   if (loading) return <Typography>Loading...</Typography>;
   if (error) return <Typography>Error: {error}</Typography>;
 
-  const hasUpcomingBookings = upcomingBookings && Array.isArray(upcomingBookings) && upcomingBookings.length > 0;
+  const hasUpcomingBookings =
+    upcomingBookings &&
+    Array.isArray(upcomingBookings) &&
+    upcomingBookings.length > 0;
 
   return (
     <div className="container mx-auto p-4">
@@ -64,10 +70,14 @@ const UpcomingAgentBookings = () => {
                   Package Name: {booking.packageD.packageName}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  Start Date: {new Date(booking.packageD.tripStartDate).toLocaleDateString()}
+                  Start Date:{" "}
+                  {new Date(
+                    booking.packageD.tripStartDate
+                  ).toLocaleDateString()}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  End Date: {new Date(booking.packageD.tripEndDate).toLocaleDateString()}
+                  End Date:{" "}
+                  {new Date(booking.packageD.tripEndDate).toLocaleDateString()}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
                   Total Price: {booking.totalPrice}
@@ -82,6 +92,6 @@ const UpcomingAgentBookings = () => {
       </div>
     </div>
   );
-}
+};
 
 export default UpcomingAgentBookings;

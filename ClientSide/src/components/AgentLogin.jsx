@@ -72,7 +72,7 @@ export default function Login() {
 
         showSnackbar("Welcome to Tour Assist", "success");
         setTimeout(() => {
-          navigate("/agent-dashboard");
+          navigate("/create-package");
         }, 2000);
       } else {
         showSnackbar("Invalid credentials. Try Again", "error");
