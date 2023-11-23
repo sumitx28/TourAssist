@@ -16,6 +16,7 @@ import PastBookings from "./components/agentdashboard/PastBookings";
 import UpcomingBookings from "./components/agentdashboard/UpcomingBookings";
 import CustomerDetails from "./components/agentdashboard/CustomerDetails";
 import AmountEarned from "./components/agentdashboard/AmountEarned";
+import UserProfile from "./components/UserProfile";
 
 function App() {
   return (
@@ -51,7 +52,7 @@ function App() {
             path="/userprofile"
             element={
               <AuthGuard>
-                <UserProfileDashboard />
+                <AgentDash title="User Profile" Component={<UserProfile />} />
               </AuthGuard>
             }
           />
