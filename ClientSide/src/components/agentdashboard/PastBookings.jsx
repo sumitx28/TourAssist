@@ -1,13 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
-import {
-  Card,
-  CardContent,
-  Typography,
-  CardActions,
-  Button,
-} from "@mui/material";
+import { Card, CardContent, Typography, CardActions } from "@mui/material";
 import fetchUserDetails from "../../utility/requestUserDetails";
 
 const PastBookings = () => {

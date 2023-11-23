@@ -75,7 +75,10 @@ function App() {
             path="/upcomingbookings"
             element={
               <AuthGuard>
-                <AgentDash title="Upcoming Bookings" Component={<UpcomingBookings />} />
+                <AgentDash
+                  title="Upcoming Bookings"
+                  Component={<UpcomingBookings />}
+                />
               </AuthGuard>
             }
           />
@@ -83,7 +86,10 @@ function App() {
             path="/customerdetails"
             element={
               <AuthGuard>
-                <AgentDash title="Customer Details" Component={<CustomerDetails />} />
+                <AgentDash
+                  title="Customer Details"
+                  Component={<CustomerDetails />}
+                />
               </AuthGuard>
             }
           />
@@ -99,7 +105,7 @@ function App() {
             path="/package/:id"
             element={
               <AuthGuard>
-                <PackageDetail />
+                <AgentDash title="Tour Assist" Component={<PackageDetail />} />
               </AuthGuard>
             }
           />
