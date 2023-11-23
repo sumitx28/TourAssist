@@ -158,7 +158,7 @@ public class BookingService implements IBookingService {
      * @param booking
      * @param bookingDetailsDTO
      */
-    private void populateEachBookingDetailDTO(Booking booking, BookingDetailsDTO bookingDetailsDTO) {
+    protected void populateEachBookingDetailDTO(Booking booking, BookingDetailsDTO bookingDetailsDTO) {
         bookingDetailsDTO.setPackageId(booking.getPackageId());
         bookingDetailsDTO.setBookingDate(booking.getBookingDate());
         bookingDetailsDTO.setTotalPrice(booking.getTotalPrice());
@@ -188,7 +188,7 @@ public class BookingService implements IBookingService {
         }
     }
 
-    private void populateTransportationDTOs(List<TransportationMinDTO> transportationMinDTOS, BookingLineItem bookingLineItem) {
+    protected void populateTransportationDTOs(List<TransportationMinDTO> transportationMinDTOS, BookingLineItem bookingLineItem) {
         if (BookedItem.TRANSPORTATION.equals(bookingLineItem.getBookedItem())) {
             TransportationMinDTO transportationMinDTO = new TransportationMinDTO();
             Long transportationId = bookingLineItem.getBookedItemId();
@@ -206,7 +206,7 @@ public class BookingService implements IBookingService {
         }
     }
 
-    private void populateGuideDTO(BookingDetailsDTO bookingDetailsDTO, BookingLineItem bookingLineItem) {
+    protected void populateGuideDTO(BookingDetailsDTO bookingDetailsDTO, BookingLineItem bookingLineItem) {
         if (BookedItem.RESORT.equals(bookingLineItem.getBookedItem())) {
             Long resortId = bookingLineItem.getBookedItemId();
             Optional<ResortMaster> resortMasterOptional = resortMasterRepository.findById(resortId);
@@ -217,7 +217,7 @@ public class BookingService implements IBookingService {
         }
     }
 
-    private void populateGuideDTOs(List<GuideDTO> guideDTOS, BookingLineItem bookingLineItem) {
+    protected void populateGuideDTOs(List<GuideDTO> guideDTOS, BookingLineItem bookingLineItem) {
         if (BookedItem.GUIDE.equals(bookingLineItem.getBookedItem())) {
             GuideDTO guideDTO = new GuideDTO();
             Long guideId = bookingLineItem.getBookedItemId();
@@ -235,7 +235,7 @@ public class BookingService implements IBookingService {
         }
     }
 
-    private void populateActivityDTOs(List<ActivityMinDTO> activityMinDTOS, BookingLineItem bookingLineItem) {
+    protected void populateActivityDTOs(List<ActivityMinDTO> activityMinDTOS, BookingLineItem bookingLineItem) {
         if (BookedItem.ACTIVITY.equals(bookingLineItem.getBookedItem())) {
             ActivityMinDTO activityMinDTO = new ActivityMinDTO();
             Long activityId = bookingLineItem.getBookedItemId();

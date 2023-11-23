@@ -2,8 +2,8 @@ package com.group15.tourassist.service;
 
 import com.group15.tourassist.core.enums.*;
 import com.group15.tourassist.dto.*;
-import com.group15.tourassist.entity.*;
 import com.group15.tourassist.entity.Package;
+import com.group15.tourassist.entity.*;
 import com.group15.tourassist.entityToDto.AgentEntityToDto;
 import com.group15.tourassist.entityToDto.CustomerEntityToDto;
 import com.group15.tourassist.entityToDto.PackageEntityToDto;
@@ -11,7 +11,6 @@ import com.group15.tourassist.repository.*;
 import com.group15.tourassist.request.BookingItemRequest;
 import com.group15.tourassist.request.BookingRequest;
 import com.group15.tourassist.response.BookingDetailsWebResponse;
-import com.group15.tourassist.response.BookingResponse;
 import com.group15.tourassist.response.CustomerDetailsBookedByAgentIDResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,9 +20,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-
-import java.sql.Date;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -35,33 +33,38 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class BookingServiceTest {
 
+    @Mock
+    private ITransportationRepository transportationRepository;
+    @Mock
+    private IResortMasterRepository resortMasterRepository;
+    @Mock
+    private ITourGuideRepository tourGuideRepository;
+    @Mock
+    private IGuideMasterRepository guideMasterRepository;
+    @Mock
+    private ITravelModeMasterRepository travelModeMasterRepository;
     @InjectMocks
     private BookingService bookingService;
-
     @Mock
     private IBookingRepository bookingRepository;
-
+    @Mock
+    private IActivityRepository activityRepository;
+    @Mock
+    private IActivityMasterRepository activityMasterRepository;
     @Mock
     private ICustomerRepository customerRepository;
-
     @Mock
     private BookingLineItemService bookingLineItemService;
-
     @Mock
     private GuestService guestService;
-
     @Mock
     private IGuestRepository guestRepository;
-
     @Mock
     private IPackageRepository packageRepository;
-
     @Mock
     private IAgentRepository agentRepository;
-
     @Mock
     private AgentEntityToDto agentEntityToDto;
-
     @Mock
     private PackageEntityToDto packageEntityToDto;
 
@@ -77,6 +80,7 @@ class BookingServiceTest {
     private Guest guest;
 
     private Booking pendingBooking;
+
 
     @BeforeEach
     public void setup() {
@@ -162,6 +166,190 @@ class BookingServiceTest {
         assertNull(result.getBookingDetailsList());
         verify(customerRepository, times(1)).getCustomerByAppUserId(appUserId);
         verify(bookingRepository, times(1)).getBookingsByCustomerId(customer.getId());
+    }
+
+
+    @Test
+    void testGetAllBookingForCustomerInvalidCustomer() {
+        // Arrange
+        long appUserId = 1L;
+        when(customerRepository.getCustomerByAppUserId(appUserId)).thenReturn(Optional.empty());
+
+        // Act
+        BookingDetailsWebResponse result = bookingService.getAllBookingForCustomer(appUserId);
+
+        // Assert
+        assertNull(result.getBookingDetailsList());
+        verify(customerRepository, times(1)).getCustomerByAppUserId(appUserId);
+        verify(bookingRepository, never()).getBookingsByCustomerId(anyLong());
+    }
+
+    @Test
+    void testPopulateEachBookingDetailDTO() {
+        // Arrange
+        Booking booking = new Booking();
+        booking.setPackageId(1L);
+        booking.setBookingDate(Instant.now());
+        booking.setTotalPrice(10.0);
+        booking.setBookingStatus(BookingStatus.CONFIRM);
+
+        Package travelPackage = new Package();
+        travelPackage.setPackageName("Test Package");
+
+        BookingLineItem bookingLineItem = new BookingLineItem();
+        bookingLineItem.setId(1L);
+
+        // Mocking packageRepository
+        when(packageRepository.findById(booking.getPackageId())).thenReturn(Optional.of(travelPackage));
+
+        // Mocking bookingLineItemService
+        when(bookingLineItemService.getBookingLineItemsByBookingId(booking.getId())).thenReturn(Collections.singletonList(bookingLineItem));
+
+        // Act
+        BookingDetailsDTO bookingDetailsDTO = new BookingDetailsDTO();
+        bookingService.populateEachBookingDetailDTO(booking, bookingDetailsDTO);
+
+        // Assert
+        assertNotNull(bookingDetailsDTO.getPackageName());
+        assertEquals("Test Package", bookingDetailsDTO.getPackageName());
+        assertNotNull(bookingDetailsDTO.getActivityMinDTOS());
+        assertNotNull(bookingDetailsDTO.getGuideDTOS());
+        assertNotNull(bookingDetailsDTO.getTransportationMinDTOS());
+        // Add more specific assertions based on your implementation.
+
+        // Verify interactions with mocks
+        verify(packageRepository, times(1)).findById(booking.getPackageId());
+        verify(bookingLineItemService, times(1)).getBookingLineItemsByBookingId(booking.getId());
+    }
+
+    @Test
+    void testPopulateTransportationDTOs() {
+        // Arrange
+        BookingLineItem bookingLineItem = new BookingLineItem();
+        bookingLineItem.setBookedItem(BookedItem.TRANSPORTATION);
+        bookingLineItem.setBookedItemId(1L);
+
+        Transportation transportation = new Transportation();
+        transportation.setId(1L);
+        transportation.setModeMasterId(1L);
+
+        TravelModeMaster travelModeMaster = new TravelModeMaster();
+        travelModeMaster.setId(1L);
+        travelModeMaster.setMode("Test Mode");
+
+        // Mocking repositories
+        when(transportationRepository.findById(bookingLineItem.getBookedItemId())).thenReturn(Optional.of(transportation));
+        when(travelModeMasterRepository.findById(transportation.getModeMasterId())).thenReturn(Optional.of(travelModeMaster));
+
+        // Act
+        List<TransportationMinDTO> transportationMinDTOS = new ArrayList<>();
+        bookingService.populateTransportationDTOs(transportationMinDTOS, bookingLineItem);
+
+        // Assert
+        assertEquals(1, transportationMinDTOS.size());
+        TransportationMinDTO resultDTO = transportationMinDTOS.get(0);
+        assertNotNull(resultDTO);
+        assertEquals(transportation.getId(), resultDTO.getTransportationId());
+        assertEquals(travelModeMaster.getMode(), resultDTO.getTransportationName());
+
+        // Verify interactions with mocks
+        verify(transportationRepository, times(1)).findById(bookingLineItem.getBookedItemId());
+        verify(travelModeMasterRepository, times(1)).findById(transportation.getModeMasterId());
+    }
+
+    @Test
+    void testPopulateGuideDTOs() {
+        // Arrange
+        List<GuideDTO> guideDTOs = new ArrayList<>();
+        BookingLineItem bookingLineItem = new BookingLineItem();
+        bookingLineItem.setBookedItem(BookedItem.GUIDE);
+        bookingLineItem.setBookedItemId(1L);
+
+        TourGuide tourGuide = new TourGuide();
+        tourGuide.setId(1L);
+        tourGuide.setGuideMasterId(1L);
+
+        GuideMaster guideMaster = new GuideMaster();
+        guideMaster.setId(1L);
+        guideMaster.setGuideName("Test Guide");
+
+        // Mocking repositories
+        when(tourGuideRepository.findById(bookingLineItem.getBookedItemId())).thenReturn(Optional.of(tourGuide));
+        when(guideMasterRepository.findById(tourGuide.getGuideMasterId())).thenReturn(Optional.of(guideMaster));
+
+        // Act
+        bookingService.populateGuideDTOs(guideDTOs, bookingLineItem);
+
+        // Assert
+        assertEquals(1, guideDTOs.size());
+        GuideDTO resultDTO = guideDTOs.get(0);
+        assertNotNull(resultDTO);
+        assertEquals(guideMaster.getGuideName(), resultDTO.getGuideName());
+        assertEquals(tourGuide.getId(), resultDTO.getGuideId());
+
+        // Verify interactions with mocks
+        verify(tourGuideRepository, times(1)).findById(bookingLineItem.getBookedItemId());
+        verify(guideMasterRepository, times(1)).findById(tourGuide.getGuideMasterId());
+    }
+
+    @Test
+    void testPopulateGuideDTO() {
+        // Arrange
+        BookingDetailsDTO bookingDetailsDTO = new BookingDetailsDTO();
+        BookingLineItem bookingLineItem = new BookingLineItem();
+        bookingLineItem.setBookedItem(BookedItem.RESORT);
+        bookingLineItem.setBookedItemId(1L);
+
+        ResortMaster resortMaster = new ResortMaster();
+        resortMaster.setId(1L);
+        resortMaster.setResortName("Test Resort");
+
+        // Mocking repository
+        when(resortMasterRepository.findById(bookingLineItem.getBookedItemId())).thenReturn(Optional.of(resortMaster));
+
+        // Act
+        bookingService.populateGuideDTO(bookingDetailsDTO, bookingLineItem);
+
+        // Assert
+        assertNotNull(bookingDetailsDTO.getResortDetails());
+        assertEquals(resortMaster, bookingDetailsDTO.getResortDetails());
+
+        // Verify interactions with mocks
+        verify(resortMasterRepository, times(1)).findById(bookingLineItem.getBookedItemId());
+    }
+
+    @Test
+    void testPopulateActivityDTOs() {
+        // Arrange
+        List<ActivityMinDTO> activityMinDTOs = new ArrayList<>();
+        BookingLineItem bookingLineItem = new BookingLineItem();
+        bookingLineItem.setBookedItem(BookedItem.ACTIVITY);
+        bookingLineItem.setBookedItemId(1L);
+
+        Activity activity = new Activity();
+        activity.setId(1L);
+
+        ActivityMaster activityMaster = new ActivityMaster();
+        activityMaster.setId(1L);
+        activityMaster.setActivityName("Test Activity");
+
+        // Mocking repositories
+        when(activityRepository.findById(bookingLineItem.getBookedItemId())).thenReturn(Optional.of(activity));
+        when(activityMasterRepository.findById(activity.getActivityMasterId())).thenReturn(Optional.of(activityMaster));
+
+        // Act
+        bookingService.populateActivityDTOs(activityMinDTOs, bookingLineItem);
+
+        // Assert
+        assertEquals(1, activityMinDTOs.size());
+        ActivityMinDTO resultDTO = activityMinDTOs.get(0);
+        assertNotNull(resultDTO);
+        assertEquals(activityMaster.getActivityName(), resultDTO.getActivityName());
+        assertEquals(activity.getId(), resultDTO.getActivityId());
+
+        // Verify interactions with mocks
+        verify(activityRepository, times(2)).findById(bookingLineItem.getBookedItemId());
+        verify(activityMasterRepository, times(1)).findById(activity.getActivityMasterId());
     }
 
     @Test

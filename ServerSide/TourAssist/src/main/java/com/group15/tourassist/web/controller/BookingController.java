@@ -42,7 +42,7 @@ public class BookingController {
      * @return booking id
      */
     @PostMapping("/create-booking")
-    private ResponseEntity<Long> createBooking(@RequestBody BookingRequest request) {
+    public ResponseEntity<Long> createBooking(@RequestBody BookingRequest request) {
         log.info("** get create-booking request {}", request.toString());
 
         Long bookingId = bookingService.createBooking(request);
@@ -61,14 +61,14 @@ public class BookingController {
     }
 
     @GetMapping("/past-booking/{agentId}")
-    private ResponseEntity<List<BookingResponse>> pastBookings(@PathVariable Long agentId) {
+    public ResponseEntity<List<BookingResponse>> pastBookings(@PathVariable Long agentId) {
         log.info("** get past booking details");
         var  response = bookingService.getPastBookings(agentId);
         return ResponseEntity.of(Optional.of(response));
     }
 
     @GetMapping("/upcoming-booking/{agentId}")
-    private ResponseEntity<List<BookingResponse>> upcomingBookings(@PathVariable Long agentId) {
+    public ResponseEntity<List<BookingResponse>> upcomingBookings(@PathVariable Long agentId) {
         log.info("** get upcoming booking details");
         var  response = bookingService.getUpcomingBookings(agentId);
         return ResponseEntity.of(Optional.of(response));
