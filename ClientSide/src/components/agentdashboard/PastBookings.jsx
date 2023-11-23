@@ -8,7 +8,6 @@ import {
   CardActions,
   Button,
 } from "@mui/material";
-import requestUserDetails from "../../utility/requestUserDetails";
 import fetchUserDetails from "../../utility/requestUserDetails";
 
 const PastBookings = () => {
