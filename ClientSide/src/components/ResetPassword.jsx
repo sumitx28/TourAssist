@@ -12,7 +12,6 @@ import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Link as RouterLink, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-import API_URL from "../../config/config";
 import TravelLogo from "./commons/TravelLogo";
 
 function Copyright(props) {
@@ -38,6 +37,7 @@ const defaultTheme = createTheme();
 export default function ResetPassword() {
   const navigate = useNavigate();
   const { token } = useParams();
+  const API_URL = process.env.API_URL;
 
   const handleSubmit = async (event) => {
     event.preventDefault();

@@ -4,8 +4,8 @@ import {jwtDecode} from 'jwt-decode';
 
 export default function UserProfile() {
   const [editFields, setEditFields] = useState({
-    email: 'abcd@dal.ca',
-    mobileNumber: '123-456-7890'
+    email: '****@dal.ca',
+    mobileNumber: '***-***-****'
   });
 
   const [editMode, setEditMode] = useState(false);

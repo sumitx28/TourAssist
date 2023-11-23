@@ -23,7 +23,6 @@ import ErrorIcon from "@mui/icons-material/Error";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import fetchData from "../../utility/request";
 import axios from "axios";
-import API_URL from "../../../config/config";
 
 const StyledSnackbar = styled(Snackbar)({
   bottom: "20px",
@@ -70,6 +69,8 @@ function TravelForm() {
     travelImage: null,
     tripStartDate: getCurrentDate(),
   });
+
+  const API_URL = process.env.API_URL;
 
   const [dialogOpen, setDialogOpen] = useState(false);
   const [sources, setSources] = useState([]);

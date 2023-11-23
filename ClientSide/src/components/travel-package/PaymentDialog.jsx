@@ -13,7 +13,6 @@ import {
   Typography,
   CircularProgress,
 } from "@mui/material";
-import API_URL from "../../../config/config";
 import axios from "axios";
 
 const PaymentDialog = ({ open, onClose, bookingData }) => {
@@ -33,6 +32,7 @@ const PaymentDialog = ({ open, onClose, bookingData }) => {
   const [paymentType, setPaymentType] = React.useState("Credit Card");
   const [isProcessingPayment, setProcessingPayment] = React.useState(false);
   const [paymentResult, setPaymentResult] = React.useState(null);
+  const API_URL = process.env.API_URL;
 
   const [validationMessages, setValidationMessages] = React.useState({
     cardNumber: "",

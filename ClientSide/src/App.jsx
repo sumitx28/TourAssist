@@ -8,13 +8,14 @@ import ResetPassword from "./components/ResetPassword";
 import SignUp from "./components/Signup";
 import AuthGuard from "./guards/AuthGuard";
 import CreatePackage from "./components/agent/CreatePackage";
-import UserProfile from "./components/UserProfile";
 import UserProfileDashboard from "./components/UserProfileDashboard";
-import AgentDashboard from "./components/agentdashboard/AgentDashboard";
-import AgentDashboard2 from "./components/agentdashboard/AgentDashboard2";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import PackageDetail from "./components/travel-package/PackageDetail";
 import Search from "./components/search/Search";
+import PastBookings from "./components/agentdashboard/PastBookings";
+import UpcomingBookings from "./components/agentdashboard/UpcomingBookings";
+import CustomerDetails from "./components/agentdashboard/CustomerDetails";
+import AmountEarned from "./components/agentdashboard/AmountEarned";
 
 function App() {
   return (
@@ -41,10 +42,19 @@ function App() {
           <Route
             path="/search"
             element={
-                <Search />
+              <AuthGuard>
+                <AgentDash title="Search" Component={<Search />} />
+              </AuthGuard>
             }
           />
-          <Route path="/userprofile" element={<UserProfileDashboard />} />
+          <Route
+            path="/userprofile"
+            element={
+              <AuthGuard>
+                <UserProfileDashboard />
+              </AuthGuard>
+            }
+          />
           <Route
             path="/dashboard"
             element={
@@ -53,8 +63,38 @@ function App() {
               </AuthGuard>
             }
           />
-          <Route path="/agentbookings" element={<AgentDashboard />} />
-          <Route path="/customerdetails" element={<AgentDashboard2 />} />
+          <Route
+            path="/pastbookings"
+            element={
+              <AuthGuard>
+                <AgentDash title="Past Bookings" Component={<PastBookings />} />
+              </AuthGuard>
+            }
+          />
+          <Route
+            path="/upcomingbookings"
+            element={
+              <AuthGuard>
+                <AgentDash title="Upcoming Bookings" Component={<UpcomingBookings />} />
+              </AuthGuard>
+            }
+          />
+          <Route
+            path="/customerdetails"
+            element={
+              <AuthGuard>
+                <AgentDash title="Customer Details" Component={<CustomerDetails />} />
+              </AuthGuard>
+            }
+          />
+          <Route
+            path="/amountearned"
+            element={
+              <AuthGuard>
+                <AgentDash title="Amount Earned" Component={<AmountEarned />} />
+              </AuthGuard>
+            }
+          />
           <Route
             path="/package/:id"
             element={

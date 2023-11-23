@@ -1,232 +1,280 @@
-import * as React from "react";
-import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
-import CssBaseline from "@mui/material/CssBaseline";
-import MuiDrawer from "@mui/material/Drawer";
-import Box from "@mui/material/Box";
-import MuiAppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-import List from "@mui/material/List";
-import Typography from "@mui/material/Typography";
-import Divider from "@mui/material/Divider";
-import IconButton from "@mui/material/IconButton";
-import Badge from "@mui/material/Badge";
-import Container from "@mui/material/Container";
-import Grid from "@mui/material/Grid";
-import Paper from "@mui/material/Paper";
-import MenuIcon from "@mui/icons-material/Menu";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import NotificationsIcon from "@mui/icons-material/Notifications";
-import { mainListItems } from "../dashboard/listItems";
-import Copyright from "../commons/Copyright";
-import { useNavigate } from 'react-router-dom';
-import Tooltip from '@mui/material/Tooltip';
-import Avatar from '@mui/material/Avatar';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import Search from "./Search2";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import {
+  TextField,
+  Button,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  Slider,
+  Typography,
+  CircularProgress,
+  Snackbar,
+  SnackbarContent,
+} from "@mui/material";
+import { styled } from "@mui/material/styles";
+import { green, red } from "@mui/material/colors";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import ErrorIcon from "@mui/icons-material/Error";
+import fetchData from "../../utility/request";
 
-const drawerWidth = 240;
+import SearchResults from "./SearchResults";
+import "./Search.css";
 
-const AppBar = styled(MuiAppBar, {
-  shouldForwardProp: (prop) => prop !== "open",
-})(({ theme, open }) => ({
-  zIndex: theme.zIndex.drawer + 1,
-  transition: theme.transitions.create(["width", "margin"], {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
-  }),
-  ...(open && {
-    marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(["width", "margin"], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  }),
-}));
-
-const Drawer = styled(MuiDrawer, {
-  shouldForwardProp: (prop) => prop !== "open",
-})(({ theme, open }) => ({
-  "& .MuiDrawer-paper": {
-    position: "relative",
-    whiteSpace: "nowrap",
-    width: drawerWidth,
-    transition: theme.transitions.create("width", {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-    boxSizing: "border-box",
-    ...(!open && {
-      overflowX: "hidden",
-      transition: theme.transitions.create("width", {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen,
-      }),
-      width: theme.spacing(7),
-      [theme.breakpoints.up("sm")]: {
-        width: theme.spacing(9),
-      },
-    }),
-  },
-}));
-
-const defaultTheme = createTheme({
-  palette: {
-    primary: {
-      main: "#000000", // Black
-    },
-    secondary: {
-      main: "#808080", // Grey
-    },
-  },
+const StyledSnackbar = styled(Snackbar)({
+  bottom: "20px",
+  left: "20px",
 });
 
-export default function Dashboard({ title, Component }) {
-  const [open, setOpen] = React.useState(true);
+const StyledSnackbarContent = styled(SnackbarContent)(({ theme, variant }) => ({
+  backgroundColor: variant === "success" ? green[600] : red[600],
+  color: theme.palette.getContrastText(
+    variant === "success" ? green[600] : red[600]
+  ),
+  display: "flex",
+  alignItems: "center",
+}));
 
-  const [anchorElUser, setAnchorElUser] = React.useState(null);
-  const navigate = useNavigate();
+const Search = () => {
+  const [results, setResults] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [sourceCity, setSourceCity] = useState("");
+  const [destinationCity, setDestinationCity] = useState("");
+  const [packageStartDate, setPackageStartDate] = useState(
+    new Date().toISOString().split("T")[0]
+  );
+  const [packageEndDate, setPackageEndDate] = useState("");
+  const [numberOfGuest, setNumberOfGuest] = useState("");
+  const [priceRange, setPriceRange] = useState([0, 1000]);
+  const [isCustomizable, setIsCustomizable] = useState("");
+  const [packageName, setPackageName] = useState("");
+  const [packageRating, setPackageRating] = useState("");
+  const [sortBy, setSortBy] = useState("priceSort:ASC");
+  const [showSpinner, setShowSpinner] = useState(false);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarVariant, setSnackbarVariant] = useState("success");
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [locations, setLocations] = useState([]);
 
-  const handleOpenUserMenu = (event) => {
-    setAnchorElUser(event.currentTarget);
+  const API_URL = process.env.API_URL;
+
+  const showSnackbar = (variant, message) => {
+    setSnackbarVariant(variant);
+    setSnackbarMessage(message);
+    setSnackbarOpen(true);
+
+    setTimeout(() => {
+      setSnackbarOpen(false);
+    }, 2000);
   };
 
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
+  const fetchTravelPackages = async () => {
+    if (
+      packageEndDate &&
+      new Date(packageEndDate) < new Date(packageStartDate)
+    ) {
+      showSnackbar("error", "End Date cannot be before Start Date");
+      return;
+    }
+
+    setLoading(true);
+    setError("");
+    setShowSpinner(true);
+
+    const dataPayload = {
+      sourceCity,
+      destinationCity,
+      packageStartDate: packageStartDate
+        ? new Date(packageStartDate).toISOString()
+        : "",
+      packageEndDate: packageEndDate
+        ? new Date(packageEndDate).toISOString()
+        : "",
+      numberOfGuest,
+    };
+
+    const queryParams = new URLSearchParams();
+    if (sortBy) queryParams.append("sortBy", sortBy);
+    if (priceRange)
+      queryParams.append("filterBy", `price:${priceRange.join("#")}`);
+    if (isCustomizable)
+      queryParams.append("filterBy", `isCustomizable:${isCustomizable}`);
+    if (packageName)
+      queryParams.append("filterBy", `packageName:${packageName}`);
+    if (packageRating)
+      queryParams.append("filterBy", `packageRating:${packageRating}`);
+
+    const authToken = localStorage.getItem("authToken");
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${authToken}`,
+    };
+
+    const url = `${API_URL}/api/v1/search/travel-packages?${queryParams.toString()}`;
+
+    try {
+      const response = await axios.post(url, dataPayload, { headers });
+      if (response.data && response.data.travelPackages) {
+        setTimeout(() => {
+          setShowSpinner(false);
+          setResults(response.data.travelPackages);
+          if (response.data.travelPackages.length == 0) {
+            showSnackbar("error", "No Packages Found");
+          }
+        }, 2000);
+      } else {
+        setError(
+          "The response from the API does not have the expected structure."
+        );
+        setShowSpinner(false);
+      }
+    } catch (e) {
+      setError(`Error: ${e.response ? e.response.data.message : e.message}`);
+      setShowSpinner(false);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const logoutUser = () => {
-    localStorage.removeItem("authToken");
-    navigate("/");
-  };
-  
-  const toggleDrawer = () => {
-    setOpen(!open);
-  };
+  const handleSourceCityChange = (e) => setSourceCity(e.target.value);
+  const handleDestinationCityChange = (e) => setDestinationCity(e.target.value);
+  const handlePackageStartDateChange = (e) =>
+    setPackageStartDate(e.target.value);
+  const handlePackageEndDateChange = (e) => setPackageEndDate(e.target.value);
+  const handlePriceRangeChange = (e, newValue) => setPriceRange(newValue);
+  const handleSortByChange = (e) => setSortBy(e.target.value);
+
+  useEffect(() => {
+    const getData = async () => {
+      const locationsData = await fetchData("/api/v1/locations");
+      setLocations(locationsData);
+    };
+
+    getData();
+
+    console.log(locations);
+  }, []);
 
   return (
-    <ThemeProvider theme={defaultTheme}>
-      <Box sx={{ display: "flex" }}>
-        <CssBaseline />
-        <AppBar position="absolute" open={open}>
-          <Toolbar
-            sx={{
-              pr: "24px",
+    <div className="search-container">
+      <div className="search-box">
+        {/* Search section */}
+        <div className="search-fields">
+          {/* Source City */}
+          <FormControl variant="outlined" className="search-input">
+            <InputLabel>Source City</InputLabel>
+            <Select
+              value={sourceCity}
+              onChange={handleSourceCityChange}
+              label="Source City"
+            >
+              {locations.map((location) => (
+                <MenuItem key={location.id} value={location.city}>
+                  {location.city}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+
+          {/* Destination City */}
+          <FormControl variant="outlined" className="search-input">
+            <InputLabel>Destination City</InputLabel>
+            <Select
+              value={destinationCity}
+              onChange={handleDestinationCityChange}
+              label="Destination City"
+            >
+              {locations.map((location) => (
+                <MenuItem key={location.id} value={location.city}>
+                  {location.city}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <TextField
+            label="Start Date"
+            type="date"
+            variant="outlined"
+            value={packageStartDate}
+            onChange={handlePackageStartDateChange}
+            InputLabelProps={{
+              shrink: true,
             }}
-          >
-            <IconButton
-              edge="start"
-              color="inherit"
-              aria-label="open drawer"
-              onClick={toggleDrawer}
-              sx={{
-                marginRight: "36px",
-                ...(open && { display: "none" }),
-              }}
-            >
-              <MenuIcon />
-            </IconButton>
-            <Typography
-              component="h1"
-              variant="h6"
-              color="inherit"
-              noWrap
-              sx={{ flexGrow: 1 }}
-            >
-              {title}
-            </Typography>
-            <IconButton color="inherit">
-              <Badge badgeContent={4} color="secondary">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
-          <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Account settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="User Avatar" src="/static/images/avatar/2.jpg" />
-              </IconButton>
-            </Tooltip>
-            <Menu
-              sx={{ mt: "45px" }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              <MenuItem
-                onClick={() => {
-                  navigate('/userprofile');
-                  handleCloseUserMenu();
-                }}
-              >
-                <Typography textAlign="center">Profile</Typography>
-              </MenuItem>
-              <MenuItem
-                onClick={() => {
-                  logoutUser();
-                  handleCloseUserMenu();
-                }}
-              >
-                <Typography textAlign="center">Logout</Typography>
-              </MenuItem>
-            </Menu>
-          </Box>
-          </Toolbar>
-        </AppBar>
-        <Drawer variant="permanent" open={open}>
-          <Toolbar
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "flex-end",
-              px: [1],
+            inputProps={{
+              min: new Date().toISOString().split("T")[0],
             }}
+            className="search-input"
+          />
+          <TextField
+            label="End Date"
+            type="date"
+            variant="outlined"
+            value={packageEndDate}
+            onChange={handlePackageEndDateChange}
+            InputLabelProps={{
+              shrink: true,
+            }}
+            className="search-input"
+          />
+          <Typography id="price-range-slider" gutterBottom>
+            Price Range
+          </Typography>
+          <Slider
+            value={priceRange}
+            onChange={handlePriceRangeChange}
+            valueLabelDisplay="auto"
+            aria-labelledby="price-range-slider"
+            min={0}
+            max={1000}
+            className="price-slider"
+          />
+          <FormControl variant="outlined" className="search-input">
+            <InputLabel>Sort By</InputLabel>
+            <Select
+              value={sortBy}
+              onChange={handleSortByChange}
+              label="Sort By"
+            >
+              <MenuItem value="priceSort:ASC">Price - Low to High</MenuItem>
+              <MenuItem value="priceSort:DESC">Price - High to Low</MenuItem>
+            </Select>
+          </FormControl>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={fetchTravelPackages}
+            className="search-button"
           >
-            <IconButton onClick={toggleDrawer}>
-              <ChevronLeftIcon />
-            </IconButton>
-          </Toolbar>
-          <Divider />
-          <List component="nav">
-            {mainListItems}
-            <Divider sx={{ my: 1 }} />
-          </List>
-        </Drawer>
-        <Box
-          component="main"
-          sx={{
-            backgroundColor: (theme) =>
-              theme.palette.mode === "light"
-                ? theme.palette.grey[100]
-                : theme.palette.grey[900],
-            flexGrow: 1,
-            height: "100vh",
-            overflow: "auto",
-          }}
-        >
-          <Toolbar />
-          <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-            <Grid container spacing={3}>
-              <Grid item xs={12}>
-                <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
-                  <Search/>
-                </Paper>
-              </Grid>
-            </Grid>
-            <Copyright sx={{ pt: 4 }} />
-          </Container>
-        </Box>
-      </Box>
-    </ThemeProvider>
+            Search
+          </Button>
+        </div>
+      </div>
+      {/* Results section */}
+      {showSpinner && <CircularProgress size={24} style={{ marginLeft: 10 }} />}
+      {!showSpinner && <SearchResults results={results} />}
+      <StyledSnackbar
+        open={snackbarOpen}
+        autoHideDuration={2000}
+        onClose={() => setSnackbarOpen(false)}
+      >
+        <StyledSnackbarContent
+          variant={snackbarVariant}
+          message={
+            <span>
+              {snackbarVariant === "success" ? (
+                <CheckCircleIcon style={{ marginRight: "8px" }} />
+              ) : (
+                <ErrorIcon style={{ marginRight: "8px" }} />
+              )}
+              {snackbarMessage}
+            </span>
+          }
+        />
+      </StyledSnackbar>
+    </div>
   );
-}
+};
+
+export default Search;

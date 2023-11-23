@@ -14,7 +14,6 @@ import { Link as RouterLink, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
-import API_URL from "../../config/config";
 import TravelLogo from "./commons/TravelLogo";
 import Copyright from "./commons/Copyright";
 
@@ -31,6 +30,7 @@ export default function Login() {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState("success");
+  const API_URL = process.env.API_URL;
 
   const handleSnackbarClose = (event, reason) => {
     if (reason === "clickaway") {

@@ -40,13 +40,13 @@ export const mainListItems = (
         <ListItemText primary="Create Package" />
       </Link>
     </ListItemButton>
-    <ListItemButton component={Link} to="/agentbookings">
+    <ListItemButton component={Link} to="/upcomingbookings">
       <ListItemIcon>
         <UpcomingIcon />
       </ListItemIcon>
       <ListItemText primary="Upcoming Bookings" />
     </ListItemButton>
-    <ListItemButton component={Link} to="/agentbookings">
+    <ListItemButton component={Link} to="/pastbookings">
       <ListItemIcon>
         <EventNoteIcon />
       </ListItemIcon>
@@ -58,7 +58,7 @@ export const mainListItems = (
       </ListItemIcon>
       <ListItemText primary="Customer Details" />
     </ListItemButton>
-    <ListItemButton component={Link} to="/customerdetails">
+    <ListItemButton component={Link} to="/amountearned">
       <ListItemIcon>
         <MonetizationOnIcon />
       </ListItemIcon>

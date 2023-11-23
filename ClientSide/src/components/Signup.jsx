@@ -19,7 +19,6 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import countries from "../data/countries.json";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import axios from "axios";
-import API_URL from "../../config/config";
 import TravelLogo from "./commons/TravelLogo";
 import { Paper } from "@mui/material";
 import Copyright from "./commons/Copyright";
@@ -43,6 +42,7 @@ export default function SignUp() {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState("success");
+  const API_URL = process.env.API_URL;
 
   const handleSnackbarClose = (event, reason) => {
     if (reason === "clickaway") {
