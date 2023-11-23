@@ -23,6 +23,7 @@ import ErrorIcon from "@mui/icons-material/Error";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import fetchData from "../../utility/request";
 import axios from "axios";
+import fetchUserDetails from "../../utility/requestUserDetails";
 
 const StyledSnackbar = styled(Snackbar)({
   bottom: "20px",
@@ -180,8 +181,6 @@ function TravelForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log(formData);
-
     const requiredFields = [
       "packageName",
       "tripStartDate",
@@ -198,9 +197,11 @@ function TravelForm() {
     if (hasEmptyFields) {
       setDialogOpen(true);
     } else {
+      const agentDetails = await fetchUserDetails("agent");
+
       const postData = {
         packageName: formData.packageName,
-        agentId: 1,
+        agentId: agentDetails.id,
         tripStartDate: new Date(formData.tripStartDate).toISOString(),
         tripEndDate: new Date(formData.tripEndDate).toISOString(),
         sourceId: formData.tripSource,
