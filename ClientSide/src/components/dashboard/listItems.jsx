@@ -6,9 +6,9 @@ import DashboardIcon from "@mui/icons-material/Dashboard";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import EventNoteIcon from "@mui/icons-material/EventNote";
 import UpcomingIcon from "@mui/icons-material/EventAvailable";
-import SearchIcon from "@mui/icons-material/Search"; 
-import PeopleIcon from "@mui/icons-material/People"; 
-import MonetizationOnIcon from "@mui/icons-material/MonetizationOn"; 
+import SearchIcon from "@mui/icons-material/Search";
+import PeopleIcon from "@mui/icons-material/People";
+import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import { Link } from "react-router-dom";
 import UpcomingBookings from "../agent/Upcomingbookings";
 
@@ -19,16 +19,6 @@ export const mainListItems = (
         <SearchIcon />
       </ListItemIcon>
       <ListItemText primary="Search" />
-    </ListItemButton>
-    <ListItemButton>
-      <Link to={"/agent-dashboard"}>
-        <ListItemIcon>
-          <DashboardIcon />
-        </ListItemIcon>
-      </Link>
-      <Link to={"/agent-dashboard"}>
-        <ListItemText primary="Dashboard" />
-      </Link>
     </ListItemButton>
     <ListItemButton>
       <Link to={"/create-package"}>
