@@ -41,12 +41,23 @@ const MainListItems = () => {
         </ListItemButton>
       )}
 
-      <ListItemButton component={Link} to="/upcomingbookings">
-        <ListItemIcon>
-          <UpcomingIcon />
-        </ListItemIcon>
-        <ListItemText primary="Upcoming Bookings" />
-      </ListItemButton>
+      {role == "AGENT" && (
+        <ListItemButton component={Link} to="/agent/upcomingbookings">
+          <ListItemIcon>
+            <UpcomingIcon />
+          </ListItemIcon>
+          <ListItemText primary="Upcoming Bookings" />
+        </ListItemButton>
+      )}
+
+      {role == "CUSTOMER" && (
+        <ListItemButton component={Link} to="/upcomingbookings">
+          <ListItemIcon>
+            <UpcomingIcon />
+          </ListItemIcon>
+          <ListItemText primary="Upcoming Bookings" />
+        </ListItemButton>
+      )}
 
       {role == "AGENT" && (
         <ListItemButton component={Link} to="/pastbookings">

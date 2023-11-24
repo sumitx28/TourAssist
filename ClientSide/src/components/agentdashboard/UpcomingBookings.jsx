@@ -4,133 +4,103 @@ import { jwtDecode } from "jwt-decode";
 import {
   Card,
   CardContent,
-  CardMedia,
   Typography,
-  Container,
   CardActions,
-  Button,
+  CircularProgress,
+  Container,
+  CardMedia,
 } from "@mui/material";
-import { Link } from "react-router-dom";
+import fetchUserDetails from "../../utility/requestUserDetails";
 
-const UpcomingAgentBookings = () => {
-  const [upcomingBookings, setUpcomingBookings] = useState([]);
+const UpcomingBookingsAgent = () => {
+  const [bookingDetails, setBookingDetails] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const API_URL = process.env.API_URL;
   const authToken = localStorage.getItem("authToken");
 
   useEffect(() => {
-    if (!authToken) {
-      console.error("Authentication token is missing.");
-      return;
-    }
-
-    let user;
-    try {
-      user = jwtDecode(authToken);
-    } catch (e) {
-      console.error("Authentication token is invalid.");
-      return;
-    }
-
-    const fetchUpcomingBookings = async () => {
+    const fetchData = async () => {
       try {
+        if (!authToken) {
+          throw new Error("Authentication token is missing.");
+        }
+
+        let user;
+        try {
+          user = jwtDecode(authToken);
+        } catch (e) {
+          throw new Error("Authentication token is invalid.");
+        }
+
+        const userDetails = await fetchUserDetails("agent");
+
         const response = await axios.get(
-          `${API_URL}/api/v1/booking/booking-details`,
+          `${API_URL}/api/v1/booking/upcoming-booking/${userDetails.id}`,
           {
-            params: { appUserId: user?.appUserId },
             headers: {
-              "Content-Type": "application/json",
               Authorization: `Bearer ${authToken}`,
             },
           }
         );
-        setUpcomingBookings(response.data.bookingDetailsList);
+
+        const filteredData = response.data.filter(
+          (data) => data.bookingStatus === "CONFIRM"
+        );
+
+        setBookingDetails(filteredData);
       } catch (error) {
-        console.error(error);
+        setError(error.message);
+      } finally {
+        setLoading(false);
       }
     };
 
-    fetchUpcomingBookings();
-  }, [authToken]);
+    fetchData();
+  }, [authToken, API_URL]);
 
-  const getImageUrlByBookingId = async (bookingId) => {
-    try {
-      const response = await axios.get(
-        `http://localhost:8080/api/v1/package/${bookingId}`
-      );
-
-      if (
-        response.data &&
-        response.data.mediaPath &&
-        response.data.mediaPath[0] &&
-        response.data.mediaPath[0].media
-      ) {
-        return response.data.mediaPath[0].media;
-      } else {
-        console.error("Image URL not found in the API response.");
-        return null;
-      }
-    } catch (error) {
-      console.error("Error fetching image URL:", error);
-      return null;
-    }
-  };
-
-  const hasUpcomingBookings =
-    upcomingBookings &&
-    Array.isArray(upcomingBookings) &&
-    upcomingBookings.length > 0;
+  if (loading) return <CircularProgress />;
+  if (error) return <Typography>Error: {error}</Typography>;
 
   return (
     <Container maxWidth="md" className="mt-4">
       <div className="flex flex-wrap justify-center">
-        {hasUpcomingBookings ? (
-          upcomingBookings.map((booking) => (
-            <Link
-              key={booking.packageId}
-              to={`/package/${booking.packageId}`}
-              style={{ textDecoration: "none" }}
-            >
-              <Card
-                className="m-2"
-                style={{
-                  backgroundColor: "black",
-                  color: "white",
-                  height: "270px",
-                  width: "300px",
-                }}
-              >
-                <CardMedia
-                  component="img"
-                  style={{ height: "150px" }}
-                  image="https://media.istockphoto.com/id/155439315/photo/passenger-airplane-flying-above-clouds-during-sunset.jpg?s=612x612&w=0&k=20&c=LJWadbs3B-jSGJBVy9s0f8gZMHi2NvWFXa3VJ2lFcL0="
-                  alt={booking.packageName}
-                />
-                <CardContent>
-                  <Typography gutterBottom variant="h5" component="div">
-                    {booking.packageName}
-                  </Typography>
-                  <Typography variant="body2">
-                    Booking Date:{" "}
-                    {new Date(booking.bookingDate).toLocaleDateString()}
-                  </Typography>
-                  <Typography variant="body2">
-                    Total Price: {booking.totalPrice}
-                  </Typography>
-                </CardContent>
-                <CardActions>
-                  <Button variant="outlined" color="primary">
-                    Learn More
-                  </Button>
-                </CardActions>
-              </Card>
-            </Link>
+        {bookingDetails.length > 0 ? (
+          bookingDetails.map((booking) => (
+            <Card key={booking.id} sx={{ maxWidth: 345, m: 2 }}>
+              <CardMedia
+                component="img"
+                height="150"
+                image="https://media.istockphoto.com/id/155439315/photo/passenger-airplane-flying-above-clouds-during-sunset.jpg?s=612x612&w=0&k=20&c=LJWadbs3B-jSGJBVy9s0f8gZMHi2NvWFXa3VJ2lFcL0="
+                alt={booking.packageName}
+              />
+              <CardContent>
+                <Typography gutterBottom variant="h5" component="div">
+                  Booking ID: {booking.id}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  User: {booking.customer.firstName} {booking.customer.lastName}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Package Name: {booking.packageD.packageName}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Booking Date:{" "}
+                  {new Date(booking.bookingDate).toLocaleDateString()}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Total Price: {booking.totalPrice}
+                </Typography>
+              </CardContent>
+              <CardActions></CardActions>
+            </Card>
           ))
         ) : (
-          <Typography>No upcoming bookings found.</Typography>
+          <Typography>No upcoming booking details found.</Typography>
         )}
       </div>
     </Container>
   );
 };
 
-export default UpcomingAgentBookings;
+export default UpcomingBookingsAgent;

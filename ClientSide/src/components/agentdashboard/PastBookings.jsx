@@ -1,37 +1,38 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
-import { Card, CardContent, Typography, CardActions } from "@mui/material";
+import {
+  Card,
+  CardContent,
+  Typography,
+  CardActions,
+  CircularProgress,
+  Container,
+  CardMedia,
+} from "@mui/material";
 import fetchUserDetails from "../../utility/requestUserDetails";
 
 const PastBookings = () => {
   const [bookingDetails, setBookingDetails] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const API_URL = process.env.API_URL;
   const authToken = localStorage.getItem("authToken");
-  if (!authToken) {
-    setError("Authentication token is missing.");
-    return;
-  }
-
-  let user;
-  try {
-    user = jwtDecode(authToken);
-  } catch (e) {
-    setError("Authentication token is invalid.");
-    return;
-  }
-
-  const hasBookings =
-    bookingDetails &&
-    Array.isArray(bookingDetails) &&
-    bookingDetails.length > 0;
 
   useEffect(() => {
-    const fetchBookingDetails = async () => {
-      setLoading(true);
+    const fetchData = async () => {
       try {
+        if (!authToken) {
+          throw new Error("Authentication token is missing.");
+        }
+
+        let user;
+        try {
+          user = jwtDecode(authToken);
+        } catch (e) {
+          throw new Error("Authentication token is invalid.");
+        }
+
         const userDetails = await fetchUserDetails("agent");
 
         const response = await axios.get(
@@ -44,7 +45,7 @@ const PastBookings = () => {
         );
 
         const filteredData = response.data.filter(
-          (data) => data.bookingStatus == "CONFIRM"
+          (data) => data.bookingStatus === "CONFIRM"
         );
 
         setBookingDetails(filteredData);
@@ -55,18 +56,24 @@ const PastBookings = () => {
       }
     };
 
-    fetchBookingDetails();
-  }, []);
+    fetchData();
+  }, [authToken, API_URL]);
 
-  if (loading) return <Typography>Loading...</Typography>;
+  if (loading) return <CircularProgress />;
   if (error) return <Typography>Error: {error}</Typography>;
 
   return (
-    <div className="container mx-auto p-4">
+    <Container maxWidth="md" className="mt-4">
       <div className="flex flex-wrap justify-center">
-        {hasBookings ? (
+        {bookingDetails.length > 0 ? (
           bookingDetails.map((booking) => (
             <Card key={booking.id} sx={{ maxWidth: 345, m: 2 }}>
+              <CardMedia
+                component="img"
+                height="150"
+                image="https://media.istockphoto.com/id/155439315/photo/passenger-airplane-flying-above-clouds-during-sunset.jpg?s=612x612&w=0&k=20&c=LJWadbs3B-jSGJBVy9s0f8gZMHi2NvWFXa3VJ2lFcL0="
+                alt={booking.packageName}
+              />
               <CardContent>
                 <Typography gutterBottom variant="h5" component="div">
                   Booking ID: {booking.id}
@@ -92,7 +99,7 @@ const PastBookings = () => {
           <Typography>No past booking details found.</Typography>
         )}
       </div>
-    </div>
+    </Container>
   );
 };
 
