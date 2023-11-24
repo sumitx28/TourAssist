@@ -8,15 +8,15 @@ import ResetPassword from "./components/ResetPassword";
 import SignUp from "./components/Signup";
 import AuthGuard from "./guards/AuthGuard";
 import CreatePackage from "./components/agent/CreatePackage";
-import UserProfileDashboard from "./components/UserProfileDashboard";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import PackageDetail from "./components/travel-package/PackageDetail";
 import Search from "./components/search/Search";
 import PastBookings from "./components/agentdashboard/PastBookings";
-import UpcomingBookings from "./components/agentdashboard/UpcomingBookings";
+import UpcomingBookings from "./components/customer/UpcomingBookings";
 import CustomerDetails from "./components/agentdashboard/CustomerDetails";
 import AmountEarned from "./components/agentdashboard/AmountEarned";
-import UserProfile from "./components/UserProfile";
+import UserProfile from "./components/userprofile/UserProfile";
+import UpcomingAgentBookings from "./components/agentdashboard/UpcomingBookings";
 
 function App() {
   return (
@@ -79,6 +79,17 @@ function App() {
                 <AgentDash
                   title="Upcoming Bookings"
                   Component={<UpcomingBookings />}
+                />
+              </AuthGuard>
+            }
+          />
+          <Route
+            path="/agent/upcomingbookings"
+            element={
+              <AuthGuard>
+                <AgentDash
+                  title="Upcoming Bookings"
+                  Component={<UpcomingAgentBookings />}
                 />
               </AuthGuard>
             }

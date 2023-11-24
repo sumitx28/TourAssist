@@ -1,96 +1,224 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import {jwtDecode} from 'jwt-decode'
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { jwtDecode } from "jwt-decode";
+import TextField from "@mui/material/TextField";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import Typography from "@mui/material/Typography";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemText from "@mui/material/ListItemText";
+import CheckIcon from "@mui/icons-material/Check";
+import EditIcon from "@mui/icons-material/Edit";
+import { useNavigate } from "react-router-dom";
 
 export default function UserProfile() {
   const [editFields, setEditFields] = useState({
-    email: 'jane.doe@example.com',
-    mobileNumber: '123-456-7890'
+    email: "",
+    mobileNumber: "",
   });
 
-  const [editMode, setEditMode] = useState(false);
+  const [customerData, setCustomerData] = useState({
+    id: 0,
+    firstName: "",
+    lastName: "",
+    mobile: "",
+    dateOfBirth: "",
+    country: "",
+  });
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [isMobileEditMode, setIsMobileEditMode] = useState(false);
+  const navigate = useNavigate();
+
+  const API_URL = process.env.API_URL;
+
+  const formatDate = (dateString) => {
+    const options = { day: "2-digit", month: "2-digit", year: "numeric" };
+    return new Date(dateString).toLocaleDateString(undefined, options);
+  };
+
+  useEffect(() => {
+    const authToken = localStorage.getItem("authToken");
+    const user = jwtDecode(authToken);
+
+    const apiEndpoint = `${API_URL}/api/v1/customer/${user.appUserId}`;
+
+    const headers = {
+      Authorization: `Bearer ${authToken}`,
+    };
+
+    axios
+      .get(apiEndpoint, { headers })
+      .then((response) => {
+        setCustomerData(response.data);
+        setEditFields({ email: user.sub, mobileNumber: response.data.mobile });
+      })
+      .catch((error) => {
+        console.error("Error fetching customer data:", error);
+      });
+
+    setEditFields({ ...editFields, email: user.sub });
+  }, []);
+
+  const handleToggleEditMode = () => {
+    setIsEditMode(!isEditMode);
+  };
+
+  const handleMobileToggleEditMode = () => {
+    setIsMobileEditMode(!isMobileEditMode);
+  };
 
   const handleInputChange = (e) => {
     setEditFields({ ...editFields, [e.target.name]: e.target.value });
   };
 
-  const updateUserProfile = async (fieldToUpdate) => {
+  const handleSaveMobile = () => {
+    updateUserDetails();
+    window.location.reload(false);
+    setIsMobileEditMode(false);
+  };
+
+  const handleSaveEmail = () => {
+    updateUserDetails();
+    window.location.reload(false);
+    setIsEditMode(false);
+  };
+
+  const updateUserDetails = async () => {
     const authToken = localStorage.getItem("authToken");
     const user = jwtDecode(authToken);
-    const apiEndpoint = 'http://localhost:8080/api/v1/user-profile/update-profile';
+    const apiEndpoint = `${API_URL}/api/v1/user-profile/update-profile`;
 
     const headers = {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${authToken}`
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${authToken}`,
     };
 
     const data = {
       appUserId: user.appUserId,
-      [fieldToUpdate]: editFields[fieldToUpdate]
+      mobile: editFields.mobileNumber,
+      email: editFields.email,
     };
 
     try {
       await axios.post(apiEndpoint, data, { headers });
-      alert('Profile updated successfully!');
-      setEditMode(false);
+      alert("Profile updated successfully!");
     } catch (error) {
-      console.error('Error updating profile:', error);
-      alert('Failed to update profile.');
+      console.error("Error updating profile:", error);
     }
   };
 
-  const handleSaveEmail = () => {
-    updateUserProfile('email');
-  };
-
-  const handleSaveMobileNumber = () => {
-    updateUserProfile('mobile');
-  };
-
   return (
-    <div className="container mx-auto p-4">
-      <div className="flex flex-wrap justify-center">
-        {/* ... existing avatar & name section ... */}
-        <div className="w-full sm:w-1/2 md:w-3/4 p-2">
-          <div className="bg-white shadow rounded-lg p-4">
-            <h3 className="text-lg font-semibold mb-4">Personal Information</h3>
-            <div className="space-y-3">
-              {editMode ? (
-                <>
-                  <input
-                    type="text"
+    <Card
+      elevation={0}
+      sx={{ textAlign: "center", backgroundColor: "transparent" }}
+    >
+      <CardContent>
+        <Typography variant="h5" gutterBottom sx={{ marginBottom: 3 }}>
+          Personal Information
+        </Typography>
+        <List sx={{ marginBottom: 2 }}>
+          <ListItem>
+            <ListItemText
+              primary={
+                <Typography variant="body1" color="textSecondary" paragraph>
+                  <strong>Name:</strong>{" "}
+                  {`${customerData.firstName} ${customerData.lastName}`}
+                </Typography>
+              }
+            />
+          </ListItem>
+          <ListItem>
+            {isMobileEditMode ? (
+              <TextField
+                label="Mobile"
+                name="mobileNumber"
+                value={editFields.mobileNumber}
+                onChange={handleInputChange}
+                variant="outlined"
+                fullWidth
+                margin="normal"
+                sx={{ marginBottom: 2 }}
+              />
+            ) : (
+              <ListItemText
+                primary={
+                  <Typography variant="body1" color="textSecondary" paragraph>
+                    <strong>Mobile:</strong> {customerData.mobile}
+                  </Typography>
+                }
+              />
+            )}
+            {isMobileEditMode ? (
+              <CheckIcon
+                color="primary"
+                onClick={handleSaveMobile}
+                sx={{ cursor: "pointer", marginLeft: 1 }}
+              />
+            ) : (
+              <EditIcon
+                color="primary"
+                onClick={handleMobileToggleEditMode}
+                sx={{ cursor: "pointer", marginLeft: 1 }}
+              />
+            )}
+          </ListItem>
+          <ListItem>
+            <ListItemText
+              primary={
+                isEditMode ? (
+                  <TextField
+                    label="Email"
                     name="email"
                     value={editFields.email}
                     onChange={handleInputChange}
-                    className="border border-gray-300 rounded-md py-2 px-4 w-full"
+                    variant="outlined"
+                    fullWidth
+                    margin="normal"
+                    sx={{ marginBottom: 2 }}
                   />
-                  <input
-                    type="text"
-                    name="mobileNumber"
-                    value={editFields.mobileNumber}
-                    onChange={handleInputChange}
-                    className="border border-gray-300 rounded-md py-2 px-4 w-full"
-                  />
-                  <button onClick={handleSaveEmail} className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
-                    Save Email
-                  </button>
-                  <button onClick={handleSaveMobileNumber} className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
-                    Save Mobile Number
-                  </button>
-                </>
-              ) : (
-                <>
-                  <p className="text-gray-600">{`Email: ${editFields.email}`}</p>
-                  <p className="text-gray-600">{`Mobile Number: ${editFields.mobileNumber}`}</p>
-                  <button onClick={() => setEditMode(true)} className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
-                    Edit Profile
-                  </button>
-                </>
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+                ) : (
+                  <Typography variant="body1" color="textSecondary" paragraph>
+                    <strong>Email:</strong> {editFields.email}
+                  </Typography>
+                )
+              }
+            />
+            {isEditMode ? (
+              <CheckIcon
+                color="primary"
+                onClick={handleSaveEmail}
+                sx={{ cursor: "pointer", marginLeft: 1 }}
+              />
+            ) : (
+              <EditIcon
+                color="primary"
+                onClick={handleToggleEditMode}
+                sx={{ cursor: "pointer", marginLeft: 1 }}
+              />
+            )}
+          </ListItem>
+          <ListItem>
+            <ListItemText
+              primary={
+                <Typography variant="body1" color="textSecondary" paragraph>
+                  <strong>Date of Birth:</strong>{" "}
+                  {formatDate(customerData.dateOfBirth)}
+                </Typography>
+              }
+            />
+          </ListItem>
+          <ListItem>
+            <ListItemText
+              primary={
+                <Typography variant="body1" color="textSecondary" paragraph>
+                  <strong>Country:</strong> {customerData.country}
+                </Typography>
+              }
+            />
+          </ListItem>
+        </List>
+      </CardContent>
+    </Card>
   );
 }

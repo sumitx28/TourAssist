@@ -3,7 +3,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Container, Grid, Dialog } from "@mui/material";
 import PaymentDialog from "./PaymentDialog";
 import axios from "axios";
-import NavBar from "../commons/NavBar";
 import { jwtDecode } from "jwt-decode";
 import UserDetailsForm from "./UserDetailsForm";
 import PackageCard from "./PackageCard";

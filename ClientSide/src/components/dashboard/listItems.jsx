@@ -41,12 +41,23 @@ const MainListItems = () => {
         </ListItemButton>
       )}
 
-      <ListItemButton component={Link} to="/upcomingbookings">
-        <ListItemIcon>
-          <UpcomingIcon />
-        </ListItemIcon>
-        <ListItemText primary="Upcoming Bookings" />
-      </ListItemButton>
+      {role == "AGENT" && (
+        <ListItemButton component={Link} to="/agent/upcomingbookings">
+          <ListItemIcon>
+            <UpcomingIcon />
+          </ListItemIcon>
+          <ListItemText primary="Upcoming Bookings" />
+        </ListItemButton>
+      )}
+
+      {role == "CUSTOMER" && (
+        <ListItemButton component={Link} to="/upcomingbookings">
+          <ListItemIcon>
+            <UpcomingIcon />
+          </ListItemIcon>
+          <ListItemText primary="Upcoming Bookings" />
+        </ListItemButton>
+      )}
 
       {role == "AGENT" && (
         <ListItemButton component={Link} to="/pastbookings">
@@ -72,14 +83,14 @@ const MainListItems = () => {
           <ListItemText primary="Amount Earned" />
         </ListItemButton>
       )}
-      {role == "CUSTOMER" && (
+      {/* {role == "CUSTOMER" && (
         <ListItemButton component={Link} to="/userprofile">
           <ListItemIcon>
             <PeopleIcon />
           </ListItemIcon>
           <ListItemText primary="User Profile" />
         </ListItemButton>
-      )}
+      )} */}
     </React.Fragment>
   );
 };

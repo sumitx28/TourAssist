@@ -1,32 +1,38 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
-import { Card, CardContent, Typography } from "@mui/material";
+import {
+  Card,
+  CardContent,
+  Typography,
+  CardActions,
+  CircularProgress,
+  Container,
+  CardMedia,
+} from "@mui/material";
 import fetchUserDetails from "../../utility/requestUserDetails";
 
-const UpcomingAgentBookings = () => {
-  const [upcomingBookings, setUpcomingBookings] = useState([]);
-  const [loading, setLoading] = useState(false);
+const UpcomingBookingsAgent = () => {
+  const [bookingDetails, setBookingDetails] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const API_URL = process.env.API_URL;
   const authToken = localStorage.getItem("authToken");
 
   useEffect(() => {
-    if (!authToken) {
-      setError("Authentication token is missing.");
-      return;
-    }
-    let user;
-    try {
-      user = jwtDecode(authToken);
-    } catch (e) {
-      setError("Authentication token is invalid.");
-      return;
-    }
-
-    const fetchUpcomingBookings = async () => {
-      setLoading(true);
+    const fetchData = async () => {
       try {
+        if (!authToken) {
+          throw new Error("Authentication token is missing.");
+        }
+
+        let user;
+        try {
+          user = jwtDecode(authToken);
+        } catch (e) {
+          throw new Error("Authentication token is invalid.");
+        }
+
         const userDetails = await fetchUserDetails("agent");
 
         const response = await axios.get(
@@ -37,7 +43,12 @@ const UpcomingAgentBookings = () => {
             },
           }
         );
-        setUpcomingBookings(response.data);
+
+        const filteredData = response.data.filter(
+          (data) => data.bookingStatus === "CONFIRM"
+        );
+
+        setBookingDetails(filteredData);
       } catch (error) {
         setError(error.message);
       } finally {
@@ -45,23 +56,24 @@ const UpcomingAgentBookings = () => {
       }
     };
 
-    fetchUpcomingBookings();
-  }, [authToken]);
+    fetchData();
+  }, [authToken, API_URL]);
 
-  if (loading) return <Typography>Loading...</Typography>;
+  if (loading) return <CircularProgress />;
   if (error) return <Typography>Error: {error}</Typography>;
 
-  const hasUpcomingBookings =
-    upcomingBookings &&
-    Array.isArray(upcomingBookings) &&
-    upcomingBookings.length > 0;
-
   return (
-    <div className="container mx-auto p-4">
+    <Container maxWidth="md" className="mt-4">
       <div className="flex flex-wrap justify-center">
-        {hasUpcomingBookings ? (
-          upcomingBookings.map((booking) => (
+        {bookingDetails.length > 0 ? (
+          bookingDetails.map((booking) => (
             <Card key={booking.id} sx={{ maxWidth: 345, m: 2 }}>
+              <CardMedia
+                component="img"
+                height="150"
+                image="https://media.istockphoto.com/id/155439315/photo/passenger-airplane-flying-above-clouds-during-sunset.jpg?s=612x612&w=0&k=20&c=LJWadbs3B-jSGJBVy9s0f8gZMHi2NvWFXa3VJ2lFcL0="
+                alt={booking.packageName}
+              />
               <CardContent>
                 <Typography gutterBottom variant="h5" component="div">
                   Booking ID: {booking.id}
@@ -73,28 +85,22 @@ const UpcomingAgentBookings = () => {
                   Package Name: {booking.packageD.packageName}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  Start Date:{" "}
-                  {new Date(
-                    booking.packageD.tripStartDate
-                  ).toLocaleDateString()}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  End Date:{" "}
-                  {new Date(booking.packageD.tripEndDate).toLocaleDateString()}
+                  Booking Date:{" "}
+                  {new Date(booking.bookingDate).toLocaleDateString()}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
                   Total Price: {booking.totalPrice}
                 </Typography>
               </CardContent>
-              {/* Add CardActions if needed */}
+              <CardActions></CardActions>
             </Card>
           ))
         ) : (
-          <Typography>No upcoming bookings found.</Typography>
+          <Typography>No upcoming booking details found.</Typography>
         )}
       </div>
-    </div>
+    </Container>
   );
 };
 
-export default UpcomingAgentBookings;
+export default UpcomingBookingsAgent;
