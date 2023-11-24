@@ -6,15 +6,15 @@ services:
 
 
 stages:
-  - test
-  - build
-  - package
-  - deploy
-  - package-fe
-  - deploy-fe
+  - test-backend
+  - build-backend
+  - package-backend
+  - deploy-backend
+  - package-frontend
+  - deploy-frontend
 
-test:
-  stage: test
+test-backend:
+  stage: test-backend
   tags:
     - deployment
   image: maven:3.8.5-openjdk-17
@@ -23,12 +23,12 @@ test:
     - echo $BACKEND_DIR
     - cd $BACKEND_DIR
     - mvn -version
-    - mvn clean test -Dspring.profiles.active=prod
+    - mvn clean test
   only:
     - main
 
-build:
-  stage: build
+build-backend:
+  stage: build-backend
   tags:
     - deployment
   image: maven:3.8.5-openjdk-17
@@ -42,14 +42,14 @@ build:
   only:
     - main
 
-package:
+package-backend:
   image: docker:latest
   variables:
     DOCKER_TLS_CERTDIR: ""
     DOCKER_HOST: "tcp://docker:2375"
   services:
     - docker:dind
-  stage: package
+  stage: package-backend
   tags:
     - deployment
   script:
@@ -61,8 +61,8 @@ package:
   only:
     - main
 
-deploy:
-  stage: deploy
+deploy-backend:
+  stage: deploy-backend
   tags:
     - deployment
   script:
@@ -78,14 +78,14 @@ deploy:
   only:
     - main
 
-package-fe:
+package-frontend:
   image: docker:latest
   variables:
     DOCKER_TLS_CERTDIR: ""
     DOCKER_HOST: "tcp://docker:2375"
   services:
     - docker:dind
-  stage: package-fe
+  stage: package-frontend
   tags:
     - deployment
   script:
@@ -97,8 +97,8 @@ package-fe:
   only:
     - main
 
-deploy-fe:
-  stage: deploy-fe
+deploy-frontend:
+  stage: deploy-frontend
   tags:
     - deployment
   script:
