@@ -12,7 +12,6 @@ public class AgentEntityToDto {
         agentDetailsDTO.setAgentId(agent.getId());
         agentDetailsDTO.setCompanyName(agent.getCompanyName());
         agentDetailsDTO.setMobile(agent.getMobile());
-
         return agentDetailsDTO;
     }
 }
