@@ -24,6 +24,7 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import fetchData from "../../utility/request";
 import axios from "axios";
 import fetchUserDetails from "../../utility/requestUserDetails";
+import { useNavigate } from "react-router-dom";
 
 const StyledSnackbar = styled(Snackbar)({
   bottom: "20px",
@@ -72,6 +73,7 @@ function TravelForm() {
   });
 
   const API_URL = process.env.API_URL;
+  const navigate = useNavigate();
 
   const [sources, setSources] = useState([]);
   const [destinations, setDestinations] = useState([]);
@@ -259,6 +261,10 @@ function TravelForm() {
         );
 
         showSnackbar("success", "Package Successfully Created");
+
+        setTimeout(() => {
+          navigate("/search");
+        }, 2300);
       } catch (e) {
         showSnackbar("error", "Error creating a package");
       }
