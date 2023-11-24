@@ -1,55 +1,79 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
-import { Card, CardContent, Typography } from "@mui/material";
-import fetchUserDetails from "../../utility/requestUserDetails";
+import {
+  Card,
+  CardContent,
+  CardMedia,
+  Typography,
+  Container,
+  CardActions,
+  Button,
+} from "@mui/material";
+import { Link } from "react-router-dom";
 
 const UpcomingAgentBookings = () => {
   const [upcomingBookings, setUpcomingBookings] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
   const API_URL = process.env.API_URL;
   const authToken = localStorage.getItem("authToken");
 
   useEffect(() => {
     if (!authToken) {
-      setError("Authentication token is missing.");
+      console.error("Authentication token is missing.");
       return;
     }
+
     let user;
     try {
       user = jwtDecode(authToken);
     } catch (e) {
-      setError("Authentication token is invalid.");
+      console.error("Authentication token is invalid.");
       return;
     }
 
     const fetchUpcomingBookings = async () => {
-      setLoading(true);
       try {
-        const userDetails = await fetchUserDetails("agent");
-
         const response = await axios.get(
-          `${API_URL}/api/v1/booking/upcoming-booking/${userDetails.id}`,
+          `${API_URL}/api/v1/booking/booking-details`,
           {
+            params: { appUserId: user?.appUserId },
             headers: {
+              "Content-Type": "application/json",
               Authorization: `Bearer ${authToken}`,
             },
           }
         );
-        setUpcomingBookings(response.data);
+        setUpcomingBookings(response.data.bookingDetailsList);
       } catch (error) {
-        setError(error.message);
-      } finally {
-        setLoading(false);
+        console.error(error);
       }
     };
 
     fetchUpcomingBookings();
   }, [authToken]);
 
-  if (loading) return <Typography>Loading...</Typography>;
-  if (error) return <Typography>Error: {error}</Typography>;
+  const getImageUrlByBookingId = async (bookingId) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/api/v1/package/${bookingId}`
+      );
+
+      if (
+        response.data &&
+        response.data.mediaPath &&
+        response.data.mediaPath[0] &&
+        response.data.mediaPath[0].media
+      ) {
+        return response.data.mediaPath[0].media;
+      } else {
+        console.error("Image URL not found in the API response.");
+        return null;
+      }
+    } catch (error) {
+      console.error("Error fetching image URL:", error);
+      return null;
+    }
+  };
 
   const hasUpcomingBookings =
     upcomingBookings &&
@@ -57,43 +81,55 @@ const UpcomingAgentBookings = () => {
     upcomingBookings.length > 0;
 
   return (
-    <div className="container mx-auto p-4">
+    <Container maxWidth="md" className="mt-4">
       <div className="flex flex-wrap justify-center">
         {hasUpcomingBookings ? (
           upcomingBookings.map((booking) => (
-            <Card key={booking.id} sx={{ maxWidth: 345, m: 2 }}>
-              <CardContent>
-                <Typography gutterBottom variant="h5" component="div">
-                  Booking ID: {booking.id}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  User: {booking.customer.firstName} {booking.customer.lastName}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Package Name: {booking.packageD.packageName}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Start Date:{" "}
-                  {new Date(
-                    booking.packageD.tripStartDate
-                  ).toLocaleDateString()}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  End Date:{" "}
-                  {new Date(booking.packageD.tripEndDate).toLocaleDateString()}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Total Price: {booking.totalPrice}
-                </Typography>
-              </CardContent>
-              {/* Add CardActions if needed */}
-            </Card>
+            <Link
+              key={booking.packageId}
+              to={`/package/${booking.packageId}`}
+              style={{ textDecoration: "none" }}
+            >
+              <Card
+                className="m-2"
+                style={{
+                  backgroundColor: "black",
+                  color: "white",
+                  height: "270px",
+                  width: "300px",
+                }}
+              >
+                <CardMedia
+                  component="img"
+                  style={{ height: "150px" }}
+                  image="https://media.istockphoto.com/id/155439315/photo/passenger-airplane-flying-above-clouds-during-sunset.jpg?s=612x612&w=0&k=20&c=LJWadbs3B-jSGJBVy9s0f8gZMHi2NvWFXa3VJ2lFcL0="
+                  alt={booking.packageName}
+                />
+                <CardContent>
+                  <Typography gutterBottom variant="h5" component="div">
+                    {booking.packageName}
+                  </Typography>
+                  <Typography variant="body2">
+                    Booking Date:{" "}
+                    {new Date(booking.bookingDate).toLocaleDateString()}
+                  </Typography>
+                  <Typography variant="body2">
+                    Total Price: {booking.totalPrice}
+                  </Typography>
+                </CardContent>
+                <CardActions>
+                  <Button variant="outlined" color="primary">
+                    Learn More
+                  </Button>
+                </CardActions>
+              </Card>
+            </Link>
           ))
         ) : (
           <Typography>No upcoming bookings found.</Typography>
         )}
       </div>
-    </div>
+    </Container>
   );
 };
 

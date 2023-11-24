@@ -72,14 +72,14 @@ const MainListItems = () => {
           <ListItemText primary="Amount Earned" />
         </ListItemButton>
       )}
-      {role == "CUSTOMER" && (
+      {/* {role == "CUSTOMER" && (
         <ListItemButton component={Link} to="/userprofile">
           <ListItemIcon>
             <PeopleIcon />
           </ListItemIcon>
           <ListItemText primary="User Profile" />
         </ListItemButton>
-      )}
+      )} */}
     </React.Fragment>
   );
 };

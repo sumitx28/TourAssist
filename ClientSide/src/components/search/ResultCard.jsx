@@ -10,9 +10,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 
 const ImgMediaCard = ({ data, id }) => {
-  const [imageURL, setImageURL] = React.useState(
-    "https://media.istockphoto.com/id/155439315/photo/passenger-airplane-flying-above-clouds-during-sunset.jpg?s=612x612&w=0&k=20&c=LJWadbs3B-jSGJBVy9s0f8gZMHi2NvWFXa3VJ2lFcL0="
-  );
+  const [imageURL, setImageURL] = React.useState("");
   const {
     packageName,
     totalPackagePrice,
