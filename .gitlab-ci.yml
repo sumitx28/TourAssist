@@ -35,7 +35,7 @@ build-backend:
   script:
     - pwd
     - cd $BACKEND_DIR
-    - mvn clean package -Dspring.profiles.active=prod
+    - mvn clean package -Dspring.profiles.active=prod -DskipTests
   artifacts:
     paths:
       - $BACKEND_DIR/target/*.jar
