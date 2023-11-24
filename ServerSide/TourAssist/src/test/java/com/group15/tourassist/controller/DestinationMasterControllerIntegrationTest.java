@@ -1,7 +1,8 @@
-package com.group15.tourassist.service;
+package com.group15.tourassist.controller;
 
 import com.group15.tourassist.entity.DestinationMaster;
 import com.group15.tourassist.repository.IDestinationMasterRepository;
+import com.group15.tourassist.service.IDestinationMasterService;
 import com.group15.tourassist.web.controller.DestinationMasterController;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
@@ -22,7 +23,7 @@ import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class DestinationMasterServiceIntegrationTest {
+class DestinationMasterControllerIntegrationTest {
 
     @InjectMocks
     DestinationMasterController destinationMasterController;
