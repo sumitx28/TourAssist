@@ -16,10 +16,7 @@ public class TransportationEntityToDto {
         TransportationDTO transportationDTO = new TransportationDTO();
         transportationDTO.setId(transportation.getId());
         transportationDTO.setPackageId(transportation.getPackageId());
-        //transportationDTO.setModeMaster(travelModeMasterRepository.findById(transportation.getModeMasterId()));
         transportationDTO.setMode(travelModeMasterRepository.findById(transportation.getModeMasterId()).get().getMode());
-        // transportationDTO.setPriceStartDate(transportation.getPriceStartDate());
-        // transportationDTO.setPriceExpiryDate(transportation.getPriceExpiryDate());
         transportationDTO.setPrice(transportation.getPrice());
         transportationDTO.setIsCustomizable(transportation.getIsCustomizable());
         return transportationDTO;

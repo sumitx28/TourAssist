@@ -16,13 +16,14 @@ public class PackageEntityToDto {
     private IDestinationMasterRepository destinationMasterRepository;
 
     @Autowired
+    private
     DestinationMasterEntityToDto destinationMasterEntityToDto;
 
     @Autowired
-    SourceMasterEntityToDto sourceMasterEntityToDto;
+    private SourceMasterEntityToDto sourceMasterEntityToDto;
 
     @Autowired
-    AgentEntityToDto agentEntityToDto;
+    private AgentEntityToDto agentEntityToDto;
 
     public PackageDTO packageEntityToDto( Package packageDetails){
         PackageDTO packageDTO = new PackageDTO();

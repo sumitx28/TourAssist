@@ -18,8 +18,6 @@ public class ActivityEntityToDto {
         activitydto.setPackageId(activity.getPackageId());
         activitydto.setActivityMaster(activityMasterRepository.findById(activity.getActivityMasterId()));
         activitydto.setActivityDate(activity.getActivityDate());
-        //activitydto.setPriceStartDate(activity.getPriceStartDate());
-        //activitydto.setPriceExpiryDate(activity.getPriceExpiryDate());
         activitydto.setPrice(activity.getPrice());
         activitydto.setIsCustomizable(activity.getIsCustomizable());
 
