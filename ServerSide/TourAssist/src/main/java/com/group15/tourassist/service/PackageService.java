@@ -63,16 +63,8 @@ public class PackageService implements IPackageService {
 
     @Override
     public PackageDetailResponse getPackageDetailsById(Long id) {
-
-        // DestinationMasterDTO sourceMasterDto= new DestinationMasterDTO();
-        // DestinationMasterDTO destinationMasterDto= new DestinationMasterDTO();
         var packageD= packageRepository.findById(id);
-//        sourceMasterDto.setId(destinationMasterRepository.findById(packageD.get().getSourceId()).get().getId());
-//        sourceMasterDto.setCity(destinationMasterRepository.findById(packageD.get().getSourceId()).get().getCity());
-//        sourceMasterDto.setCountry(destinationMasterRepository.findById(packageD.get().getSourceId()).get().getCountry());
-//        destinationMasterDto.setId(destinationMasterRepository.findById(packageD.get().getDestinationId()).get().getId());
-//        destinationMasterDto.setCity(destinationMasterRepository.findById(packageD.get().getDestinationId()).get().getCity());
-//        destinationMasterDto.setCountry(destinationMasterRepository.findById(packageD.get().getDestinationId()).get().getCountry());
+//
         List<Activity> listActivity = activityRepository.getActivityDetailsByPackageId(id);
         List<ActivityDTO> listActivityDto = new ArrayList<>();;
         for (Activity activity:listActivity

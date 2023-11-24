@@ -8,17 +8,27 @@ import com.group15.tourassist.entity.TourGuide;
 import com.group15.tourassist.entityToDto.TourGuideEntityToDto;
 import com.group15.tourassist.repository.IGuideMasterRepository;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Spy;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.Instant;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 class TourGuideEntityToDtoTest {
+
+    @Mock
+    private IGuideMasterRepository guideMasterRepository;
+
+    @Spy
+    @InjectMocks
+    private TourGuideEntityToDto converter;
 
     @Test
     void testTourGuideEntityToDto() {
@@ -38,19 +48,7 @@ class TourGuideEntityToDtoTest {
                 .destinationMaster(DestinationMaster.builder().id(4L).city("TestCity").country("TestCountry").build())
                 .build();
 
-        IGuideMasterRepository guideMasterRepository = mock(IGuideMasterRepository.class);
         when(guideMasterRepository.findById(3L)).thenReturn(Optional.of(guideMaster));
-
-        GuideDTO guideDTO = GuideDTO.builder()
-                .guideId(3L)
-                .guideName("TestGuide")
-                .build();
-
-//        GuideMasterEntityToDto guideMasterEntityToDto = mock(GuideMasterEntityToDto.class);
-//        when(guideMasterEntityToDto.guideMasterEntityToDto(guideMaster)).thenReturn(guideMasterDTO);
-
-        TourGuideEntityToDto converter = new TourGuideEntityToDto();
-        converter.guideMasterRepository = guideMasterRepository;
 
         TourGuideDTO resultDto = converter.tourGuideEntityToDto(tourGuide);
 
@@ -63,4 +61,3 @@ class TourGuideEntityToDtoTest {
         verify(guideMasterRepository, times(1)).findById(3L);
     }
 }
-

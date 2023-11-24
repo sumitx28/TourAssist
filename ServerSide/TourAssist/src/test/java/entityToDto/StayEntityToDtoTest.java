@@ -1,4 +1,5 @@
 package entityToDto;
+
 import com.group15.tourassist.dto.StayDto;
 import com.group15.tourassist.entity.ResortMaster;
 import com.group15.tourassist.entity.Stay;
@@ -7,6 +8,11 @@ import com.group15.tourassist.entityToDto.StayEntityToDto;
 import com.group15.tourassist.repository.IResortMasterRepository;
 import com.group15.tourassist.repository.ISuiteMasterRepository;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Spy;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.Instant;
 import java.util.Optional;
@@ -14,7 +20,18 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 class StayEntityToDtoTest {
+
+    @Mock
+    private IResortMasterRepository resortMasterRepository;
+
+    @Mock
+    private ISuiteMasterRepository suiteMasterRepository;
+
+    @Spy
+    @InjectMocks
+    private StayEntityToDto converter;
 
     @Test
     void testStayEntityToDto() {
@@ -31,15 +48,8 @@ class StayEntityToDtoTest {
         ResortMaster testResortMaster = ResortMaster.builder().id(2L).resortName("TestResort").build();
         SuiteMaster testSuiteMaster = SuiteMaster.builder().id(3L).suiteType("TestSuite").build();
 
-        IResortMasterRepository resortMasterRepository = mock(IResortMasterRepository.class);
         when(resortMasterRepository.findById(2L)).thenReturn(Optional.of(testResortMaster));
-
-        ISuiteMasterRepository suiteMasterRepository = mock(ISuiteMasterRepository.class);
         when(suiteMasterRepository.findById(3L)).thenReturn(Optional.of(testSuiteMaster));
-
-        StayEntityToDto converter = new StayEntityToDto();
-        converter.resortMasterRepository = resortMasterRepository;
-        converter.suiteMasterRepository = suiteMasterRepository;
 
         StayDto resultDto = converter.stayEntityToDto(stay);
 
@@ -52,12 +62,9 @@ class StayEntityToDtoTest {
         assertEquals(100.0, resultDto.getPrice());
         assertEquals(true, resultDto.getIsCustomizable());
 
-        // Additional assertions if needed
 
-        // Verify that findById was called with the correct IDs
         verify(resortMasterRepository, times(1)).findById(2L);
         verify(suiteMasterRepository, times(1)).findById(3L);
     }
 
 }
-

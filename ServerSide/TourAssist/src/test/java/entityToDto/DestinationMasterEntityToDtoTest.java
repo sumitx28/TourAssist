@@ -2,27 +2,23 @@ package entityToDto;
 
 import com.group15.tourassist.dto.DestinationMasterDTO;
 import com.group15.tourassist.entity.DestinationMaster;
+import com.group15.tourassist.entity.ResortMaster;
 import com.group15.tourassist.entityToDto.DestinationMasterEntityToDto;
 import com.group15.tourassist.repository.IGuideMasterRepository;
 import com.group15.tourassist.repository.IResortMasterRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
-import org.mockito.junit.jupiter.MockitoExtension;
-
-import com.group15.tourassist.entity.ResortMaster;
-import java.util.Arrays;
-import java.util.List;
-
-@ExtendWith(MockitoExtension.class)
-public class DestinationMasterEntityToDtoTest {
-
-@Mock
-private DestinationMasterEntityToDto destinationMasterEntityToDto;
+class DestinationMasterEntityToDtoTest {
 
     @Mock
     private IGuideMasterRepository guideMasterRepository;
@@ -30,52 +26,36 @@ private DestinationMasterEntityToDto destinationMasterEntityToDto;
     @Mock
     private IResortMasterRepository resortMasterRepository;
 
+    @InjectMocks
+    private DestinationMasterEntityToDto entityToDtoConverter;
+
     @BeforeEach
-    public void setUp() {
-        destinationMasterEntityToDto = new DestinationMasterEntityToDto();
-        destinationMasterEntityToDto.guideMasterRepository = guideMasterRepository;
-        destinationMasterEntityToDto.resortMasterRepository = resortMasterRepository;
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
     }
 
     @Test
-    public void testDestinationMasterEntityToDto() {
+    void destinationMasterEntityToDtoTest() {
         DestinationMaster destinationMaster = new DestinationMaster();
         destinationMaster.setId(1L);
-        destinationMaster.setCity("Test City");
-        destinationMaster.setCountry("Test Country");
+        destinationMaster.setCity("City");
+        destinationMaster.setCountry("Country");
 
-        when(resortMasterRepository.findAllByDestinationMaster_Id(1L))
-                .thenReturn(createMockResorts());
-        destinationMaster.setResorts(resortMasterRepository.findAllByDestinationMaster_Id(1L));
-        DestinationMasterDTO destinationMasterDTO = destinationMasterEntityToDto.destinationMasterEntityToDto(destinationMaster);
+        ResortMaster resortMaster = new ResortMaster();
+        resortMaster.setId(1L);
+        resortMaster.setResortName("Resort1");
+        resortMaster.setDestinationMaster(destinationMaster);
 
-        assertEquals(1L, destinationMasterDTO.getId());
-        assertEquals("Test City", destinationMasterDTO.getCity());
-        assertEquals("Test Country", destinationMasterDTO.getCountry());
-        assertEquals(createMockResorts(),destinationMaster.getResorts());
-    }
+        List<ResortMaster> resortList = new ArrayList<>();
+        resortList.add(resortMaster);
+        when(resortMasterRepository.findAllByDestinationMaster_Id(destinationMaster.getId())).thenReturn(resortList);
 
-    private List<ResortMaster> createMockResorts() {
-        ResortMaster resort1 = ResortMaster.builder()
-                .id(1L)
-                .resortName("Mock Resort 1")
-                .destinationMaster(createMockDestination())
-                .build();
+        DestinationMasterDTO destinationMasterDTO = entityToDtoConverter.destinationMasterEntityToDto(destinationMaster);
 
-        ResortMaster resort2 = ResortMaster.builder()
-                .id(2L)
-                .resortName("Mock Resort 2")
-                .destinationMaster(createMockDestination())
-                .build();
-
-        return Arrays.asList(resort1, resort2);
-    }
-
-    private DestinationMaster createMockDestination() {
-        DestinationMaster destinationMaster = new DestinationMaster();
-        destinationMaster.setId(1L);
-        destinationMaster.setCity("Test City");
-        destinationMaster.setCountry("Test Country");
-        return destinationMaster;
+        assertEquals(destinationMaster.getId(), destinationMasterDTO.getId());
+        assertEquals(destinationMaster.getCity(), destinationMasterDTO.getCity());
+        assertEquals(destinationMaster.getCountry(), destinationMasterDTO.getCountry());
+        assertEquals(1, destinationMasterDTO.getResorts().size());
+        assertEquals(resortMaster.getResortName(), destinationMasterDTO.getResorts().get(0).getResortName());
     }
 }

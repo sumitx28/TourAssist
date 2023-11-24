@@ -25,7 +25,6 @@ public class PackageDetailResponse {
     private List<ActivityDTO> activity;
     private TransportationDTO transportationDetails;
     private StayDto stay;
-    //private ResortMaster resorts;
     private TourGuideDTO tourGuide;
     private Boolean isCustomizable;
 }
