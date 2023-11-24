@@ -10,13 +10,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class PackageEntityToDto {
     @Autowired
-    public IAgentRepository agentRepository;
+    private IAgentRepository agentRepository;
 
     @Autowired
-    public IDestinationMasterRepository destinationMasterRepository;
+    private IDestinationMasterRepository destinationMasterRepository;
 
     @Autowired
-    public
+    private
     DestinationMasterEntityToDto destinationMasterEntityToDto;
 
     @Autowired
