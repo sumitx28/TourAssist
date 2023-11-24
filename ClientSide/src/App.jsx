@@ -32,7 +32,7 @@ function App() {
           <Route
             path="/create-package"
             element={
-              <AuthGuard>
+              <AuthGuard ROLE={"AGENT"}>
                 <AgentDash
                   title="New Travel Package"
                   Component={<CreatePackage />}
@@ -43,7 +43,7 @@ function App() {
           <Route
             path="/search"
             element={
-              <AuthGuard>
+              <AuthGuard ROLE={"OPEN"}>
                 <AgentDash title="Search" Component={<Search />} />
               </AuthGuard>
             }
@@ -51,7 +51,7 @@ function App() {
           <Route
             path="/userprofile"
             element={
-              <AuthGuard>
+              <AuthGuard ROLE={"OPEN"}>
                 <AgentDash title="User Profile" Component={<UserProfile />} />
               </AuthGuard>
             }
@@ -59,7 +59,7 @@ function App() {
           <Route
             path="/dashboard"
             element={
-              <AuthGuard>
+              <AuthGuard ROLE={"OPEN"}>
                 <Dashboard />
               </AuthGuard>
             }
@@ -67,7 +67,7 @@ function App() {
           <Route
             path="/pastbookings"
             element={
-              <AuthGuard>
+              <AuthGuard ROLE={"AGENT"}>
                 <AgentDash title="Past Bookings" Component={<PastBookings />} />
               </AuthGuard>
             }
@@ -75,7 +75,7 @@ function App() {
           <Route
             path="/upcomingbookings"
             element={
-              <AuthGuard>
+              <AuthGuard ROLE={"CUSTOMER"}>
                 <AgentDash
                   title="Upcoming Bookings"
                   Component={<UpcomingBookings />}
@@ -86,7 +86,7 @@ function App() {
           <Route
             path="/agent/upcomingbookings"
             element={
-              <AuthGuard>
+              <AuthGuard ROLE={"AGENT"}>
                 <AgentDash
                   title="Upcoming Bookings"
                   Component={<UpcomingAgentBookings />}
@@ -97,7 +97,7 @@ function App() {
           <Route
             path="/customerdetails"
             element={
-              <AuthGuard>
+              <AuthGuard ROLE={"AGENT"}>
                 <AgentDash
                   title="Customer Details"
                   Component={<CustomerDetails />}
@@ -108,7 +108,7 @@ function App() {
           <Route
             path="/amountearned"
             element={
-              <AuthGuard>
+              <AuthGuard ROLE={"AGENT"}>
                 <AgentDash title="Amount Earned" Component={<AmountEarned />} />
               </AuthGuard>
             }
@@ -116,7 +116,7 @@ function App() {
           <Route
             path="/package/:id"
             element={
-              <AuthGuard>
+              <AuthGuard ROLE={"OPEN"}>
                 <AgentDash title="Tour Assist" Component={<PackageDetail />} />
               </AuthGuard>
             }
