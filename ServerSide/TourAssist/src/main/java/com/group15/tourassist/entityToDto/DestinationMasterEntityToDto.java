@@ -12,10 +12,10 @@ import org.springframework.stereotype.Service;
 public class DestinationMasterEntityToDto {
 
     @Autowired
-    private IGuideMasterRepository guideMasterRepository;
+    public IGuideMasterRepository guideMasterRepository;
 
     @Autowired
-    private IResortMasterRepository resortMasterRepository;
+    public IResortMasterRepository resortMasterRepository;
 
 
     public DestinationMasterDTO destinationMasterEntityToDto(DestinationMaster destinationMaster){

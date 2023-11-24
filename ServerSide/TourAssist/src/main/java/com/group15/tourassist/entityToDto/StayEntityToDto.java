@@ -16,10 +16,10 @@ import java.time.Instant;
 public class StayEntityToDto {
 
     @Autowired
-    private IResortMasterRepository resortMasterRepository;
+    public IResortMasterRepository resortMasterRepository;
 
     @Autowired
-    private ISuiteMasterRepository suiteMasterRepository;
+    public ISuiteMasterRepository suiteMasterRepository;
 
     public StayDto stayEntityToDto(Stay stay){
         StayDto stayDto = new StayDto();

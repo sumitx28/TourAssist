@@ -13,6 +13,7 @@ import java.time.Instant;
 public class TourGuideEntityToDto {
 
     @Autowired
+    public
     IGuideMasterRepository guideMasterRepository;
 
     public TourGuideDTO tourGuideEntityToDto(TourGuide tourGuide){
