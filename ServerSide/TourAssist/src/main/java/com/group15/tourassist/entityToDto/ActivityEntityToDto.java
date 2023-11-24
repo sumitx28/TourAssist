@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 public class ActivityEntityToDto {
 
     @Autowired
-    public IActivityMasterRepository activityMasterRepository;
+    private IActivityMasterRepository activityMasterRepository;
 
     public ActivityDTO activityEntityToDto(Activity activity){
         ActivityDTO activitydto= new ActivityDTO();

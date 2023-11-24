@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class TransportationEntityToDto {
     @Autowired
-    public ITravelModeMasterRepository travelModeMasterRepository;
+    private ITravelModeMasterRepository travelModeMasterRepository;
 
     public TransportationDTO transportationEntityToDto(Transportation transportation){
         TransportationDTO transportationDTO = new TransportationDTO();

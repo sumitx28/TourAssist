@@ -20,12 +20,10 @@ public class PackageEntityToDto {
     DestinationMasterEntityToDto destinationMasterEntityToDto;
 
     @Autowired
-    public
-    SourceMasterEntityToDto sourceMasterEntityToDto;
+    private SourceMasterEntityToDto sourceMasterEntityToDto;
 
     @Autowired
-    public
-    AgentEntityToDto agentEntityToDto;
+    private AgentEntityToDto agentEntityToDto;
 
     public PackageDTO packageEntityToDto( Package packageDetails){
         PackageDTO packageDTO = new PackageDTO();
