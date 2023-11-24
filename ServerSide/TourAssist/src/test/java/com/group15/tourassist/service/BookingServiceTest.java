@@ -94,7 +94,7 @@ class BookingServiceTest {
     }
 
     @Test
-    void createBooking_PositiveCase() {
+    void testCreateBooking_PositiveCase() {
         // Arrange
         when(bookingRepository.save(any())).thenReturn(confirmBooking);
         when(bookingLineItemService.computeTotalPrice(any())).thenReturn(10d);

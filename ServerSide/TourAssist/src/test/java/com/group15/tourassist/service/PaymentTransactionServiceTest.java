@@ -87,7 +87,7 @@ class PaymentTransactionServiceTest {
     }
 
     @Test
-    void createPayment() {
+    void testCreatePayment() {
         // Arrange
         when(bookingService.getBookingById(1L)).thenReturn(booking);
         when(packageRepository.findById(1L)).thenReturn(Optional.ofNullable(package1));

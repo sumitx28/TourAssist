@@ -40,7 +40,7 @@ class AgentServiceTest {
     }
 
     @Test
-    void getAgentByAppUserId() {
+    void testGetAgentByAppUserId() {
         // Arrange
         when(agentRepository.findByAppUserId(1L)).thenReturn(agent);
         // Act
