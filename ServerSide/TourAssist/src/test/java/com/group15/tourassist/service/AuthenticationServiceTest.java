@@ -75,7 +75,7 @@ class AuthenticationServiceTest {
     }
 
     @Test
-    void registerCustomer() {
+    void testRegisterCustomer() {
         // Arrange
         when(validatorService.validateCustomerRegistration(customerRegistrationRequest)).thenReturn(validateDto);
         when(jwtService.generateToken(any())).thenReturn("token");
@@ -88,7 +88,7 @@ class AuthenticationServiceTest {
     }
 
     @Test
-    void registerAgent() {
+    void testRegisterAgent() {
         // Arrange
         when(validatorService.validateAgentRegistration(agentRegistrationRequest)).thenReturn(validateDto);
         when(jwtService.generateToken(any())).thenReturn("token");

@@ -38,7 +38,7 @@ class CustomerServiceTest {
     }
 
     @Test
-    void getCustomerByAppUserId() {
+    void testGetCustomerByAppUserId() {
         // Arrange
         when(customerRepository.getCustomerByAppUserId(1L)).thenReturn(Optional.ofNullable(customer));
 
