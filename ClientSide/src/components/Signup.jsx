@@ -351,10 +351,10 @@ export default function SignUp() {
                   disabled={loading}
                 >
                   {loading
-                    ? "Signing In..."
+                    ? "Signing up..."
                     : loginStatus === "success"
                     ? "Success!"
-                    : "Sign In"}
+                    : "Sign Up"}
                 </Button>
                 <Grid container justifyContent="flex-end">
                   <Grid item>
@@ -371,7 +371,6 @@ export default function SignUp() {
           </Grid>
         </Grid>
       </div>
-      {/* Place Snackbar component outside the Box component */}
       <Snackbar
         open={snackbarOpen}
         autoHideDuration={6000}
