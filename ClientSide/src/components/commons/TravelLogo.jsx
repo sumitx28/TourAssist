@@ -15,7 +15,7 @@ const TravelLogo = () => {
           t.palette.mode === "light" ? t.palette.grey[50] : t.palette.grey[900],
         backgroundSize: "cover",
         backgroundPosition: "center",
-        width: "200px", // Adjust the width as needed
+        width: "100%", // Adjust the width as needed
         height: "100%", // Adjust the height as needed
       }}
     />
