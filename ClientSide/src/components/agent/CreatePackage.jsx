@@ -6,11 +6,6 @@ import {
   Button,
   FormControlLabel,
   Checkbox,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
   Snackbar,
   SnackbarContent,
   createTheme,
@@ -161,6 +156,7 @@ function TravelForm() {
 
   function getCurrentDate() {
     const now = new Date();
+    now.setDate(now.getDate() + 1);
     const year = now.getFullYear();
     const month = String(now.getMonth() + 1).padStart(2, "0");
     const day = String(now.getDate()).padStart(2, "0");
@@ -171,7 +167,7 @@ function TravelForm() {
     const endDate = e.target.value;
     const startDate = formData.tripStartDate;
 
-    if (endDate < startDate) {
+    if (endDate <= startDate) {
       setEndDateError(true);
     } else {
       setEndDateError(false);
@@ -232,7 +228,7 @@ function TravelForm() {
           return {
             activityMasterId: value,
             activityDate: new Date(formData.tripEndDate).toISOString(),
-            price: 100,
+            price: 20,
             isCustomizable: false,
           };
         }),
@@ -263,7 +259,7 @@ function TravelForm() {
         showSnackbar("success", "Package Successfully Created");
 
         setTimeout(() => {
-          navigate("/search");
+          navigate(`/package/${response.data}`);
         }, 2300);
       } catch (e) {
         showSnackbar("error", "Error creating a package");
