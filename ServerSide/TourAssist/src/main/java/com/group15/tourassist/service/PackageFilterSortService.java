@@ -108,9 +108,10 @@ public class PackageFilterSortService implements IPackageFilterSortService {
             double minPrice = Double.parseDouble(minMaxPriceRange[0]);
             double maxPrice = Double.parseDouble(minMaxPriceRange[1]);
 
-            Predicate<SearchTravelPackagesDTO> searchTravelPackagesDTOPredicate = searchTravelPackagesDTO -> searchTravelPackagesDTO.getTotalPackagePrice() < minPrice ||
+            Predicate<SearchTravelPackagesDTO> shouldRemovePackage = searchTravelPackagesDTO -> searchTravelPackagesDTO.getTotalPackagePrice() < minPrice ||
                     searchTravelPackagesDTO.getTotalPackagePrice() > maxPrice;
-            searchTravelPackages.removeIf(searchTravelPackagesDTOPredicate);
+
+            searchTravelPackages.removeIf(shouldRemovePackage);
 
         }
 
