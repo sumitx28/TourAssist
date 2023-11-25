@@ -63,7 +63,8 @@ public class AuthenticationService implements IAuthenticationService {
                     .build();
         }
 
-        AppUser appUser = AppUser.getAppUserForRegister(request.getEmail(), passwordEncoder.encode(request.getPassword()), Role.CUSTOMER);
+        String password = passwordEncoder.encode(request.getPassword());
+        AppUser appUser = AppUser.getAppUserForRegister(request.getEmail(), password, Role.CUSTOMER);
         appUser = appUserRepository.save(appUser);
 
         Customer customer = Customer.getCustomerForRegister(request, appUser);
@@ -90,7 +91,8 @@ public class AuthenticationService implements IAuthenticationService {
                     .build();
         }
 
-        AppUser appUser = AppUser.getAppUserForRegister(request.getEmail(), passwordEncoder.encode(request.getPassword()), Role.AGENT);
+        String password = passwordEncoder.encode(request.getPassword());
+        AppUser appUser = AppUser.getAppUserForRegister(request.getEmail(), password, Role.AGENT);
         appUser = appUserRepository.save(appUser);
 
         Agent agent = Agent.getAgentForRegister(request, appUser);
