@@ -39,8 +39,9 @@ public class PasswordResetTokenService<EmailService> implements IPasswordResetTo
 
     @Override
     public Boolean isPasswordResetTokenExpired(String token) {
+        LocalDateTime expiryDate= null;
         PasswordResetToken passwordResetToken= passwordResetTokenRepository.findByToken(token);
-        var expiryDate=passwordResetToken.getExpiryDate();
+        expiryDate=passwordResetToken.getExpiryDate();
         LocalDateTime currentTime = LocalDateTime.now();
         return expiryDate.isBefore(currentTime) ;
     }

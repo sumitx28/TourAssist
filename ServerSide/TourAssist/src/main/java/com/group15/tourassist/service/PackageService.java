@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -72,7 +73,7 @@ public class PackageService implements IPackageService {
             listActivityDto.add(activityEntityToDto.activityEntityToDto(activity));
         }
         TransportationDTO transportationDto = transportationEntityToDto.transportationEntityToDto(transportationRepository.getTransportationDetailsByPackageId(id));
-        SourceMasterDTO sourceMasterDto1= sourceMasterEntityToDto.sourceMasterEntityToDto(destinationMasterRepository.findById(packageD.get().getSourceId()).orElseThrow());
+        SourceMasterDTO sourceMasterDto1= sourceMasterEntityToDto.sourceMasterEntityToDto(destinationMasterRepository.findById(packageD.get().getSourceId()).orElseThrow(() -> new NoSuchElementException("No package details found with id: " + id)));
         DestinationMasterDTO destinationMasterDto1= destinationMasterEntityToDto.destinationMasterEntityToDto(destinationMasterRepository.findById(packageD.get().getDestinationId()).orElseThrow());
         AgentDetailsDTO agentDetailsDTO= agentEntityToDto.agentEntityToDto(agentRepository.findById(packageD.get().getAgentId()).get());
         StayDto stayDto= stayEntityToDto.stayEntityToDto(stayRepository.getStayDetailsByPackageId(id));
