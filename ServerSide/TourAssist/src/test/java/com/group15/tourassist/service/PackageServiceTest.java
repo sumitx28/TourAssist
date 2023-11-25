@@ -1,9 +1,12 @@
 package com.group15.tourassist.service;
 
+import com.group15.tourassist.dto.*;
 import com.group15.tourassist.entity.*;
 import com.group15.tourassist.entity.Package;
+import com.group15.tourassist.entityToDto.*;
 import com.group15.tourassist.repository.*;
 import com.group15.tourassist.request.*;
+import com.group15.tourassist.response.PackageDetailResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,13 +16,17 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.Duration;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -32,7 +39,28 @@ class PackageServiceTest {
     private IPackageRepository packageRepository;
 
     @Mock
+    private SourceMasterEntityToDto sourceMasterEntityToDto;
+
+    @Mock
+    private DestinationMasterEntityToDto destinationMasterEntityToDto;
+
+    @Mock
+    private AgentEntityToDto agentEntityToDto;
+
+    @Mock
+    private StayEntityToDto stayEntityToDto;
+
+    @Mock
+    private TourGuideEntityToDto tourGuideEntityToDto;
+
+    @Mock
+    private TransportationEntityToDto transportationEntityToDto;
+
+    @Mock
     private IStayRepository stayRepository;
+
+    @Mock
+    private IDestinationMasterRepository destinationMasterRepository;
 
     @Mock
     private ITourGuideRepository tourGuideRepository;
@@ -42,6 +70,9 @@ class PackageServiceTest {
 
     @Mock
     private IActivityRepository activityRepository;
+
+    @Mock
+    private IPackageMediaRepository packageMediaRepository;
 
     @Mock
     private PackageMediaService packageMediaService;
@@ -153,4 +184,5 @@ class PackageServiceTest {
         // Assert
         assertEquals(1L, packageId);
     }
+
 }

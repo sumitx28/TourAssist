@@ -5,6 +5,7 @@ import com.group15.tourassist.entity.PasswordResetToken;
 import com.group15.tourassist.repository.IAppUserRepository;
 import com.group15.tourassist.repository.PasswordResetTokenRepository;
 import com.group15.tourassist.request.ForgotPasswordEmailRequest;
+import com.group15.tourassist.request.PasswordResetRequest;
 import com.group15.tourassist.service.EmailService;
 import com.group15.tourassist.service.IPasswordResetTokenService;
 import com.group15.tourassist.web.controller.PasswordResetTokenController;
@@ -43,6 +44,32 @@ class PasswordResetTokenControllerTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.initMocks(this);
+    }
+
+    @Test
+    public void testResetPasswordValidToken() {
+        PasswordResetRequest request = new PasswordResetRequest("validToken", "newPassword");
+
+        when(passwordResetTokenService.validateToken(request.getToken())).thenReturn(true);
+
+        ResponseEntity<String> response = passwordResetTokenController.resetPassword(request);
+
+        verify(passwordResetTokenService, times(1)).resetPassword(request.getToken(), request.getPassword());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals("Password reset successfully.", response.getBody());
+    }
+
+    @Test
+    public void testResetPasswordInvalidToken() {
+        PasswordResetRequest request = new PasswordResetRequest("invalidToken", "newPassword");
+
+        when(passwordResetTokenService.validateToken(request.getToken())).thenReturn(false);
+
+        ResponseEntity<String> response = passwordResetTokenController.resetPassword(request);
+
+        verify(passwordResetTokenService, never()).resetPassword(any(), any());
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals("Invalid or expired token.", response.getBody());
     }
 
     @Test

@@ -15,7 +15,7 @@ public class TokenGenerator {
         return new String(encodedToken);
     }
 
-    private static String generateRandomString(int length) {
+    public static String generateRandomString(int length) {
         String characters = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
         StringBuilder randomString = new StringBuilder(length);
 
