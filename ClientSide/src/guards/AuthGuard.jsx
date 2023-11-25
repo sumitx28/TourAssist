@@ -1,5 +1,5 @@
 import { jwtDecode } from "jwt-decode";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 
 function isUserAuthenticated() {
   const token = localStorage.getItem("authToken");
@@ -9,6 +9,7 @@ function isUserAuthenticated() {
 export default function ProtectedRoute({ children, ROLE }) {
   const token = localStorage.getItem("authToken");
   const user = jwtDecode(token);
+  const navigate = useNavigate();
 
   if (isUserAuthenticated() && (ROLE == "OPEN" || user.role == ROLE)) {
     return children;
