@@ -53,7 +53,7 @@ public class PackageController {
     }
 
     @GetMapping("/package/{packageId}")
-    private ResponseEntity<PackageDetailResponse> getPackageDetails(@PathVariable Long packageId) {
+    public ResponseEntity<PackageDetailResponse> getPackageDetails(@PathVariable Long packageId) {
         log.info("** get package details");
         var  response = packageService.getPackageDetailsById(packageId);
         return ResponseEntity.of(Optional.of(response));

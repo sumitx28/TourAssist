@@ -215,7 +215,6 @@ class BookingServiceTest {
         assertNotNull(bookingDetailsDTO.getActivityMinDTOS());
         assertNotNull(bookingDetailsDTO.getGuideDTOS());
         assertNotNull(bookingDetailsDTO.getTransportationMinDTOS());
-        // Add more specific assertions based on your implementation.
 
         // Verify interactions with mocks
         verify(packageRepository, times(1)).findById(booking.getPackageId());
@@ -419,9 +418,9 @@ class BookingServiceTest {
                 .build();
 
         AgentDetailsDTO agentDetailsDTO1 = AgentDetailsDTO.builder()
-                .agentId(1L) // Replace with a valid agent ID
-                .companyName("ABC Company") // Replace with a valid company name
-                .mobile("1234567890") // Replace with a valid mobile number
+                .agentId(1L)
+                .companyName("ABC Company")
+                .mobile("1234567890")
                 .build();
 
 
