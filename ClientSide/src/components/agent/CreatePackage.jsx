@@ -6,11 +6,6 @@ import {
   Button,
   FormControlLabel,
   Checkbox,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
   Snackbar,
   SnackbarContent,
   createTheme,
@@ -24,6 +19,7 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import fetchData from "../../utility/request";
 import axios from "axios";
 import fetchUserDetails from "../../utility/requestUserDetails";
+import { useNavigate } from "react-router-dom";
 
 const StyledSnackbar = styled(Snackbar)({
   bottom: "20px",
@@ -72,6 +68,7 @@ function TravelForm() {
   });
 
   const API_URL = process.env.API_URL;
+  const navigate = useNavigate();
 
   const [sources, setSources] = useState([]);
   const [destinations, setDestinations] = useState([]);
@@ -159,6 +156,7 @@ function TravelForm() {
 
   function getCurrentDate() {
     const now = new Date();
+    now.setDate(now.getDate() + 1);
     const year = now.getFullYear();
     const month = String(now.getMonth() + 1).padStart(2, "0");
     const day = String(now.getDate()).padStart(2, "0");
@@ -169,7 +167,7 @@ function TravelForm() {
     const endDate = e.target.value;
     const startDate = formData.tripStartDate;
 
-    if (endDate < startDate) {
+    if (endDate <= startDate) {
       setEndDateError(true);
     } else {
       setEndDateError(false);
@@ -230,7 +228,7 @@ function TravelForm() {
           return {
             activityMasterId: value,
             activityDate: new Date(formData.tripEndDate).toISOString(),
-            price: 100,
+            price: 20,
             isCustomizable: false,
           };
         }),
@@ -259,6 +257,10 @@ function TravelForm() {
         );
 
         showSnackbar("success", "Package Successfully Created");
+
+        setTimeout(() => {
+          navigate(`/package/${response.data}`);
+        }, 2300);
       } catch (e) {
         showSnackbar("error", "Error creating a package");
       }
