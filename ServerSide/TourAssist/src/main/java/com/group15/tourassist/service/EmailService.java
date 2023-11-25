@@ -11,7 +11,6 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.time.format.DateTimeFormatter;
 
 @Service
 public class EmailService {
@@ -50,7 +49,8 @@ public class EmailService {
         Instant tripStart =  bookedPackage.getTripStartDate();
         Instant tripEnd =  bookedPackage.getTripEndDate();
 
-        String emailContent = String.format(ConstantUtils.BOOKING_EMAIL_TEMPLATE, packageName, bookingStatus, booking.getId(), tranxId, tripStart, tripEnd);
+        Object[] args = {packageName, bookingStatus, booking.getId(), tranxId, tripStart, tripEnd};
+        String emailContent = String.format(ConstantUtils.BOOKING_EMAIL_TEMPLATE, args);
 
         return emailContent;
     }
