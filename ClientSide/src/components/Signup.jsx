@@ -159,18 +159,24 @@ export default function SignUp() {
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      <div style={{ overflow: "hidden", height: "100vh", width: "100vw" }}>
-        <Grid container component="main" sx={{ height: "100vh" }}>
-          <CssBaseline />
+      <div style={{ display: "flex", height: "100vh", width: "100vw" }}>
+        <div style={{ flex: "0 0 60%", overflow: "hidden" }}>
           <TravelLogo />
+        </div>
+        <div
+          style={{
+            display: "flex",
+            flex: "1",
+            overflowY: "auto",
+            width: "100%",
+          }}
+        >
           <Grid
             item
             xs={12}
             sm={8}
             md={5}
-            component={Paper}
-            elevation={6}
-            square
+            sx={{ display: "flex", flexDirection: "column", flexGrow: 1 }}
           >
             <Box
               sx={{
@@ -179,7 +185,6 @@ export default function SignUp() {
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
-                overflow: "hidden",
               }}
             >
               <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
@@ -369,7 +374,7 @@ export default function SignUp() {
               </Box>
             </Box>
           </Grid>
-        </Grid>
+        </div>
       </div>
       {/* Place Snackbar component outside the Box component */}
       <Snackbar
