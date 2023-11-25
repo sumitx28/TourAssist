@@ -18,17 +18,24 @@ export default function UserProfile() {
     mobileNumber: "",
   });
 
-  const [customerData, setCustomerData] = useState({
+  const authToken = localStorage.getItem("authToken");
+  const user = jwtDecode(authToken);
+  const navigate = useNavigate();
+
+  const [data, setdata] = useState({
     id: 0,
     firstName: "",
     lastName: "",
     mobile: "",
     dateOfBirth: "",
     country: "",
+    companyName: "",
+    employeeCount: "",
+    verificationId: "",
   });
+
   const [isEditMode, setIsEditMode] = useState(false);
   const [isMobileEditMode, setIsMobileEditMode] = useState(false);
-  const navigate = useNavigate();
 
   const API_URL = process.env.API_URL;
 
@@ -41,7 +48,11 @@ export default function UserProfile() {
     const authToken = localStorage.getItem("authToken");
     const user = jwtDecode(authToken);
 
-    const apiEndpoint = `${API_URL}/api/v1/customer/${user.appUserId}`;
+    let apiEndpoint = `${API_URL}/api/v1/customer/${user.appUserId}`;
+
+    if (user.role == "AGENT") {
+      apiEndpoint = `${API_URL}/api/v1/agent/${user.appUserId}`;
+    }
 
     const headers = {
       Authorization: `Bearer ${authToken}`,
@@ -50,7 +61,7 @@ export default function UserProfile() {
     axios
       .get(apiEndpoint, { headers })
       .then((response) => {
-        setCustomerData(response.data);
+        setdata(response.data);
         setEditFields({ email: user.sub, mobileNumber: response.data.mobile });
       })
       .catch((error) => {
@@ -74,13 +85,13 @@ export default function UserProfile() {
 
   const handleSaveMobile = () => {
     updateUserDetails();
-    window.location.reload(false);
+    window.location.reload(-1);
     setIsMobileEditMode(false);
   };
 
   const handleSaveEmail = () => {
     updateUserDetails();
-    window.location.reload(false);
+    navigate("/agent-login");
     setIsEditMode(false);
   };
 
@@ -102,7 +113,7 @@ export default function UserProfile() {
 
     try {
       await axios.post(apiEndpoint, data, { headers });
-      alert("Profile updated successfully!");
+      alert(`Profile updated successfully! Email: ${data.email}`);
     } catch (error) {
       console.error("Error updating profile:", error);
     }
@@ -118,18 +129,31 @@ export default function UserProfile() {
           Personal Information
         </Typography>
         <List sx={{ marginBottom: 2 }}>
+          {user.role == "CUSTOMER" && (
+            <ListItem>
+              <ListItemText
+                primary={
+                  <Typography variant="body1" color="textSecondary" paragraph>
+                    <strong>Name:</strong>{" "}
+                    {`${data.firstName} ${data.lastName}`}
+                  </Typography>
+                }
+              />
+            </ListItem>
+          )}
+          {user.role == "AGENT" && (
+            <ListItem>
+              <ListItemText
+                primary={
+                  <Typography variant="body1" color="textSecondary" paragraph>
+                    <strong>Company:</strong> {`${data.companyName}`}
+                  </Typography>
+                }
+              />
+            </ListItem>
+          )}
           <ListItem>
-            <ListItemText
-              primary={
-                <Typography variant="body1" color="textSecondary" paragraph>
-                  <strong>Name:</strong>{" "}
-                  {`${customerData.firstName} ${customerData.lastName}`}
-                </Typography>
-              }
-            />
-          </ListItem>
-          <ListItem>
-            {isMobileEditMode ? (
+            {user.role == "CUSTOMER" && isMobileEditMode ? (
               <TextField
                 label="Mobile"
                 name="mobileNumber"
@@ -144,23 +168,25 @@ export default function UserProfile() {
               <ListItemText
                 primary={
                   <Typography variant="body1" color="textSecondary" paragraph>
-                    <strong>Mobile:</strong> {customerData.mobile}
+                    <strong>Mobile:</strong> {data.mobile}
                   </Typography>
                 }
               />
             )}
-            {isMobileEditMode ? (
+            {user.role == "CUSTOMER" && isMobileEditMode ? (
               <CheckIcon
                 color="primary"
                 onClick={handleSaveMobile}
                 sx={{ cursor: "pointer", marginLeft: 1 }}
               />
             ) : (
-              <EditIcon
-                color="primary"
-                onClick={handleMobileToggleEditMode}
-                sx={{ cursor: "pointer", marginLeft: 1 }}
-              />
+              user.role == "CUSTOMER" && (
+                <EditIcon
+                  color="primary"
+                  onClick={handleMobileToggleEditMode}
+                  sx={{ cursor: "pointer", marginLeft: 1 }}
+                />
+              )
             )}
           </ListItem>
           <ListItem>
@@ -198,25 +224,40 @@ export default function UserProfile() {
               />
             )}
           </ListItem>
-          <ListItem>
-            <ListItemText
-              primary={
-                <Typography variant="body1" color="textSecondary" paragraph>
-                  <strong>Date of Birth:</strong>{" "}
-                  {formatDate(customerData.dateOfBirth)}
-                </Typography>
-              }
-            />
-          </ListItem>
-          <ListItem>
-            <ListItemText
-              primary={
-                <Typography variant="body1" color="textSecondary" paragraph>
-                  <strong>Country:</strong> {customerData.country}
-                </Typography>
-              }
-            />
-          </ListItem>
+          {user.role == "AGENT" && (
+            <ListItem>
+              <ListItemText
+                primary={
+                  <Typography variant="body1" color="textSecondary" paragraph>
+                    <strong>Verification ID:</strong> {`${data.verificationId}`}
+                  </Typography>
+                }
+              />
+            </ListItem>
+          )}
+          {user.role == "CUSTOMER" && (
+            <ListItem>
+              <ListItemText
+                primary={
+                  <Typography variant="body1" color="textSecondary" paragraph>
+                    <strong>Date of Birth:</strong>{" "}
+                    {formatDate(data.dateOfBirth)}
+                  </Typography>
+                }
+              />
+            </ListItem>
+          )}
+          {user.role == "CUSTOMER" && (
+            <ListItem>
+              <ListItemText
+                primary={
+                  <Typography variant="body1" color="textSecondary" paragraph>
+                    <strong>Country:</strong> {data.country}
+                  </Typography>
+                }
+              />
+            </ListItem>
+          )}
         </List>
       </CardContent>
     </Card>
