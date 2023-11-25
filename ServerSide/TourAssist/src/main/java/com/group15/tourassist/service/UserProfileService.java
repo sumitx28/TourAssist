@@ -45,11 +45,13 @@ public class UserProfileService implements IUserProfileService {
     @Override
     public void updateUserProfileMobile(UpdateUserProfileRequest updateUserProfileRequest) {
         log.info("updateUserProfileRequest: {}", updateUserProfileRequest);
-        int tupleUpdated = customerRepository.updateCustomerMobile(updateUserProfileRequest.getAppUserId(), updateUserProfileRequest.getMobile());
+        Long appUserId = updateUserProfileRequest.getAppUserId();
+        String mobile = updateUserProfileRequest.getMobile();
+        int tupleUpdated = customerRepository.updateCustomerMobile(appUserId, mobile);
         if (tupleUpdated > 0) {
-            log.info("mobile number updated successfully for appUserId: {}", updateUserProfileRequest.getAppUserId());
+            log.info("mobile number updated successfully for appUserId: {}", appUserId);
         } else {
-            log.info("failed to update mobile for appUserId :{}", updateUserProfileRequest.getAppUserId());
+            log.info("failed to update mobile for appUserId :{}", appUserId);
         }
     }
 }
