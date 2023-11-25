@@ -45,11 +45,8 @@ public class LogoutServiceTest {
         logoutService.logout(request, response, authentication);
 
         // Assert
-        // Add assertions based on the behavior you expect, for example, verify that the token is marked as expired and revoked
         verify(tokenRepository, times(1)).findByToken(validJwtToken);
         verify(tokenRepository, times(1)).save(any()); // You might want to use ArgumentMatchers if the token is complex
-        // Additional assertions on SecurityContextHolder, log, etc.
     }
 
-    // Add more test methods for different scenarios (invalid token, null token, etc.)
 }
