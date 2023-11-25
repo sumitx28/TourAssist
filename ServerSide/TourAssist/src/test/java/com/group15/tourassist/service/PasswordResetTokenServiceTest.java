@@ -59,7 +59,6 @@ class PasswordResetTokenServiceTest {
 
     @Test
     public void testIsPasswordResetTokenExpired() {
-        // Create a sample PasswordResetToken
         PasswordResetTokenRepository mockRepository = mock(PasswordResetTokenRepository.class);
         PasswordEncoder mockPasswordEncoder = mock(PasswordEncoder.class);
         IAppUserRepository mockAppUserRepository = mock(IAppUserRepository.class);
@@ -77,14 +76,11 @@ class PasswordResetTokenServiceTest {
                 .expiryDate(LocalDateTime.now().plusDays(1))
                 .build();
 
-        // Mock the behavior of your repository to return the sample token when findByToken is called
         when(mockRepository.findByToken("sampleToken")).thenReturn(passwordResetToken);
 
-        // Test the method with an unexpired token
         assertFalse(passwordResetTokenService.isPasswordResetTokenExpired("sampleToken"));
 
-        // Test the method with an expired token
-        passwordResetToken.setExpiryDate(LocalDateTime.now().minusDays(1)); // Set an expiry date in the past
+        passwordResetToken.setExpiryDate(LocalDateTime.now().minusDays(1));
         assertTrue(passwordResetTokenService.isPasswordResetTokenExpired("sampleToken"));
     }
 
