@@ -43,7 +43,6 @@ class PasswordResetTokenServiceTest {
         PasswordResetTokenService passwordResetTokenService = new PasswordResetTokenService(
                 mockRepository, mockPasswordEncoder, mockAppUserRepository
         );
-
         AppUser mockAppUser = mock(AppUser.class);
 
         // Act
