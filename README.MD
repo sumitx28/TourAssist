@@ -135,3 +135,14 @@ allows the user to keep track of their past and future bookings in order to have
 
 The API takes the appUserId has a request parameter and fetches the required booking details.
 
+### Forgot Password Use Case:
+Here a user can enter the email Id and they will receive an email with reset password link. 
+Once they navigate to that URL, with the help of Base64 encoded token, the user is verified and an option to reset the password is provided. 
+
+### Details page of travel Package Use Case:
+Here input source, destination, proposed dates, day-by-day activities, transport details, stay amenities, and agent contacts are showcased. 
+One can also customize packages; default includes all. It also includes images of agent and company name. 'Book' button seamlessly redirects users to the payment page for a hassle-free experience. 
+
+### Agent Dashboard Use Case: 
+This dashboard support agents with a comprehensive dashboard that includes, view past and upcoming bookings, access customer details for deeper insights, analyse earnings monthly, yearly, etc.
+It provides a robust overview for effective business analysis.
