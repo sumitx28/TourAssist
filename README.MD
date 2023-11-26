@@ -8,7 +8,7 @@ A web-app letting tour agents to list their customizable tour packages and custo
 
 ## LIVE DEPOLYED APPLICATION
 
-Please ensure you are connected to Dal VPN:
+Please ensure you are connected to [Dal VPN](https://dalu.sharepoint.com/sites/its/SitePages/vpn.aspx?xsdata=MDV8MDF8fDExMTQ0MjBhYjNkOTRlZGJkOGNmMDhkYmJmOTRmZGM3fDYwYjgxOTk5MGI3ZjQxMmQ5MmEzZTE3ZDhhZTllM2UwfDB8MHw2MzgzMTQ0MTg4MzY4NTQ5OTF8VW5rbm93bnxWR1ZoYlhOVFpXTjFjbWwwZVZObGNuWnBZMlY4ZXlKV0lqb2lNQzR3TGpBd01EQWlMQ0pRSWpvaVYybHVNeklpTENKQlRpSTZJazkwYUdWeUlpd2lWMVFpT2pFeGZRPT18MXxMM1JsWVcxekx6RTVPbVpKTUc5R1NEWk5RelZUUnpVdGRVeHVabE42UTJWbll6UjRVelZNUWpOSWJXTXRPSG94VWs5aWRYTXhRSFJvY21WaFpDNTBZV04yTWk5amFHRnVibVZzY3k4eE9UbzBZV1UwTkRGak0yVTFZVEUwWW1FNE9HRTVNMlZtTkROa016VmtOVFZqTkVCMGFISmxZV1F1ZEdGamRqSXZiV1Z6YzJGblpYTXZNVFk1TlRnME5UQTRNalF5TXc9PXwxMzZlZTlmMmI0OTc0NzgxNzY2OTA4ZGJiZjk0ZmRjNXxkMmZjMDcxM2M3YTg0ZGEyYmIyMDZkMDUyYTA4ZjZhMg%3D%3D&sdata=OFdmNHhPL1NXcE9zSGM3c28wWUV5Q1pnVnJ1eWJSZmp5em9lT2NVYWdycz0%3D):
 
 URL: http://172.17.0.148:8074
 
@@ -16,49 +16,87 @@ URL: http://172.17.0.148:8074
 
 1. [Install Java 17 or higher](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)
 2. [Install Maven](https://formulae.brew.sh/formula/maven) - version: 3.1.4
-   * brew install maven
+   - brew install maven
 3. [Setup MySQL Locally](https://www.mysql.com/downloads/)
-   * [Run setup SQL script](https://git.cs.dal.ca/courses/2023-fall/csci-5308/Group15/-/blob/main/ServerSide/TourAssist/sql/db-structure.sql)
+   - [Run setup SQL script](https://git.cs.dal.ca/courses/2023-fall/csci-5308/Group15/-/blob/main/ServerSide/TourAssist/sql/db-structure.sql)
 4. [Docker](https://www.docker.com/products/docker-desktop/)
 
 ## BACKEND - BUILD/DEPLOYMENT INSTRUCTIONS
 
 1. Run tests:
-   * mvn clean test
+
+   `mvn clean test`
+
 2. Package Jar:
-   * mvn clean package -Dspring.profiles.active=prod -DskipTests
+
+   `mvn clean package -Dspring.profiles.active=prod -DskipTests`
+
 3. Build docker image
-   * docker build -t backend-app-image ServerSide/TourAssist/
+
+   `docker build -t backend-app-image ServerSide/TourAssist/`
+
 4. Run docker container
-   * docker run -d -p 8080:8080 --name backend-app backend-app-image
+
+   `docker run -d -p 8080:8080 --name tour-assist-be backend-app-image`
 
 Backend API should be accessible at http://localhost:8080
 
 ## BACKEND - DATABASE DESIGN
-* [Wiki Link](https://git.cs.dal.ca/courses/2023-fall/csci-5308/Group15/-/wikis/Database-Design)
+
+- [Wiki Link](https://git.cs.dal.ca/courses/2023-fall/csci-5308/Group15/-/wikis/Database-Design)
 
 ## INITIAL CODE SMELLS
 
-* [Link](https://git.cs.dal.ca/courses/2023-fall/csci-5308/Group15/-/wikis/Implementation-and-Design-Smell-and-Architecture-Designite-Reports)
+- [Link](https://git.cs.dal.ca/courses/2023-fall/csci-5308/Group15/-/wikis/Implementation-and-Design-Smell-and-Architecture-Designite-Reports)
 
 ## CODE SMELLS POST REFACTORING
 
-* [TODO]
+- [TODO]
 
-## Frontend Setup - Local
+## Frontend
 
 TourAssist requires [Node.js](https://nodejs.org/) v18+ to run.
 
-Install the dependencies and devDependencies and start the server.
+Check your node & npm version using:
 
-```sh
-cd ClientSide
-npm install
-npm run dev
-```
+`node -v`
 
-Frontend should be running on https://localhost:5173
+`npm -v`
 
+<<<<<<< HEAD
+## Run Locally
+
+1. Navigate to ClientSide directory
+
+   `cd ClientSide `
+
+2. Install Node Dependencies
+
+   `npm install`
+
+3. Set Environment variable to development
+
+   - For Mac/Linux: `export ENV=development`
+   - For Windows: `$Env:ENV = 'development'`
+
+4. Run React App
+
+   `npm run dev`
+
+Frontend should be accessible at http://localhost:5173
+
+## Run Using Docker
+
+1. Build docker image
+
+   `docker build -t frontend-app-image ClientSide/`
+
+2. Run docker container
+
+   `docker run -d -p 5173:5173 -e ENV=development --name tour-assist-fe frontend-app-image`
+
+Frontend should be accessible at http://localhost:5173
+=======
 
 # Use Cases:
 
@@ -146,3 +184,4 @@ One can also customize packages; default includes all. It also includes images o
 ### Agent Dashboard Use Case: 
 This dashboard support agents with a comprehensive dashboard that includes, view past and upcoming bookings, access customer details for deeper insights, analyse earnings monthly, yearly, etc.
 It provides a robust overview for effective business analysis.
+>>>>>>> 13f8cd7883a88424571fcab3c1f8e82199d742e2
