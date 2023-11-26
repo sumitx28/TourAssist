@@ -59,3 +59,61 @@ npm run dev
 
 Frontend should be running on https://localhost:5173
 
+
+# Use Cases:
+
+
+### Login  and Logout Use Case 
+
+This use cases uses the JWT based stateless implementation. The user can login by providing their email and password.
+Upon login, a valid JWT token is generated in the authentication response, which will be unique to the user.
+Likewise, the user can also logout from the application which invalidate the current JWT for that user via API call.
+
+### Search and Filter Use Case:
+
+A user can search for travel packages for the required destination and the from and to dates so that the 
+appropriate list of travel packages can be displayed.
+
+The API also supports multiple sort functionalities listed below:
+Sort Functionality:
+
+1. Sort by name
+2. Sort by price (highest first)
+3. Sort by price (lowest first)
+4. Sort by user rating
+
+### Filter Functionality Use Case:
+
+Filter by user rating
+1. Filter by price range
+2. Filter by agent/company
+3. Filter by customization availability
+
+The API takes in parameters such as sortBy and FilterBy (which can be configured in multiple combinations) to return 
+the list of travel packages as per the criteria 
+specified in the request.
+
+View and Edit Customer Profile Use Case:
+
+This feature allows the app user to view/edit their profile, so that the information can be up to date in the application
+
+1. User can view their profile and edit their information such as email, contact number.
+The API takes the appUserId and the email or the phone number to be updated in the request body and returns the status
+with the field names updated.
+
+### Booking Details Use Case:
+
+A user can view their booking history which includes both past and upcoming bookings of the customer. This feature 
+allows the user to keep track of their past and future bookings in order to have a better user experience.
+
+The API takes the appUserId has a request parameter and fetches the required booking details.
+
+
+
+
+
+
+
+ 
+
+
