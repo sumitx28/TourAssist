@@ -59,3 +59,31 @@ npm run dev
 
 Frontend should be running on https://localhost:5173
 
+
+
+### Customer and Agent Signup Use Case
+This feature lets both Agent and Customer to signup with their basic details to use the application. Password gets encrypted and stored in the database in this Use Case.
+Below are the major details captured for signup:
+1. Name
+2. Email
+3. Password
+4. Mobile
+5. Verification Document (For Agents)
+
+### Create Package Use Case
+This feature builds the core database structure of the entire application from technical perspective. With this use case, agent can create a unique package which are customisable. Each item has a price associated with it. Below are the package items which can be offered:
+1. Package Name
+2. Package Media - Which gets stored on Cloudinary database.
+3. Trip duration details
+4. Trip source and destination
+5. Resort - Customizable
+6. Activities - Customizable
+7. Travel - Customizable
+8. Tour Guide - Customizable
+9. Package Media - Images of the package
+
+### Booking and Payment Use Case
+This feature deals with the package booking and payment flow by customer. Here, the Customer can do all the customizations for all the customizable items, and the package created accordingly. After, the booking is done, payment flow initiates and dummy payment interface is built on front-end to capture the payment details.
+Post the payment, booking and payment status are changed to CONFIRM and SUCCESS respectively.
+
+
