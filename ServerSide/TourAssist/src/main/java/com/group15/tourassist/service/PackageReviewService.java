@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class PackageReviewServiceService implements IPackageReviewService {
+public class PackageReviewService implements IPackageReviewService {
 
     /**
      * calculates the average package ratings accross all the package reviews for that package id

@@ -2,11 +2,9 @@ package com.group15.tourassist.service;
 
 import com.group15.tourassist.entity.PackageReview;
 import org.junit.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -18,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class PackageReviewServiceTest {
 
     @InjectMocks
-    private PackageReviewServiceService reviewService;
+    private PackageReviewService reviewService;
 
     @Test
     public void testCalculateAveragePackageRatings() {
