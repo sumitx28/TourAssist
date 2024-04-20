@@ -10,8 +10,8 @@ spring:
     database: mysql
   datasource:
     url: jdbc:mysql://db-5308.cs.dal.ca:3306/CSCI5308_15_DEVINT
-    username: CSCI5308_15_DEVINT_USER
-    password: oqu2eeKohK
+    username: root
+    password: password
     driver-class-name: com.mysql.cj.jdbc.Driver
 
 application:

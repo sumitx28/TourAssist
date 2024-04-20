@@ -6,13 +6,13 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>3.1.4</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <relativePath/>
     </parent>
     <groupId>com.group15</groupId>
-    <artifactId>tour-assist</artifactId>
+    <artifactId>backend</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
-    <name>TourAssist</name>
+    <name>TourAssist-backend</name>
     <description>TourAssist</description>
     <properties>
         <java.version>17</java.version>
@@ -105,7 +105,7 @@
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-            <version>3.12.4</version> <!-- Use the latest version -->
+            <version>3.12.4</version>
             <scope>test</scope>
         </dependency>
         <dependency>
