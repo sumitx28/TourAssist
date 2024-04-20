@@ -15,19 +15,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
-@CrossOrigin(
-        origins = {
-                "*",
-        },
-        methods = {
-                RequestMethod.OPTIONS,
-                RequestMethod.GET,
-                RequestMethod.PUT,
-                RequestMethod.DELETE,
-                RequestMethod.POST
-        })
-
-
 @RestController
 @RequestMapping("/api/v1")
 public class PackageController {

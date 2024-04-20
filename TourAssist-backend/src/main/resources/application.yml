@@ -18,11 +18,14 @@ application:
   security:
     jwt:
       secret-key: idr7T5JBeraYvPQWcrtj5RLxdak43JJlUd0OTghkzUc=
-      expiration: 86400000 # a day
+      expiration: 86400000
       refresh-token:
-        expiration: 604800000 # 7 days
+        expiration: 604800000
 
 storage:
   cloud-name: dnm5uzsbl
   access-key: 854872313461948
   secret-key: e2gLOFlmFp_S9OVkzkL6nzNoWrQ
+
+cors:
+  url: http://localhost:5173
