@@ -26,6 +26,9 @@ public class GuideMaster implements Serializable {
     @Column(name = "experience_years")
     private String experienceYears;
 
+    @Column(name = "description")
+    private String description;
+
     @ManyToOne
     @JoinColumn(name = "destination_master_id")
     private DestinationMaster destinationMaster;

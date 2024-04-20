@@ -237,7 +237,7 @@ CREATE TABLE guest (
 
 
 
---- Inserts:
+-- Inserts:
 
 -- destination_master
 
