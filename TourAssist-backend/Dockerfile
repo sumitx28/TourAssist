@@ -1,13 +1,13 @@
-FROM amazoncorretto:17-al2023-jdk
+FROM ubuntu:latest AS build
+LABEL authors="sumit"
 
-RUN pwd
+RUN apt-get update
+RUN apt-get install openjdk-17-jdk -y
+COPY . .
+RUN ./mvnw clean install
 
-WORKDIR /app
-
-RUN pwd
-
-COPY target/tour-assist-0.0.1-SNAPSHOT.jar /app/app.jar
-
+FROM openjdk:17-jdk-slim
 EXPOSE 8080
+COPY --from=build /target/spring-boot-starter-0.0.1-SNAPSHOT.jar app.jar
 
-ENTRYPOINT ["java", "-Dspring.profiles.active=prod", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
