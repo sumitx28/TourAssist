@@ -5,16 +5,16 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
   return {
     define: {
-      'process.env.API_URL': JSON.stringify(env.ENV == "development" ? "http://localhost:8080" : "http://172.17.0.148:8073")
+      'process.env.API_URL': JSON.stringify(env.ENV == "development" ? "http://localhost:8080" : "https://tourassist.onrender.com")
     },
     plugins: [react()],
     server: {
       watch: {
         usePolling: true,
       },
-      host: true, 
+      host: true,
       strictPort: true,
-      port: 5173, 
+      port: 5173,
     }
   }
 })
