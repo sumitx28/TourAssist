@@ -12,8 +12,6 @@ TourAssist aims to create a marketplace that provides a fair and even platform f
 
 2. **Customizable Packages:** Travel agencies can provide customers with the option to customize their packages according to their preferences. For instance, if a customer wants to travel to a destination independently but prefers to include only hotel stay and activities in their package, they can customize the package accordingly. The price adjusts dynamically based on the selected customizations.
 
-3. **Comparison View:** TourAssist offers an adjacent comparison view of two or more packages, allowing customers to easily compare what each package offers. This feature helps customers make informed decisions based on their preferences and requirements.
-
 By offering these features, TourAssist aims to revolutionize the way travel agencies interact with customers and provide a seamless and personalized booking experience.
 
 
