@@ -1,5 +1,3 @@
--- All the DDL and indexes are mentioned here. This is a single sql file which could be executed to create the entire database.
-
 CREATE TABLE `app_user` (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `email` varchar(255) DEFAULT NULL,
