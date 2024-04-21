@@ -1,21 +1,21 @@
-# TourAssist
+# TourAssist: Streamlining Travel Experiences
 
-A web-app enabling tour agents to upsell their customizable tour packages and customers to compare those packages and customize them as per their needs.
+TourAssist is a web application designed to empower tour agents to enhance their tour packages and enable customers to compare and personalize these packages according to their preferences.
 
-# Overview
+## Project Overview
 
-[Understand the project requirements.](https://dalu.sharepoint.com/:p:/r/teams/CSCI5308_Fall2023/_layouts/15/Doc.aspx?sourcedoc=%7BB2F1C7A0-286C-491A-B9E0-598ADE2064E0%7D&file=Group_9_TourAssist.pptx&action=edit&mobileredirect=true "Project description")
+[Detailed Project Requirements](https://dalu.sharepoint.com/:p:/r/teams/CSCI5308_Fall2023/_layouts/15/Doc.aspx?sourcedoc=%7BB2F1C7A0-286C-491A-B9E0-598ADE2064E0%7D&file=Group_9_TourAssist.pptx&action=edit&mobileredirect=true "Project description")
 
-## BACKEND - DEPENDENCIES
+### Backend Dependencies
 
 1. [Install Java 17 or higher](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)
 2. [Install Maven](https://formulae.brew.sh/formula/maven) - version: 3.1.4
-   - brew install maven
+   - `brew install maven`
 3. [Setup MySQL Locally](https://www.mysql.com/downloads/)
    - [Run setup SQL script](https://git.cs.dal.ca/courses/2023-fall/csci-5308/Group15/-/blob/main/ServerSide/TourAssist/sql/db-structure.sql)
 4. [Docker](https://www.docker.com/products/docker-desktop/)
 
-## BACKEND - BUILD/DEPLOYMENT INSTRUCTIONS
+### Backend Build/Deployment Instructions
 
 1. Run tests:
 
