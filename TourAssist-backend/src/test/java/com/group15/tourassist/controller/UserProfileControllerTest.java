@@ -2,7 +2,7 @@ package com.group15.tourassist.controller;
 
 import com.group15.tourassist.request.UpdateUserProfileRequest;
 import com.group15.tourassist.response.UpdateUserProfileWebResponse;
-import com.group15.tourassist.service.IUserProfileService;
+import com.group15.tourassist.service.impl.IUserProfileService;
 import com.group15.tourassist.web.controller.UserProfileController;
 import org.junit.Test;
 import org.mockito.InjectMocks;

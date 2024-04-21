@@ -6,13 +6,14 @@ import com.group15.tourassist.dto.ValidateDto;
 import com.group15.tourassist.repository.IAppUserRepository;
 import com.group15.tourassist.request.AgentRegistrationRequest;
 import com.group15.tourassist.request.CustomerRegistrationRequest;
+import com.group15.tourassist.service.impl.IValidatorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 @Service
-public class ValidatorService implements IValidatorService{
+public class ValidatorService implements IValidatorService {
 
     @Autowired
     private IAppUserRepository appUserRepository;

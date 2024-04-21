@@ -3,8 +3,8 @@ package com.group15.tourassist.service;
 import com.group15.tourassist.dto.AgentDetailsDTO;
 import com.group15.tourassist.entity.Agent;
 import com.group15.tourassist.repository.IAgentRepository;
+import com.group15.tourassist.service.impl.IAgentService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service

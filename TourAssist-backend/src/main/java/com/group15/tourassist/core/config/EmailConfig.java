@@ -1,4 +1,4 @@
-package com.group15.tourassist.service;
+package com.group15.tourassist.core.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

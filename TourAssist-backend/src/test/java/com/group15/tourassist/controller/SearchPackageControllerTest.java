@@ -3,7 +3,7 @@ package com.group15.tourassist.controller;
 
 import com.group15.tourassist.request.CustomerSearchPackageRequest;
 import com.group15.tourassist.response.SearchPackagesWebResponse;
-import com.group15.tourassist.service.ISearchPackageService;
+import com.group15.tourassist.service.impl.ISearchPackageService;
 import com.group15.tourassist.web.controller.SearchPackageController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

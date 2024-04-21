@@ -5,7 +5,7 @@ import com.group15.tourassist.entity.AppUser;
 import com.group15.tourassist.entity.Customer;
 import com.group15.tourassist.repository.IAppUserRepository;
 import com.group15.tourassist.repository.ICustomerRepository;
-import com.group15.tourassist.service.ICustomerService;
+import com.group15.tourassist.service.impl.ICustomerService;
 import com.group15.tourassist.web.controller.CustomerController;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;

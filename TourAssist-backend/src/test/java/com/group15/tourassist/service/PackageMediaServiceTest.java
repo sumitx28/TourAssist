@@ -1,6 +1,7 @@
 package com.group15.tourassist.service;
 
 import com.group15.tourassist.repository.IPackageMediaRepository;
+import com.group15.tourassist.service.impl.IStorageService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

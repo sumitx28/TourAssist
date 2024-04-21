@@ -2,7 +2,7 @@ package com.group15.tourassist.web.controller;
 
 import com.group15.tourassist.request.AgentRegistrationRequest;
 import com.group15.tourassist.request.CustomerRegistrationRequest;
-import com.group15.tourassist.service.IAuthenticationService;
+import com.group15.tourassist.service.impl.IAuthenticationService;
 import com.group15.tourassist.request.AuthenticationRequest;
 import com.group15.tourassist.response.AuthenticationResponse;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,7 +16,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.util.Optional;
 
 @RestController

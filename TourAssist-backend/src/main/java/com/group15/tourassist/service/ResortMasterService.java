@@ -2,13 +2,14 @@ package com.group15.tourassist.service;
 
 import com.group15.tourassist.entity.ResortMaster;
 import com.group15.tourassist.repository.IResortMasterRepository;
+import com.group15.tourassist.service.impl.IResortMasterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class ResortMasterService implements IResortMasterService{
+public class ResortMasterService implements IResortMasterService {
 
     @Autowired
     private IResortMasterRepository resortMasterRepository;

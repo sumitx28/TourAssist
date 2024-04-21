@@ -1,7 +1,7 @@
 package com.group15.tourassist.web.controller;
 
 import com.group15.tourassist.entity.DestinationMaster;
-import com.group15.tourassist.service.IDestinationMasterService;
+import com.group15.tourassist.service.impl.IDestinationMasterService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

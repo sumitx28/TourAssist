@@ -5,6 +5,7 @@ import com.group15.tourassist.entity.AppUser;
 import com.group15.tourassist.entity.PasswordResetToken;
 import com.group15.tourassist.repository.IAppUserRepository;
 import com.group15.tourassist.repository.PasswordResetTokenRepository;
+import com.group15.tourassist.service.impl.IPasswordResetTokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -13,7 +14,7 @@ import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
-public class PasswordResetTokenService<EmailService> implements IPasswordResetTokenService{
+public class PasswordResetTokenService<EmailService> implements IPasswordResetTokenService {
 
     private final PasswordResetTokenRepository passwordResetTokenRepository;
     private final PasswordEncoder passwordEncoder;

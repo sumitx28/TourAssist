@@ -7,7 +7,7 @@ import com.group15.tourassist.repository.PasswordResetTokenRepository;
 import com.group15.tourassist.request.ForgotPasswordEmailRequest;
 import com.group15.tourassist.request.PasswordResetRequest;
 import com.group15.tourassist.service.EmailService;
-import com.group15.tourassist.service.IPasswordResetTokenService;
+import com.group15.tourassist.service.impl.IPasswordResetTokenService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

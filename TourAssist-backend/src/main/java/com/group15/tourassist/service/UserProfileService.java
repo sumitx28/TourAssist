@@ -3,6 +3,7 @@ package com.group15.tourassist.service;
 import com.group15.tourassist.repository.IAppUserRepository;
 import com.group15.tourassist.repository.ICustomerRepository;
 import com.group15.tourassist.request.UpdateUserProfileRequest;
+import com.group15.tourassist.service.impl.IUserProfileService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

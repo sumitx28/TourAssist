@@ -2,7 +2,7 @@ package com.group15.tourassist.web.controller;
 
 import com.group15.tourassist.request.CustomerSearchPackageRequest;
 import com.group15.tourassist.response.SearchPackagesWebResponse;
-import com.group15.tourassist.service.ISearchPackageService;
+import com.group15.tourassist.service.impl.ISearchPackageService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

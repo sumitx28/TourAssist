@@ -2,6 +2,7 @@ package com.group15.tourassist.service;
 
 import com.group15.tourassist.entity.Customer;
 import com.group15.tourassist.repository.ICustomerRepository;
+import com.group15.tourassist.service.impl.ICustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

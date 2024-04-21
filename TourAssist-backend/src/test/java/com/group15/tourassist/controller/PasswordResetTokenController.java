@@ -1,13 +1,12 @@
 package com.group15.tourassist.controller;
 
 import com.group15.tourassist.entity.AppUser;
-import com.group15.tourassist.entity.PasswordResetToken;
 import com.group15.tourassist.repository.IAppUserRepository;
 import com.group15.tourassist.repository.PasswordResetTokenRepository;
 import com.group15.tourassist.request.ForgotPasswordEmailRequest;
 import com.group15.tourassist.request.PasswordResetRequest;
 import com.group15.tourassist.service.EmailService;
-import com.group15.tourassist.service.IPasswordResetTokenService;
+import com.group15.tourassist.service.impl.IPasswordResetTokenService;
 import com.group15.tourassist.web.controller.PasswordResetTokenController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

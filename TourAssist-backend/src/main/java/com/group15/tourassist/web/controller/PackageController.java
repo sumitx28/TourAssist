@@ -1,9 +1,8 @@
 package com.group15.tourassist.web.controller;
 
 import com.group15.tourassist.request.PackageCreateRequest;
-import com.group15.tourassist.response.AuthenticationResponse;
 import com.group15.tourassist.response.PackageDetailResponse;
-import com.group15.tourassist.service.IPackageService;
+import com.group15.tourassist.service.impl.IPackageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

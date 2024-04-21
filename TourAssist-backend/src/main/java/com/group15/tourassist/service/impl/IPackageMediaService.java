@@ -1,4 +1,4 @@
-package com.group15.tourassist.service;
+package com.group15.tourassist.service.impl;
 
 import org.springframework.web.multipart.MultipartFile;
 

@@ -2,11 +2,10 @@ package com.group15.tourassist.web.controller;
 
 import com.group15.tourassist.request.UpdateUserProfileRequest;
 import com.group15.tourassist.response.UpdateUserProfileWebResponse;
-import com.group15.tourassist.service.IUserProfileService;
+import com.group15.tourassist.service.impl.IUserProfileService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

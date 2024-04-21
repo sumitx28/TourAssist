@@ -2,7 +2,7 @@ package com.group15.tourassist.controller;
 
 import com.group15.tourassist.entity.TravelModeMaster;
 import com.group15.tourassist.repository.ITravelModeMasterRepository;
-import com.group15.tourassist.service.ITravelModeMasterService;
+import com.group15.tourassist.service.impl.ITravelModeMasterService;
 import com.group15.tourassist.web.controller.TravelModeMasterController;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;

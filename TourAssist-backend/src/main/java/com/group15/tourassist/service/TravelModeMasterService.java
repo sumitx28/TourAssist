@@ -2,6 +2,7 @@ package com.group15.tourassist.service;
 
 import com.group15.tourassist.entity.TravelModeMaster;
 import com.group15.tourassist.repository.ITravelModeMasterRepository;
+import com.group15.tourassist.service.impl.ITravelModeMasterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

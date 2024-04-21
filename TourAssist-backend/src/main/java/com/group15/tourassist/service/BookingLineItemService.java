@@ -5,6 +5,7 @@ import com.group15.tourassist.entity.Booking;
 import com.group15.tourassist.entity.BookingLineItem;
 import com.group15.tourassist.repository.*;
 import com.group15.tourassist.request.BookingItemRequest;
+import com.group15.tourassist.service.impl.IBookingLineItemService;
 import com.group15.tourassist.web.controller.PackageController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

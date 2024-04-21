@@ -1,4 +1,4 @@
-package com.group15.tourassist.service;
+package com.group15.tourassist.service.impl;
 
 import com.group15.tourassist.entity.Booking;
 import com.group15.tourassist.entity.Guest;

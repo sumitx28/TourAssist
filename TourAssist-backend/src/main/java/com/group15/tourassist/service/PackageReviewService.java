@@ -1,6 +1,7 @@
 package com.group15.tourassist.service;
 
 import com.group15.tourassist.entity.PackageReview;
+import com.group15.tourassist.service.impl.IPackageReviewService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

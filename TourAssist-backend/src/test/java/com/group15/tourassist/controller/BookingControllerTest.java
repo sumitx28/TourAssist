@@ -4,7 +4,7 @@ import com.group15.tourassist.request.BookingRequest;
 import com.group15.tourassist.response.BookingDetailsWebResponse;
 import com.group15.tourassist.response.BookingResponse;
 import com.group15.tourassist.response.CustomerDetailsBookedByAgentIDResponse;
-import com.group15.tourassist.service.IBookingService;
+import com.group15.tourassist.service.impl.IBookingService;
 import com.group15.tourassist.web.controller.BookingController;
 import org.junit.Test;
 import org.junit.runner.RunWith;

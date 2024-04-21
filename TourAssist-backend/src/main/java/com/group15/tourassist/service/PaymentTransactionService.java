@@ -6,6 +6,7 @@ import com.group15.tourassist.entity.PaymentTransaction;
 import com.group15.tourassist.repository.IPackageRepository;
 import com.group15.tourassist.repository.IPaymentTransactionRepository;
 import com.group15.tourassist.request.PaymentRequest;
+import com.group15.tourassist.service.impl.IPaymentTransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,7 +15,7 @@ import java.util.Optional;
 
 
 @Service
-public class PaymentTransactionService implements IPaymentTransactionService{
+public class PaymentTransactionService implements IPaymentTransactionService {
 
     @Autowired
     private IPaymentTransactionRepository paymentTransactionRepository;

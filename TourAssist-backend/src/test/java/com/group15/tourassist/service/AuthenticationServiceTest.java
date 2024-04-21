@@ -1,7 +1,6 @@
 package com.group15.tourassist.service;
 
 import com.group15.tourassist.core.config.service.JwtService;
-import com.group15.tourassist.core.enums.Role;
 import com.group15.tourassist.dto.ValidateDto;
 import com.group15.tourassist.entity.AppUser;
 import com.group15.tourassist.repository.IAgentRepository;
@@ -12,6 +11,7 @@ import com.group15.tourassist.request.AgentRegistrationRequest;
 import com.group15.tourassist.request.AuthenticationRequest;
 import com.group15.tourassist.request.CustomerRegistrationRequest;
 import com.group15.tourassist.response.AuthenticationResponse;
+import com.group15.tourassist.service.impl.IValidatorService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,12 +20,10 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.Instant;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;

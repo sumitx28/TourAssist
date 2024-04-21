@@ -17,6 +17,8 @@ import com.group15.tourassist.request.CustomerRegistrationRequest;
 import com.group15.tourassist.response.AuthenticationResponse;
 import com.group15.tourassist.repository.TokenRepository;
 import com.group15.tourassist.repository.IAppUserRepository;
+import com.group15.tourassist.service.impl.IAuthenticationService;
+import com.group15.tourassist.service.impl.IValidatorService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;

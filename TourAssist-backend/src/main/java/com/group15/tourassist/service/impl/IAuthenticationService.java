@@ -1,4 +1,4 @@
-package com.group15.tourassist.service;
+package com.group15.tourassist.service.impl;
 
 import com.group15.tourassist.request.AgentRegistrationRequest;
 import com.group15.tourassist.request.AuthenticationRequest;

@@ -2,6 +2,8 @@ package com.group15.tourassist.service;
 
 import com.group15.tourassist.entity.PackageMedia;
 import com.group15.tourassist.repository.IPackageMediaRepository;
+import com.group15.tourassist.service.impl.IPackageMediaService;
+import com.group15.tourassist.service.impl.IStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;

@@ -17,10 +17,12 @@ import com.group15.tourassist.request.BookingRequest;
 import com.group15.tourassist.response.BookingDetailsWebResponse;
 import com.group15.tourassist.response.BookingResponse;
 import com.group15.tourassist.response.CustomerDetailsBookedByAgentIDResponse;
+import com.group15.tourassist.service.impl.IBookingLineItemService;
+import com.group15.tourassist.service.impl.IBookingService;
+import com.group15.tourassist.service.impl.IGuestService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
