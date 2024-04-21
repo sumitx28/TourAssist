@@ -8,14 +8,14 @@ TourAssist is a web application designed to empower tour agents to enhance their
 
 ### Backend Dependencies
 
-1. [Install Java 17 or higher](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)
-2. [Install Maven](https://formulae.brew.sh/formula/maven) - version: 3.1.4
+1. 🚀 **Install [Java 17](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html):** 
+2. 🛠️ **Install [Maven (v3.1.4)](https://formulae.brew.sh/formula/maven):**
    - `brew install maven`
-3. [Setup MySQL Locally](https://www.mysql.com/downloads/)
-   - [Run setup SQL script](https://git.cs.dal.ca/courses/2023-fall/csci-5308/Group15/-/blob/main/ServerSide/TourAssist/sql/db-structure.sql)
-4. [Docker](https://www.docker.com/products/docker-desktop/)
+3. 🗃️ **Setup [MySQL Locally](https://www.mysql.com/downloads/):** 
+- [Run setup SQL script](https://git.cs.dal.ca/courses/2023-fall/csci-5308/Group15/-/blob/main/ServerSide/TourAssist/sql/db-structure.sql)
+4. 🐳 **Install [Docker](https://www.docker.com/products/docker-desktop/):**
 
-### Backend Build/Deployment Instructions
+### Backend Setup and Deployment
 
 1. Run tests:
 
@@ -35,9 +35,9 @@ TourAssist is a web application designed to empower tour agents to enhance their
 
 Backend API should be accessible at http://localhost:8080
 
-## Frontend
+## Frontend Setup and Deployment
 
-TourAssist requires [Node.js](https://nodejs.org/) v18+ to run.
+TourAssist requires [Node.js](https://nodejs.org/) v18+ to run. 🚀
 
 Check your node & npm version using:
 
@@ -80,65 +80,15 @@ Frontend should be accessible at http://localhost:5173
 
 # Use Cases
 
-### Customer and Agent Signup
-
-This feature allows both agents and customers to sign up with their basic details. Passwords are encrypted and stored securely in the database. Details captured include:
-1. Name
-2. Email
-3. Password
-4. Mobile
-5. Verification Document (For Agents)
-
-### Login and Logout
-
-This use case employs JWT-based stateless implementation. Users can log in using their email and password. Upon login, a unique JWT token is generated. Users can also logout, which invalidates the current JWT for that user.
-
-### Create Package
-
-Agents can create unique, customizable tour packages. Each item in the package has an associated price. Details include:
-1. Package Name
-2. Package Media
-3. Trip Duration
-4. Trip Source and Destination
-5. Resort
-6. Activities
-7. Travel
-8. Tour Guide
-9. Package Media (Images)
-
-### Booking and Payment
-
-Customers can customize packages and proceed with booking. Payment flow is initiated and dummy payment interface is provided for capturing payment details. Booking and payment status are updated upon completion.
-
-### Search and Filter
-
-Users can search for travel packages based on destination and dates. Sorting options include:
-1. Sort by Name
-2. Sort by Price (Highest/Lowest)
-3. Sort by User Rating
-
-Filter options include:
-1. Filter by User Rating
-2. Filter by Price Range
-3. Filter by Agent/Company
-4. Filter by Customization Availability
-
-### View and Edit Customer Profile
-
-Users can view and edit their profiles, updating information such as email and contact number.
-
-### Booking Details
-
-Users can view their booking history, including past and upcoming bookings.
-
-### Forgot Password
-
-Users can reset their password by providing their email. A reset password link is sent to the email address provided.
-
-### Details Page of Travel Package
-
-Details of travel packages include source, destination, dates, activities, transport details, stay amenities, and agent contacts. Users can customize packages and proceed to book seamlessly.
-
-### Agent Dashboard
-
-Agents have access to a comprehensive dashboard showing past and upcoming bookings, customer details, and earnings analysis.
+| Use Case | Description |
+|----------|-------------|
+| Customer and Agent Signup | This feature allows both agents and customers to sign up with their basic details. Passwords are encrypted and stored securely in the database. Details captured include: <br> 1. Name <br> 2. Email <br> 3. Password <br> 4. Mobile <br> 5. Verification Document (For Agents) |
+| Login and Logout | This use case employs JWT-based stateless implementation. Users can log in using their email and password. Upon login, a unique JWT token is generated. Users can also logout, which invalidates the current JWT for that user. |
+| Create Package | Agents can create unique, customizable tour packages. Each item in the package has an associated price. Details include: <br> 1. Package Name <br> 2. Package Media <br> 3. Trip Duration <br> 4. Trip Source and Destination <br> 5. Resort <br> 6. Activities <br> 7. Travel <br> 8. Tour Guide <br> 9. Package Media (Images) |
+| Booking and Payment | Customers can customize packages and proceed with booking. Payment flow is initiated and dummy payment interface is provided for capturing payment details. Booking and payment status are updated upon completion. |
+| Search and Filter | Users can search for travel packages based on destination and dates. Sorting options include: <br> 1. Sort by Name <br> 2. Sort by Price (Highest/Lowest) <br> 3. Sort by User Rating <br> Filter options include: <br> 1. Filter by User Rating <br> 2. Filter by Price Range <br> 3. Filter by Agent/Company <br> 4. Filter by Customization Availability |
+| View and Edit Customer Profile | Users can view and edit their profiles, updating information such as email and contact number. |
+| Booking Details | Users can view their booking history, including past and upcoming bookings. |
+| Forgot Password | Users can reset their password by providing their email. A reset password link is sent to the email address provided. |
+| Details Page of Travel Package | Details of travel packages include source, destination, dates, activities, transport details, stay amenities, and agent contacts. Users can customize packages and proceed to book seamlessly. |
+| Agent Dashboard | Agents have access to a comprehensive dashboard showing past and upcoming bookings, customer details, and earnings analysis. |
