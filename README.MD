@@ -23,7 +23,6 @@ By offering these features, TourAssist aims to revolutionize the way travel agen
 2. 🛠️ **Install [Maven (v3.1.4)](https://formulae.brew.sh/formula/maven):**
    - `brew install maven`
 3. 🗃️ **Setup [MySQL Locally](https://www.mysql.com/downloads/):** 
-- [Run setup SQL script](https://git.cs.dal.ca/courses/2023-fall/csci-5308/Group15/-/blob/main/ServerSide/TourAssist/sql/db-structure.sql)
 4. 🐳 **Install [Docker](https://www.docker.com/products/docker-desktop/):**
 
 ### Backend Setup and Deployment
