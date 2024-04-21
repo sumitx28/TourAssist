@@ -2,16 +2,17 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-      database-platform: org.hibernate.dialect.MySQLDialect
+      database-platform: org.hibernate.dialect.MySQL8Dialect
     show-sql: true
     properties:
       hibernate:
         format_sql: true
     database: mysql
   datasource:
-    url: jdbc:mysql://localhost:3306/TourAssist
-    username: root
-    password: password
+#    url: jdbc:mysql://localhost:3306/TourAssist
+    url: ${DATABASE_URL}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
 application:
@@ -28,4 +29,4 @@ storage:
   secret-key: e2gLOFlmFp_S9OVkzkL6nzNoWrQ
 
 cors:
-  url: http://localhost:5173
+  url: ${FRONTEND_URL}
