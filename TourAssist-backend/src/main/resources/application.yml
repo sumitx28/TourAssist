@@ -9,7 +9,6 @@ spring:
         format_sql: true
     database: mysql
   datasource:
-#    url: jdbc:mysql://localhost:3306/TourAssist
     url: ${DATABASE_URL}
     username: ${DATABASE_USERNAME}
     password: ${DATABASE_PASSWORD}
