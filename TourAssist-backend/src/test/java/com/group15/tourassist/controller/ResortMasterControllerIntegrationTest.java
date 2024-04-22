@@ -44,15 +44,7 @@ class ResortMasterControllerIntegrationTest {
     void testResortMasterApi() {
 
         // Arrange
-        DestinationMaster destinationMaster = new DestinationMaster(1L, "Figi", "Maldives", new ArrayList<>(), new ArrayList<>());
-        DestinationMaster thailand = new DestinationMaster(2L, "Goose", "Thailand", new ArrayList<>(), new ArrayList<>());
-        destinationMasterRepository.save(destinationMaster);
-        destinationMasterRepository.save(thailand);
-
-        List<ResortMaster> resortMasters = new ArrayList<>();
-        resortMasters.add(new ResortMaster(1L, "Figi Retreat", destinationMaster));
-        resortMasters.add(new ResortMaster(2L, "Standard Room", thailand));
-        resortMasterRepository.saveAll(resortMasters);
+        int numberOfResorts = 7;
 
         // Act
         ResponseEntity<List<ResortMaster>> response = restTemplate.exchange("/api/v1/resorts/1", HttpMethod.GET,
@@ -61,6 +53,6 @@ class ResortMasterControllerIntegrationTest {
 
 
         // Assert
-        Assert.assertEquals(1, response.getBody().size());
+        Assert.assertEquals(numberOfResorts, response.getBody().size());
     }
 }

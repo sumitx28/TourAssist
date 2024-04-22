@@ -44,10 +44,7 @@ class DestinationMasterControllerIntegrationTest {
     void testGetAllLocations() {
 
         // Arrange
-        List<DestinationMaster> destinationMasters = new ArrayList<>();
-        destinationMasters.add(new DestinationMaster(1L, "New York", "USA", new ArrayList<>(), new ArrayList<>()));
-        destinationMasters.add(new DestinationMaster(2L, "Male", "Maldives", new ArrayList<>(), new ArrayList<>()));
-        destinationMasterRepository.saveAll(destinationMasters);
+        int numberOfDestinations = 20;
 
         // Act
         ResponseEntity<List<DestinationMaster>> response = restTemplate.exchange("/api/v1/locations", HttpMethod.GET,
@@ -56,7 +53,7 @@ class DestinationMasterControllerIntegrationTest {
 
 
         // Assert
-        Assert.assertEquals(2, response.getBody().size());
+        Assert.assertEquals(numberOfDestinations, response.getBody().size());
 
     }
 }

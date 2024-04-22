@@ -8,6 +8,7 @@ import com.group15.tourassist.web.controller.SuiteMasterController;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,24 +39,18 @@ class SuiteMasterControllerIntegrationTest {
     @Autowired
     private TestRestTemplate restTemplate;
 
-    // integration test for /api/v1/suites GET end-point
     @Test
     void testSuitesMasterController() {
-
         // Arrange
-        List<SuiteMaster> suiteMasters = new ArrayList<>();
-        suiteMasters.add(new SuiteMaster(1L, "Delux Room"));
-        suiteMasters.add(new SuiteMaster(2L, "Standard Room"));
-        suiteMasterRepository.saveAll(suiteMasters);
+        int numberOfSuites = 8;
 
         // Act
-        ResponseEntity<List<TravelModeMaster>> response = restTemplate.exchange("/api/v1/suites", HttpMethod.GET,
+        ResponseEntity<List<SuiteMaster>> response = restTemplate.exchange("/api/v1/suites", HttpMethod.GET,
                 null,
-                new ParameterizedTypeReference<List<TravelModeMaster>>() {});
-
+                new ParameterizedTypeReference<List<SuiteMaster>>() {});
 
         // Assert
-        Assert.assertEquals(2, response.getBody().size());
+        Assert.assertEquals(numberOfSuites, response.getBody().size());
     }
 
 }

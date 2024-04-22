@@ -41,10 +41,7 @@ class TravelModeMasterControllerIntegrationTest {
     void testTravelModeController() {
 
         // Arrange
-        List<TravelModeMaster> travelModeMasters = new ArrayList<>();
-        travelModeMasters.add(new TravelModeMaster(1L, "Train"));
-        travelModeMasters.add(new TravelModeMaster(2L, "Flight"));
-        travelModeMasterRepository.saveAll(travelModeMasters);
+        int numberOfTravelModes = 4;
 
         // Act
         ResponseEntity<List<TravelModeMaster>> response = restTemplate.exchange("/api/v1/travel-modes", HttpMethod.GET,
@@ -53,6 +50,6 @@ class TravelModeMasterControllerIntegrationTest {
 
 
         // Assert
-        Assert.assertEquals(2, response.getBody().size());
+        Assert.assertEquals(numberOfTravelModes, response.getBody().size());
     }
 }
