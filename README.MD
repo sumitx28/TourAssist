@@ -1,21 +1,29 @@
-# TourAssist
+# TourAssist: Streamlining Travel Experiences
 
-A web-app enabling tour agents to upsell their customizable tour packages and customers to compare those packages and customize them as per their needs.
+TourAssist is a web application designed to empower tour agents to enhance their tour packages and enable customers to compare and personalize these packages according to their preferences.
 
-# Overview
+# Project Overview
 
-[Understand the project requirements.](https://dalu.sharepoint.com/:p:/r/teams/CSCI5308_Fall2023/_layouts/15/Doc.aspx?sourcedoc=%7BB2F1C7A0-286C-491A-B9E0-598ADE2064E0%7D&file=Group_9_TourAssist.pptx&action=edit&mobileredirect=true "Project description")
+TourAssist aims to create a marketplace that provides a fair and even platform for all travel companies, regardless of their size, to offer travel and holiday packages to customers. The platform offers several key features to enhance the customer experience and streamline the process for travel agencies.
 
-## BACKEND - DEPENDENCIES
+## Key Features
 
-1. [Install Java 17 or higher](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)
-2. [Install Maven](https://formulae.brew.sh/formula/maven) - version: 3.1.4
-   - brew install maven
-3. [Setup MySQL Locally](https://www.mysql.com/downloads/)
-   - [Run setup SQL script](https://git.cs.dal.ca/courses/2023-fall/csci-5308/Group15/-/blob/main/ServerSide/TourAssist/sql/db-structure.sql)
-4. [Docker](https://www.docker.com/products/docker-desktop/)
+1. **Fair Platform:** TourAssist provides a fair platform for both big and small companies offering travel/holiday packages. It ensures equal visibility and opportunities for all companies to reach potential customers.
 
-## BACKEND - BUILD/DEPLOYMENT INSTRUCTIONS
+2. **Customizable Packages:** Travel agencies can provide customers with the option to customize their packages according to their preferences. For instance, if a customer wants to travel to a destination independently but prefers to include only hotel stay and activities in their package, they can customize the package accordingly. The price adjusts dynamically based on the selected customizations.
+
+By offering these features, TourAssist aims to revolutionize the way travel agencies interact with customers and provide a seamless and personalized booking experience.
+
+
+### Backend Dependencies
+
+1. 🚀 **Install [Java 17](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html):** 
+2. 🛠️ **Install [Maven (v3.1.4)](https://formulae.brew.sh/formula/maven):**
+   - `brew install maven`
+3. 🗃️ **Setup [MySQL Locally](https://www.mysql.com/downloads/):** 
+4. 🐳 **Install [Docker](https://www.docker.com/products/docker-desktop/):**
+
+### Backend Setup and Deployment
 
 1. Run tests:
 
@@ -35,9 +43,9 @@ A web-app enabling tour agents to upsell their customizable tour packages and cu
 
 Backend API should be accessible at http://localhost:8080
 
-## Frontend
+## Frontend Setup and Deployment
 
-TourAssist requires [Node.js](https://nodejs.org/) v18+ to run.
+TourAssist requires [Node.js](https://nodejs.org/) v18+ to run. 🚀
 
 Check your node & npm version using:
 
@@ -47,7 +55,7 @@ Check your node & npm version using:
 
 ## Run Locally
 
-1. Navigate to ClientSide directory
+1. Navigate to TourAssist-frontend directory
 
    `cd TourAssist-frontend `
 
@@ -78,89 +86,17 @@ Frontend should be accessible at http://localhost:5173
 
 Frontend should be accessible at http://localhost:5173
 
-# Use Cases:
+# Use Cases
 
-
-### Customer and Agent Signup Use Case
-This feature lets both Agent and Customer to signup with their basic details to use the application. Password gets encrypted and stored in the database in this Use Case.
-Below are the major details captured for signup:
-1. Name
-2. Email
-3. Password
-4. Mobile
-5. Verification Document (For Agents)
-
-### Login  and Logout Use Case 
-
-This use cases uses the JWT based stateless implementation. The user can login by providing their email and password.
-Upon login, a valid JWT token is generated in the authentication response, which will be unique to the user.
-Likewise, the user can also logout from the application which invalidate the current JWT for that user via API call.
-
-### Create Package Use Case
-This feature builds the core database structure of the entire application from technical perspective. With this use case, agent can create a unique package which are customisable. Each item has a price associated with it. Below are the package items which can be offered:
-1. Package Name
-2. Package Media - Which gets stored on Cloudinary database.
-3. Trip duration details
-4. Trip source and destination
-5. Resort - Customizable
-6. Activities - Customizable
-7. Travel - Customizable
-8. Tour Guide - Customizable
-9. Package Media - Images of the package
-
-
-### Booking and Payment Use Case
-This feature deals with the package booking and payment flow by customer. Here, the Customer can do all the customizations for all the customizable items, and the package created accordingly. After, the booking is done, payment flow initiates and dummy payment interface is built on front-end to capture the payment details.
-Post the payment, booking and payment status are changed to CONFIRM and SUCCESS respectively.
-
-
-### Search and Filter Use Case:
-
-A user can search for travel packages for the required destination and the from and to dates so that the 
-appropriate list of travel packages can be displayed.
-
-The API also supports multiple sort functionalities listed below:
-Sort Functionality:
-
-1. Sort by name
-2. Sort by price (highest first)
-3. Sort by price (lowest first)
-4. Sort by user rating
-
-### Filter Functionality Use Case:
-
-Filter by user rating
-1. Filter by price range
-2. Filter by agent/company
-3. Filter by customization availability
-
-The API takes in parameters such as sortBy and FilterBy (which can be configured in multiple combinations) to return 
-the list of travel packages as per the criteria 
-specified in the request.
-
-## View and Edit Customer Profile Use Case:
-
-This feature allows the app user to view/edit their profile, so that the information can be up to date in the application
-
-1. User can view their profile and edit their information such as email, contact number.
-The API takes the appUserId and the email or the phone number to be updated in the request body and returns the status
-with the field names updated.
-
-### Booking Details Use Case:
-
-A user can view their booking history which includes both past and upcoming bookings of the customer. This feature 
-allows the user to keep track of their past and future bookings in order to have a better user experience.
-
-The API takes the appUserId has a request parameter and fetches the required booking details.
-
-### Forgot Password Use Case:
-Here a user can enter the email Id and they will receive an email with reset password link. 
-Once they navigate to that URL, with the help of Base64 encoded token, the user is verified and an option to reset the password is provided. 
-
-### Details page of travel Package Use Case:
-Here input source, destination, proposed dates, day-by-day activities, transport details, stay amenities, and agent contacts are showcased. 
-One can also customize packages; default includes all. It also includes images of agent and company name. 'Book' button seamlessly redirects users to the payment page for a hassle-free experience. 
-
-### Agent Dashboard Use Case: 
-This dashboard support agents with a comprehensive dashboard that includes, view past and upcoming bookings, access customer details for deeper insights, analyse earnings monthly, yearly, etc.
-It provides a robust overview for effective business analysis.
+| Use Case | Description |
+|----------|-------------|
+| Customer and Agent Signup | This feature allows both agents and customers to sign up with their basic details. Passwords are encrypted and stored securely in the database. Details captured include: <br> 1. Name <br> 2. Email <br> 3. Password <br> 4. Mobile <br> 5. Verification Document (For Agents) |
+| Login and Logout | This use case employs JWT-based stateless implementation. Users can log in using their email and password. Upon login, a unique JWT token is generated. Users can also logout, which invalidates the current JWT for that user. |
+| Create Package | Agents can create unique, customizable tour packages. Each item in the package has an associated price. Details include: <br> 1. Package Name <br> 2. Package Media <br> 3. Trip Duration <br> 4. Trip Source and Destination <br> 5. Resort <br> 6. Activities <br> 7. Travel <br> 8. Tour Guide <br> 9. Package Media (Images) |
+| Booking and Payment | Customers can customize packages and proceed with booking. Payment flow is initiated and dummy payment interface is provided for capturing payment details. Booking and payment status are updated upon completion. |
+| Search and Filter | Users can search for travel packages based on destination and dates. Sorting options include: <br> 1. Sort by Name <br> 2. Sort by Price (Highest/Lowest) <br> 3. Sort by User Rating <br> Filter options include: <br> 1. Filter by User Rating <br> 2. Filter by Price Range <br> 3. Filter by Agent/Company <br> 4. Filter by Customization Availability |
+| View and Edit Customer Profile | Users can view and edit their profiles, updating information such as email and contact number. |
+| Booking Details | Users can view their booking history, including past and upcoming bookings. |
+| Forgot Password | Users can reset their password by providing their email. A reset password link is sent to the email address provided. |
+| Details Page of Travel Package | Details of travel packages include source, destination, dates, activities, transport details, stay amenities, and agent contacts. Users can customize packages and proceed to book seamlessly. |
+| Agent Dashboard | Agents have access to a comprehensive dashboard showing past and upcoming bookings, customer details, and earnings analysis. |
