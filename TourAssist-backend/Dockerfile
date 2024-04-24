@@ -1,4 +1,4 @@
-FROM ubuntu:latest AS build
+FROM ubuntu AS build
 LABEL authors="sumit"
 
 RUN apt-get update
