@@ -124,7 +124,7 @@ function TravelForm() {
 
       setSources(sourcesData);
       setDestinations(destinationsData);
-      setActivities(activitiesData);
+      setActivities(activitiesData.activities);
       setTransportModes(transportModeData);
       setRoomTypes(roomTypesData);
     };
