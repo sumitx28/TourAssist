@@ -26,8 +26,7 @@ public class ActivityMasterController {
     @GetMapping("/activities")
     private ResponseEntity<ActivitiesResponse> getAllActivities() {
         log.info("Received request to get all activities");
-        List<ActivityMaster> activities = activityMasterService.findAllActivities();
-        ActivitiesResponse response = new ActivitiesResponse(activities);
+        ActivitiesResponse response = new ActivitiesResponse(activityMasterService.findAllActivities());
         response.setMessage(ConstantUtils.SUCCESS);
         response.setStatusCode("200");
         log.info("The request to retrieve activities was handled.");
