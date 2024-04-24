@@ -3,10 +3,6 @@ spring:
     hibernate:
       ddl-auto: update
       database-platform: org.hibernate.dialect.MySQL8Dialect
-    show-sql: true
-    properties:
-      hibernate:
-        format_sql: true
     database: mysql
   datasource:
     url: ${DATABASE_URL}
