@@ -58,7 +58,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         try {
             userEmail = jwtService.extractUsername(jwt);
         } catch (Exception e) {
-            log.info("invalid or expired jwt token provided");
+            log.warn("invalid or expired jwt token provided");
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             response.getWriter().write("Invalid JWT token");
             return;
@@ -70,9 +70,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             var isTokenValid = tokenRepository.findByToken(jwt)
                     .map(t -> !t.isExpired() && !t.isRevoked())
                     .orElse(false);
-            log.info("isValidToken: {}", isTokenValid);
+            log.warn("isValidToken: {}", isTokenValid);
             if (jwtService.isTokenValid(jwt, userDetails) && isTokenValid) {
-                log.info("JWT is valid !!!");
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         userDetails,
                         null,
