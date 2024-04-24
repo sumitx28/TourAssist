@@ -122,8 +122,8 @@ function TravelForm() {
       const transportModeData = await fetchData("/api/v1/travel-modes");
       const roomTypesData = await fetchData("/api/v1/suites");
 
-      setSources(sourcesData);
-      setDestinations(destinationsData);
+      setSources(sourcesData.locations);
+      setDestinations(destinationsData.locations);
       setActivities(activitiesData.activities);
       setTransportModes(transportModeData);
       setRoomTypes(roomTypesData);
