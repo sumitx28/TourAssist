@@ -149,7 +149,7 @@ const Search = () => {
   useEffect(() => {
     const getData = async () => {
       const locationsData = await fetchData("/api/v1/locations");
-      setLocations(locationsData);
+      setLocations(locationsData.locations);
     };
 
     getData();
