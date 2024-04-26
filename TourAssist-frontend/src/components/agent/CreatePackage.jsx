@@ -139,7 +139,7 @@ function TravelForm() {
 
   const fetchResorts = async (destinationId) => {
     const resortsData = await fetchData(`/api/v1/resorts/${destinationId}`);
-    setResorts(resortsData);
+    setResorts(resortsData.resorts);
   };
 
   const handleActivityChange = (e) => {
