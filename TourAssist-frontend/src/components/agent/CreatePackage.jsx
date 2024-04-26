@@ -134,7 +134,7 @@ function TravelForm() {
 
   const fetchTourGuides = async (destinationId) => {
     const tourGuideData = await fetchData(`/api/v1/guides/${destinationId}`);
-    setTourGuides(tourGuideData);
+    setTourGuides(tourGuideData.guides);
   };
 
   const fetchResorts = async (destinationId) => {
