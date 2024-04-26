@@ -1,6 +1,8 @@
 package com.group15.tourassist.web.controller;
 
+import com.group15.tourassist.core.utils.ConstantUtils;
 import com.group15.tourassist.entity.GuideMaster;
+import com.group15.tourassist.response.GuidesResponse;
 import com.group15.tourassist.service.impl.IGuideMasterService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,11 +23,13 @@ public class GuideMasterController {
     private IGuideMasterService guideMasterService;
 
     @GetMapping("/guides/{destinationId}")
-    private ResponseEntity<List<GuideMaster>> getSuites(@PathVariable Long destinationId) {
-
-        log.info("** get guides request");
-        List<GuideMaster> guides = guideMasterService.getAllGuidesByLocation(destinationId);
-        return ResponseEntity.of(Optional.of(guides));
+    private ResponseEntity<GuidesResponse> getSuites(@PathVariable Long destinationId) {
+        log.info("Received request to get all guides for destination Id: " + destinationId);
+        GuidesResponse response = new GuidesResponse(guideMasterService.getAllGuidesByLocation(destinationId));
+        response.setMessage(ConstantUtils.SUCCESS);
+        response.setStatusCode("200");
+        log.info("The request to retrieve guides was handled.");
+        return ResponseEntity.ok(response);
     }
 
 }
