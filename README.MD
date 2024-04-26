@@ -14,77 +14,60 @@ TourAssist aims to create a marketplace that provides a fair and even platform f
 
 By offering these features, TourAssist aims to revolutionize the way travel agencies interact with customers and provide a seamless and personalized booking experience.
 
+## Prerequisites
 
-### Backend Dependencies
+Ensure you have Docker Desktop installed.
 
-1. 🚀 **Install [Java 17](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html):** 
-2. 🛠️ **Install [Maven (v3.1.4)](https://formulae.brew.sh/formula/maven):**
-   - `brew install maven`
-3. 🗃️ **Setup [MySQL Locally](https://www.mysql.com/downloads/):** 
-4. 🐳 **Install [Docker](https://www.docker.com/products/docker-desktop/):**
+## Configuration
 
-### Backend Setup and Deployment
+Key variables which are used in the startup of the app. They are pre-configured for initial use, can be adjusted to tailor the app's startup settings.
+- `ENV`: `dev` profile for frontend
+- `FRONTEND_URL`: Frontend URL
+- `DATASOURCE_URL`: JDBC URL for the MySQL database
+- `DATASOURCE_USERNAME`: Database username
+- `DATASOURCE_PASSWORD`: Database password
 
-1. Run tests:
+Refer to [docker-compose.yaml](./docker-compose.yaml)
 
-   `mvn clean test`
+## Starting the Application
 
-2. Package Jar:
+### Running All Services with latest build
+To start the application containers with the latest build:
 
-   `mvn clean package`
+```bash
+docker-compose -f docker-compose.yaml up -d --build
+```
 
-3. Build docker image
+### Running All Services
 
-   `docker build -t backend-app-image TourAssist-backend/`
+To start both the backend and MySQL database services as defined in the `docker-compose.yaml` file:
 
-4. Run docker container
+```bash
+docker-compose -f docker-compose.yaml up -d
+```
 
-   `docker run -d -p 8080:8080 --name tour-assist-be backend-app-image`
+### Running only a Database (mysql)
+To start only the mysql database as defined in the docker-compose.yaml file:
+```bash
+docker-compose -f docker-compose.yaml up -d db
+```
 
-Backend API should be accessible at http://localhost:8080
+## Additional Docker Commands
 
-## Frontend Setup and Deployment
+### Rebuild containers after changes
+```bash
+docker-compose -f docker-compose.yaml build
+```
+### Stopping Services
+To stop all running containers:
+```bash
+docker-compose -f docker-compose.yaml down
+```
 
-TourAssist requires [Node.js](https://nodejs.org/) v18+ to run. 🚀
-
-Check your node & npm version using:
-
-`node -v`
-
-`npm -v`
-
-## Run Locally
-
-1. Navigate to TourAssist-frontend directory
-
-   `cd TourAssist-frontend `
-
-2. Install Node Dependencies
-
-   `npm install`
-
-3. Set Environment variable to development
-
-   - For Mac/Linux: `export ENV=development`
-   - For Windows: `$Env:ENV = 'development'`
-
-4. Run React App
-
-   `npm run dev`
-
-Frontend should be accessible at http://localhost:5173
-
-## Run Using Docker
-
-1. Build docker image
-
-   `docker build -t frontend-app-image TourAssist-frontend/`
-
-2. Run docker container
-
-   `docker run -d -p 5173:5173 -e ENV=development --name tour-assist-fe frontend-app-image`
-
-Frontend should be accessible at http://localhost:5173
+### Remove all volumes (including database data):
+```bash
+docker-compose -f docker-compose.yaml down -v
+```
 
 # Use Cases
 
