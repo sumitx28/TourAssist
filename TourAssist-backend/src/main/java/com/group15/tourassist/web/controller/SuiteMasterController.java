@@ -1,6 +1,8 @@
 package com.group15.tourassist.web.controller;
 
+import com.group15.tourassist.core.utils.ConstantUtils;
 import com.group15.tourassist.entity.SuiteMaster;
+import com.group15.tourassist.response.SuitesResponse;
 import com.group15.tourassist.service.impl.ISuiteMasterService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,9 +23,12 @@ public class SuiteMasterController {
     private ISuiteMasterService suiteMasterService;
 
     @GetMapping("/suites")
-    private ResponseEntity<List<SuiteMaster>> getSuites() {
-        log.info("** get suites request");
-        List<SuiteMaster> suites = suiteMasterService.findAllSuites();
-        return ResponseEntity.of(Optional.of(suites));
+    private ResponseEntity<SuitesResponse> getSuites() {
+        log.info("Received request to get all suites");
+        SuitesResponse response = new SuitesResponse(suiteMasterService.findAllSuites());
+        response.setMessage(ConstantUtils.SUCCESS);
+        response.setStatusCode("200");
+        log.info("The request to retrieve suites was handled.");
+        return ResponseEntity.ok(response);
     }
 }
