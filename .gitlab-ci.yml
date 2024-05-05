@@ -1,4 +1,3 @@
-# test, build, package and deploy stages.
 
 image: docker:latest
 services:
@@ -54,10 +53,10 @@ package-backend:
     - deployment
   script:
     - pwd
-    - ls -la ServerSide/TourAssist/target/
-    - docker build -t docker.io/patelraj22777/test:$CI_COMMIT_SHORT_SHA $BACKEND_DIR
+    - ls -la TourAssist-backend/
+    - docker build -t docker.io/sumitx28/test:$CI_COMMIT_SHORT_SHA $BACKEND_DIR
     - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PWD docker.io
-    - docker push docker.io/patelraj22777/test:$CI_COMMIT_SHORT_SHA
+    - docker push docker.io/sumitx28/test:$CI_COMMIT_SHORT_SHA
   only:
     - main
 
@@ -69,9 +68,9 @@ deploy-backend:
     - chmod og= $ID_RSA
     - apk update && apk add openssh-client
     - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PWD docker.io"
-    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker pull docker.io/patelraj22777/test:$CI_COMMIT_SHORT_SHA"
+    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker pull docker.io/sumitx28/test:$CI_COMMIT_SHORT_SHA"
     - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker container rm -f my-app || true"
-    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker run -d -p 8073:8080 --name my-app docker.io/patelraj22777/test:$CI_COMMIT_SHORT_SHA"
+    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker run -d -p 8073:8080 --name my-app docker.io/sumitx28/test:$CI_COMMIT_SHORT_SHA"
   environment:
     name: production
     url: http://172.17.0.148:8073
@@ -90,10 +89,10 @@ package-frontend:
     - deployment
   script:
     - pwd
-    - ls -la ClientSide/
-    - docker build -t docker.io/patelraj22777/test:$CI_COMMIT_SHORT_SHA-fe $FRONTEND_DIR
+    - ls -la TourAssist-frontend/
+    - docker build -t docker.io/sumitx28/test:$CI_COMMIT_SHORT_SHA-fe $FRONTEND_DIR
     - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PWD docker.io
-    - docker push docker.io/patelraj22777/test:$CI_COMMIT_SHORT_SHA-fe
+    - docker push docker.io/sumitx28/test:$CI_COMMIT_SHORT_SHA-fe
   only:
     - main
 
@@ -105,9 +104,9 @@ deploy-frontend:
     - chmod og= $ID_RSA
     - apk update && apk add openssh-client
     - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PWD docker.io"
-    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker pull docker.io/patelraj22777/test:$CI_COMMIT_SHORT_SHA-fe"
+    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker pull docker.io/sumitx28/test:$CI_COMMIT_SHORT_SHA-fe"
     - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker container rm -f fe-app || true"
-    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker run -d -p 8074:5173 --name fe-app docker.io/patelraj22777/test:$CI_COMMIT_SHORT_SHA-fe"
+    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker run -d -p 8074:5173 --name fe-app docker.io/sumitx28/test:$CI_COMMIT_SHORT_SHA-fe"
   environment:
     name: production-fe
     url: http://172.17.0.148:8074
