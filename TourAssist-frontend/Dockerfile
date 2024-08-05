@@ -1,8 +1,10 @@
 FROM node:18.18
 
-RUN pwd
-
 WORKDIR /app
+
+ARG BACKEND_URL
+
+ENV BACKEND_URL=$BACKEND_URL
 
 RUN pwd
 
@@ -11,8 +13,6 @@ COPY / /app
 RUN npm install
 
 RUN npm i -g serve
-
-ENV BACKEND_URL=$BACKEND_URL
 
 RUN npm run build
 
