@@ -1,19 +1,13 @@
 FROM node:18.18
 
-WORKDIR /app
-
-ENV BACKEND_URL=$BACKEND_URL
-
 RUN pwd
+
+WORKDIR /app
 
 COPY / /app
 
 RUN npm install
 
-RUN npm i -g serve
+EXPOSE 5173
 
-RUN npm run build
-
-EXPOSE 3000
-
-CMD [ "serve", "-s", "dist" ]
+ENTRYPOINT ["npm", "run", "dev"]
