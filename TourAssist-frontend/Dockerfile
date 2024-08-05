@@ -10,6 +10,10 @@ COPY / /app
 
 RUN npm install
 
-EXPOSE 5173
+RUN npm i -g serve
 
-ENTRYPOINT ["npm", "run", "dev"]
+RUN npm run build
+
+EXPOSE 3000
+
+CMD [ "serve", "-s", "dist" ]
